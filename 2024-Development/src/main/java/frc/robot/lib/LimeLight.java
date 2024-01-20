@@ -32,19 +32,6 @@ public class LimeLight extends SubsystemBase {
     public PIDController strafePID;
 
     public LimeLight() {
-        strafePID = new PIDController(
-            PID_Config.VisionDriving.Strafing.Proportional,
-            PID_Config.VisionDriving.Strafing.Integral,
-            PID_Config.VisionDriving.Strafing.Derivitive
-        );
-        //SmartDashboard.putData(strafePID);
-        setName("Test PID");
-        
-       SendableRegistry.setName(strafePID, "PID Drive");
-
-        ShuffleboardTab tab = Shuffleboard.getTab("LiveWindow");
-        GenericEntry drivePIDTestEnable = tab.add("DrivePID Enable", false).getEntry();
-
     }
     
     @Override
@@ -54,9 +41,7 @@ public class LimeLight extends SubsystemBase {
         SmartDashboard.putNumber("LimeLight Y Delta", getLimeLightTY());
         SmartDashboard.putNumber("LimeLight Target Area", getLimeLightTA());
         
-        double targetDelta[] = targetpose_cameraspace();
-        SmartDashboard.putNumber("Distance Equation",
-            6+27.875/Math.sin(Math.toRadians(getLimeLightTY())));
+        SmartDashboard.putNumber("Distance Equation TEST",6+27.875/Math.sin(Math.toRadians(getLimeLightTY())));
 
 
     }

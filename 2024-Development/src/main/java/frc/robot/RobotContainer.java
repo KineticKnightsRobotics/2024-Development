@@ -12,6 +12,7 @@ import frc.robot.lib.Constants.OIConstants;
 import frc.robot.lib.Constants.POIGeometryConstants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -26,6 +27,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive();
   private final LimeLight SUBSYSTEM_LIMELIGHT = new LimeLight();
+  private final Intake SUBSYSTEM_INTAKE = new Intake();
 
   private final CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
 
@@ -95,34 +97,28 @@ public class RobotContainer {
     //new Trigger(m_exampleSubsystem::exampleCondition)
     //    .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-
-    //DRIVER_A.onTrue(SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
     DRIVER_B.onTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
 
     DRIVER_X.whileTrue(new LIMELIGHT_Steer(SUBSYSTEM_SWERVEDRIVE, SUBSYSTEM_LIMELIGHT));
 
-    //DRIVER_START.onTrue(SUBSYSTEM_LIMELIGHT.changePipeline(0));
-    //DRIVER_BACK.onTrue(SUBSYSTEM_LIMELIGHT.changePipeline(1));
+    DRIVER_L1.whileTrue(new LIMELIGHT_Steer(SUBSYSTEM_SWERVEDRIVE, SUBSYSTEM_LIMELIGHT));
+    DRIVER_R1.whileTrue(new LIMELIGHT__Strafe(SUBSYSTEM_LIMELIGHT,SUBSYSTEM_SWERVEDRIVE,POIGeometryConstants.Test1.OFFSET_POI_X,() -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y)));
 
-    //DRIVER_Y.whileTrue(new RunShooter(SUBSYSTEM_CONVEYER));
 
-    DRIVER_L1.whileTrue(
-      new LIMELIGHT_Steer(SUBSYSTEM_SWERVEDRIVE, SUBSYSTEM_LIMELIGHT)
-    );
-    DRIVER_R1.whileTrue(
-      new LIMELIGHT__Strafe(
-       SUBSYSTEM_LIMELIGHT,
-       SUBSYSTEM_SWERVEDRIVE,
-       POIGeometryConstants.Test1.OFFSET_POI_X,
-       () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y)
-
-      )
-    );
     OP_1.whileTrue(SUBSYSTEM_SWERVEDRIVE.startTrajectory());
     OP_2.onTrue(SUBSYSTEM_SWERVEDRIVE.zeroRoboOdemetry());
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+    OP_4.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 0.4));
+
+    OP_5.onTrue(SUBSYSTEM_INTAKE.toggleSolenoids(false));
+    OP_6.onTrue(SUBSYSTEM_INTAKE.toggleSolenoids(true));
+    OP_7.onTrue(
+      new SequentialCommandGroup(
+        SUBSYSTEM_INTAKE.toggleSolenoids(true),
+        new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 0.4)
+      )
+    );
+
   }
 
   public Command getAutonomousCommand() {
