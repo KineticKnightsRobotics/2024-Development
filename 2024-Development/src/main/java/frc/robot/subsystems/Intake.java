@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -13,7 +14,7 @@ import frc.robot.lib.Constants.IntakeSubsystemConstants;
 
 public class Intake extends SubsystemBase {
     
-    CANSparkMax rollerMotor;
+    private final CANSparkMax rollerMotor = new CANSparkMax(9, MotorType.kBrushless);
 
     DoubleSolenoid solenoidIntakeLeft = new DoubleSolenoid(
         PneumaticsModuleType.CTREPCM,
