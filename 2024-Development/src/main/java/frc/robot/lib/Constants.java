@@ -103,6 +103,10 @@ public final class Constants {
       public static int CHANNEL_RIGHT_REVERSE = 3;
     }
   }
+  
+  public static class ConveyerSubsystemConstants {
+    public static int ID_MOTOR_CONVEYER = 41;
+  }
 
   public static final class OIConstants {
     public static final int ID_CONTROLLER_DRIVER = 0;

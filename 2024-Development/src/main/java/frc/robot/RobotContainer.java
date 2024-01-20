@@ -28,6 +28,7 @@ public class RobotContainer {
   private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive();
   private final LimeLight SUBSYSTEM_LIMELIGHT = new LimeLight();
   private final Intake SUBSYSTEM_INTAKE = new Intake();
+  private final Conveyer SUBSYSTEM_CONVEYER = new Conveyer();
 
   private final CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
 
@@ -83,23 +84,12 @@ public class RobotContainer {
     configureBindings();
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     //new Trigger(m_exampleSubsystem::exampleCondition)
     //    .onTrue(new ExampleCommand(m_exampleSubsystem));
 
     DRIVER_B.onTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
-
-    DRIVER_X.whileTrue(new LIMELIGHT_Steer(SUBSYSTEM_SWERVEDRIVE, SUBSYSTEM_LIMELIGHT));
 
     DRIVER_L1.whileTrue(new LIMELIGHT_Steer(SUBSYSTEM_SWERVEDRIVE, SUBSYSTEM_LIMELIGHT));
     DRIVER_R1.whileTrue(new LIMELIGHT__Strafe(SUBSYSTEM_LIMELIGHT,SUBSYSTEM_SWERVEDRIVE,POIGeometryConstants.Test1.OFFSET_POI_X,() -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y)));
@@ -112,13 +102,15 @@ public class RobotContainer {
 
     OP_5.onTrue(SUBSYSTEM_INTAKE.toggleSolenoids(false));
     OP_6.onTrue(SUBSYSTEM_INTAKE.toggleSolenoids(true));
-    OP_7.onTrue(
+    OP_7.whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.toggleSolenoids(true),
         new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 0.4)
       )
     );
 
+    OP_8.whileTrue(SUBSYSTEM_CONVEYER.runConveyer(0.3));
+    
   }
 
   public Command getAutonomousCommand() {

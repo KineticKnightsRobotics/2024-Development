@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,6 +27,7 @@ public class Intake extends SubsystemBase {
         IntakeSubsystemConstants.IntakePneumatics.CHANNEL_RIGHT_REVERSE
     );
 
+    Compressor airCompressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
     public Intake(){
         rollerMotor.restoreFactoryDefaults();
@@ -34,6 +36,8 @@ public class Intake extends SubsystemBase {
 
         solenoidIntakeLeft.set (DoubleSolenoid.Value.kReverse);
         solenoidIntakeRight.set(DoubleSolenoid.Value.kReverse);
+
+        airCompressor.enableDigital();
     }
 
     public void setSolenoids(boolean state){
