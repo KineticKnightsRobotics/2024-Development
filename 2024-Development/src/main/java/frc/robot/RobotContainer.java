@@ -74,6 +74,13 @@ public class RobotContainer {
   Trigger OP_19 = new Trigger(JOYSTICK_OPERATOR.button(19));
   Trigger OP_20 = new Trigger(JOYSTICK_OPERATOR.button(20));
 
+
+
+  public Command getAutonomousCommand() {
+    return new PathPlannerAuto("ihate");
+    } 
+
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
@@ -93,12 +100,12 @@ public class RobotContainer {
     configureBindings();
 
     // Build an auto chooser. This will use Commands.none() as the default option.
-    autoChooser = AutoBuilder.buildAutoChooser("I hate big chungus");
+    autoChooser = AutoBuilder.buildAutoChooser("ihate");
 
         // Another option that allows you to specify the default auto by its name
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+  //  SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   private void configureBindings() {
@@ -130,12 +137,5 @@ public class RobotContainer {
     
   }
 
-  // public Command getAutonomousCommand() {
-  //   // An example command will be run in autonomous
-  //   return  new PathPlannerAuto("I hate big chungus");
-  // }
 
-  public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
-  } 
 }
