@@ -130,12 +130,12 @@ public class RobotContainer {
     
   }
 
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return  new PathPlannerAuto("I hate big chungus");
-  }
-
   // public Command getAutonomousCommand() {
-  //   return autoChooser.getSelected();
-  // } 
+  //   // An example command will be run in autonomous
+  //   return  new PathPlannerAuto("I hate big chungus");
+  // }
+
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
+  } 
 }
