@@ -117,7 +117,7 @@ public class RobotContainer {
     DRIVER_R1.whileTrue(new LIMELIGHT__Strafe(SUBSYSTEM_LIMELIGHT,SUBSYSTEM_SWERVEDRIVE,POIGeometryConstants.Test1.OFFSET_POI_X,() -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y)));
 
 
-    OP_1.whileTrue(SUBSYSTEM_SWERVEDRIVE.startTrajectory());
+    //OP_1.whileTrue(SUBSYSTEM_SWERVEDRIVE.startTrajectory());
     OP_2.onTrue(SUBSYSTEM_SWERVEDRIVE.zeroRoboOdemetry());
 
     OP_4.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 0.4));
