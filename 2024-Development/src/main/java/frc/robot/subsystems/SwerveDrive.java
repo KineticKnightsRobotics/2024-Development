@@ -104,7 +104,7 @@ public class SwerveDrive extends SubsystemBase {
         AutoBuilder.configureHolonomic(
                 this::getPose, // Robot pose supplier
                 this::resetOdometer, // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::setChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                         new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
@@ -159,9 +159,8 @@ public class SwerveDrive extends SubsystemBase {
         return currentPos;
     }
 
-    public ChassisSpeeds getRobotRelativeSpeeds() {
-        return null;
-        //TODO: ChassisSpeeds.fromFieldRelativeSpeeds(getRobotHeading(), getRotation2d());
+    public ChassisSpeeds getChassisSpeeds() {
+        return Constants.KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toChassisSpeeds(getModuleStates()); //TODO:This needs to be tested!
     }
 
     public double getRobotHeading() {
@@ -214,7 +213,24 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_BACK_RIGHT.resetEncoders();   
     }
 
-    public SwerveControllerCommand startTrajectory() {
+    public Command zeroRobotHeading() {
+        return Commands.runOnce(() -> navX.zeroYaw());
+    }
+
+    public Command zeroModuleAngles() {
+        return Commands.runOnce(()-> zeroModules());
+    }
+
+    public Command zeroRoboOdemetry() {
+        return Commands.runOnce(()-> zeroModules());
+    }
+
+    // public Pose2d getPose() {
+    //     return Pose2d(x, y, Rotation2d.fromDegrees(deg));
+    // }
+
+    /*
+     *     public SwerveControllerCommand startTrajectory() {
         //Config Trajectory Settings
 
         TrajectoryConfig config = new TrajectoryConfig(
@@ -261,23 +277,6 @@ public class SwerveDrive extends SubsystemBase {
             this
         );
     }
-
-
-    public Command zeroRobotHeading() {
-        return Commands.runOnce(() -> navX.zeroYaw());
-    }
-
-    public Command zeroModuleAngles() {
-        return Commands.runOnce(()-> zeroModules());
-    }
-
-    public Command zeroRoboOdemetry() {
-        return Commands.runOnce(()-> zeroModules());
-    }
-
-    // public Pose2d getPose() {
-    //     return Pose2d(x, y, Rotation2d.fromDegrees(deg));
-    // }
-
+     */
 
 }
