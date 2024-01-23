@@ -76,10 +76,8 @@ public class RobotContainer {
 
 
 
-  public Command getAutonomousCommand() {
-    return new PathPlannerAuto("ihate");
-    } 
 
+  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -105,7 +103,7 @@ public class RobotContainer {
         // Another option that allows you to specify the default auto by its name
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
-  //  SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   private void configureBindings() {
@@ -137,5 +135,8 @@ public class RobotContainer {
     
   }
 
-
+    public Command getAutonomousCommand() {
+      return autoChooser.getSelected();
+    } 
+  
 }
