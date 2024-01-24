@@ -9,10 +9,8 @@ import frc.robot.subsystems.*;
 import frc.robot.lib.LimeLight;
 
 import frc.robot.lib.Constants.OIConstants;
-import frc.robot.lib.Constants.POIGeometryConstants;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,7 +30,7 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
 
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive();
   private final LimeLight SUBSYSTEM_LIMELIGHT = new LimeLight();
   private final Intake SUBSYSTEM_INTAKE = new Intake();
@@ -140,9 +138,9 @@ public class RobotContainer {
   }
 
     public Command getAutonomousCommand() {
-   //   return autoChooser.getSelected();
-   return SUBSYSTEM_SWERVEDRIVE.followPath("TestPath");
-   //new PathPlannerAuto("ilove");
+   return SUBSYSTEM_SWERVEDRIVE.followPath("BigRob");
+      //new PathPlannerAuto("ilove");
+      //   return autoChooser.getSelected();
 
     } 
   

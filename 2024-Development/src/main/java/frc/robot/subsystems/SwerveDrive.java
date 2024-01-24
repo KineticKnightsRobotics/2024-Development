@@ -11,7 +11,6 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.controller.PIDController;
 //wpi
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -145,7 +144,7 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_BACK_LEFT.moduleData2Dashboard();
         MODULE_BACK_RIGHT.moduleData2Dashboard();
 
-        POSITION_ESTIMATOR.update(getRotation2d(), getModulePositions());
+        //POSITION_ESTIMATOR.update(getRotation2d(), getModulePositions());
 
         ODEMETER.update(
             getRotation2d(),
@@ -248,7 +247,9 @@ public class SwerveDrive extends SubsystemBase {
                     return false;
                 },
                 this
-            )
+            ),
+
+            new InstantCommand( () -> setChassisSpeed(new ChassisSpeeds(0,0,0)))
         );
 
     }

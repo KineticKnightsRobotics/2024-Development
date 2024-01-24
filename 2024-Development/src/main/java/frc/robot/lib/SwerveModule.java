@@ -105,8 +105,8 @@ public class SwerveModule extends SubsystemBase {
         setAngle(state);
         setSpeed(state);
 
-        SmartDashboard.putNumber(MODULE_NAME + ENCODER_ABSOLUTE.getDeviceID() + " angle", Math.toDegrees(getTurningPosition()));
-        SmartDashboard.putNumber(MODULE_NAME + ENCODER_ABSOLUTE.getDeviceID() + " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
+        //SmartDashboard.putNumber(MODULE_NAME + ENCODER_ABSOLUTE.getDeviceID() + " angle", Math.toDegrees(getTurningPosition()));
+        //SmartDashboard.putNumber(MODULE_NAME + ENCODER_ABSOLUTE.getDeviceID() + " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
         SmartDashboard.putString(MODULE_NAME + ENCODER_ABSOLUTE.getDeviceID() + " state", state.toString());
 
         //SmartDashboard.putNumber("Swerve[" + ENCODER_ABSOLUTE.getDeviceID() + "] offset", OFFSET_ABSOLUTEENCODER);
@@ -115,18 +115,18 @@ public class SwerveModule extends SubsystemBase {
      * Set a new angle to the turning motor
      */
     public void setAngle(SwerveModuleState state) {
-
+        MOTOR_TURN.set(PID_TURNING.calculate(getTurningPosition(), state.angle.getRadians()));
+        /*
         double currentAngle = getTurningPosition();
         double delta = PID_TURNING.calculate(currentAngle, state.angle.getRadians());
-
         MOTOR_TURN.set(delta);
+        */
         //MOTOR_TURN.set(delta < 0.01 ? 0.0 : delta); // if delta is less than 1% output, just stop the motor so it doesn't jitter
     }
     /**
      * Set new speed for the driving motors
      */
     public void setSpeed(SwerveModuleState state) {
-
         //the speed limit is full power 
         MOTOR_DRIVE.set(state.speedMetersPerSecond/Constants.SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE);
     }

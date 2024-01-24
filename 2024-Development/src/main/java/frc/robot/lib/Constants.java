@@ -37,7 +37,7 @@ public final class Constants {
     public static final double MODULE_WHEEL_DIAMETER = Units.inchesToMeters(4.0);
     public static final double MODULE_DRIVE_GEAR_RATIO = 8.14 / 1.0; // Drive ratio of 8.14 : 1
     public static final double MODULE_TURN_GEAR_RATIO = 1.0 / (150.0 / 7.0); // Turning ratio of (150 / 7) : 1
-    public static final double MODULE_DRIVE_ROTATIONS_TO_METERS = MODULE_DRIVE_GEAR_RATIO * Math.PI * MODULE_WHEEL_DIAMETER;
+    public static final double MODULE_DRIVE_ROTATIONS_TO_METERS = (MODULE_WHEEL_DIAMETER * Math.PI) / MODULE_DRIVE_GEAR_RATIO;
     public static final double MODULE_TURN_ROTATIONS_TO_RADIANS = MODULE_TURN_GEAR_RATIO * 2 * Math.PI;
     public static final double MODULE_DRIVE_RPM_TO_MPS = MODULE_DRIVE_ROTATIONS_TO_METERS / 60.0;
     public static final double TurningEncoderRPM2RadPerSec = MODULE_TURN_ROTATIONS_TO_RADIANS / 60.0;
@@ -78,10 +78,10 @@ public final class Constants {
     public static final boolean REVERSED_BACK_RIGHT_MOTOR_DRIVE = true;
 
     // Turning encoder offsets
-    public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE = Math.toRadians(-96.0 + 7.6);
-    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians(34 + 8.4);
-    public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE= Math.toRadians(-77.0 + 6);
-    public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE = Math.toRadians(62.0 + -3.6);
+    public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE = Math.toRadians(-96.0 +  7.6);
+    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians( 34 +    8.4);
+    public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE= Math.toRadians(-77.0 +  6);
+    public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE = Math.toRadians( 62.0 + -3.6);
 
     // Robot drive speeds
     public static final double LIMIT_HARD_SPEED_DRIVE = 3.6; // hard limit for speed of chassis
