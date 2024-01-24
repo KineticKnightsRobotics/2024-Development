@@ -25,7 +25,10 @@ public final class Constants {
       new Translation2d(-KINEMATICS_CHASSIS_WIDTH / 2, +KINEMATICS_CHASSIS_LENGTH / 2),
       new Translation2d(+KINEMATICS_CHASSIS_WIDTH / 2, +KINEMATICS_CHASSIS_LENGTH / 2),
       new Translation2d(-KINEMATICS_CHASSIS_WIDTH / 2, -KINEMATICS_CHASSIS_LENGTH / 2),
-      new Translation2d(KINEMATICS_CHASSIS_WIDTH / 2, -KINEMATICS_CHASSIS_LENGTH / 2));
+      new Translation2d(KINEMATICS_CHASSIS_WIDTH / 2, -KINEMATICS_CHASSIS_LENGTH / 2)
+    );
+
+    public static final double RADIUS_DRIVE_CHASSIS = Math.sqrt(KINEMATICS_CHASSIS_LENGTH*KINEMATICS_CHASSIS_LENGTH + KINEMATICS_CHASSIS_WIDTH*KINEMATICS_CHASSIS_WIDTH);
   }
 
   public static final class ModuleConstants {

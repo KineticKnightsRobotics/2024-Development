@@ -33,12 +33,13 @@ public class Intake extends SubsystemBase {
     public Intake(){
         rollerMotor.restoreFactoryDefaults();
         rollerMotor.setOpenLoopRampRate(2.0);
-        rollerMotor.setInverted(false);
+        rollerMotor.setInverted(true);
 
         solenoidIntakeLeft.set (DoubleSolenoid.Value.kReverse);
         solenoidIntakeRight.set(DoubleSolenoid.Value.kReverse);
 
-        airCompressor.enableDigital();
+        //airCompressor.enableDigital();
+        airCompressor.disable();
     }
 
     public void setSolenoids(boolean state){

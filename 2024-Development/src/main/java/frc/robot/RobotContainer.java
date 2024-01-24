@@ -113,11 +113,15 @@ public class RobotContainer {
 
     DRIVER_B.onTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
 
-    DRIVER_L1.whileTrue(new LIMELIGHT_Steer(SUBSYSTEM_SWERVEDRIVE, SUBSYSTEM_LIMELIGHT));
-    DRIVER_R1.whileTrue(new LIMELIGHT__Strafe(SUBSYSTEM_LIMELIGHT,SUBSYSTEM_SWERVEDRIVE,POIGeometryConstants.Test1.OFFSET_POI_X,() -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y)));
+    //DRIVER_L1.whileTrue(new LIMELIGHT_Steer(SUBSYSTEM_SWERVEDRIVE, SUBSYSTEM_LIMELIGHT));
+    //DRIVER_R1.whileTrue(new LIMELIGHT__Strafe(SUBSYSTEM_LIMELIGHT,SUBSYSTEM_SWERVEDRIVE,POIGeometryConstants.Test1.OFFSET_POI_X,() -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y)));
 
+    DRIVER_R1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 1.0));
+    DRIVER_L1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, -1.0));
 
     //OP_1.whileTrue(SUBSYSTEM_SWERVEDRIVE.startTrajectory());
+
+
     OP_2.onTrue(SUBSYSTEM_SWERVEDRIVE.zeroRoboOdemetry());
 
     OP_4.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 0.4));
@@ -137,7 +141,8 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
    //   return autoChooser.getSelected();
-   return new PathPlannerAuto("ihate");
+   return SUBSYSTEM_SWERVEDRIVE.followPath("TestPath");
+   //new PathPlannerAuto("ilove");
 
     } 
   

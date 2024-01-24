@@ -1,40 +1,40 @@
 package frc.robot.subsystems;
+
 //kauai
 import com.kauailabs.navx.frc.AHRS;
+
+//pathplanner
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathHolonomic;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+//wpi
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-//wpi
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
+//robot
 import frc.robot.lib.Constants;
 import frc.robot.lib.SwerveModule;
 import frc.robot.lib.Constants.KinematicsConstants;
-import frc.robot.lib.Constants.AutonomousConstants;
-import frc.robot.lib.PID_Config;
+import frc.robot.lib.PID_Config.TrajectoryDriving;
 
-import java.util.List;
-//import java.util.Timer;
+//java
 import java.util.concurrent.TimeUnit;
 
 
@@ -102,15 +102,17 @@ public class SwerveDrive extends SubsystemBase {
 
         // Configure AutoBuilder last
         AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier
+                () -> ODEMETER.getPoseMeters(), // Robot pose supplier
                 this::resetOdometer, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::setChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                        4.5, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                        new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive), // Translation PID constants
+                        new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive), // Rotation PID constants
+                        0.05, // Max module speed, in m/s
+                        Math.sqrt(KinematicsConstants.KINEMATICS_CHASSIS_LENGTH * KinematicsConstants.KINEMATICS_CHASSIS_LENGTH 
+                                      + 
+                                  KinematicsConstants.KINEMATICS_CHASSIS_WIDTH * KinematicsConstants.KINEMATICS_CHASSIS_WIDTH ), // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 () -> {
@@ -154,13 +156,8 @@ public class SwerveDrive extends SubsystemBase {
 
     }
 
-    public Pose2d getPose() {
-        Pose2d currentPos = ODEMETER.getPoseMeters();
-        return currentPos;
-    }
-
     public ChassisSpeeds getChassisSpeeds() {
-        return Constants.KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toChassisSpeeds(getModuleStates()); //TODO:This needs to be tested!
+        return KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toChassisSpeeds(getModuleStates()); //TODO:This needs to be tested!
     }
 
     public double getRobotHeading() {
@@ -172,7 +169,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void resetOdometer(Pose2d pose){
-        ODEMETER.resetPosition(getRotation2d(), getModulePositions(),pose);
+        ODEMETER.resetPosition(getRotation2d(), getModulePositions(), pose);
     }
 
     public SwerveModulePosition[] getModulePositions() {
@@ -223,6 +220,37 @@ public class SwerveDrive extends SubsystemBase {
 
     public Command zeroRoboOdemetry() {
         return Commands.runOnce(()-> zeroModules());
+    } 
+
+    public Command followPath(String pathName) {
+
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+
+        Pose2d initialPose = path.getPreviewStartingHolonomicPose();
+
+        return new SequentialCommandGroup(
+        
+            new InstantCommand( () -> resetOdometer(initialPose)),
+
+            new FollowPathHolonomic(
+                path,
+                () -> ODEMETER.getPoseMeters(),
+                () -> getChassisSpeeds(),
+                this::setChassisSpeed,
+                new HolonomicPathFollowerConfig(
+                    new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
+                    new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
+                    0.1,
+                    KinematicsConstants.RADIUS_DRIVE_CHASSIS,
+                    new ReplanningConfig()
+                ),
+                () -> {
+                    return false;
+                },
+                this
+            )
+        );
+
     }
 
     // public Pose2d getPose() {
