@@ -94,4 +94,10 @@ public class Intake extends SubsystemBase {
         return Commands.runOnce(() -> actuateIntake(position));
     }
 
+
+
+    public void unlockSchwoop(boolean unlocked) {
+        if (unlocked) {schwoopMotor.setIdleMode(IdleMode.kCoast);}
+        else          {schwoopMotor.setIdleMode(IdleMode.kBrake);}
+    }
 }

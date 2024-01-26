@@ -106,14 +106,6 @@ public final class Constants {
     public static double Forward_Schwoop_Position;
     public static double Reverse_Schwoop_Position;
 
-
-    public static class IntakePneumatics {
-      public static int CHANNEL_LEFT_FORWARD = 1;
-      public static int CHANNEL_LEFT_REVERSE = 2; 
-
-      public static int CHANNEL_RIGHT_FORWARD = 3;
-      public static int CHANNEL_RIGHT_REVERSE = 3;
-    }
   }
   
   public static class ConveyerSubsystemConstants {
@@ -123,13 +115,13 @@ public final class Constants {
 
   public static class ShooterSubsystemConstants {
     public static int ID_MOTOR_TILTER = 51;
-
     public static int ID_MOTOR_SHOOTER_LEADER = 52;
     public static int ID_MOTOR_SHOOTER_FOLLOWER = 53;
     public static int ID_MOTOR_FEEDER = 54;
-
-
-    //public static double shooterOpenRampRate = 0.5;
+    public static class ShooterBlockPneumatics {
+      public static int CHANNEL_FORWARD = 1;
+      public static int CHANNEL_REVERSE = 2;
+    }
 
   }
 

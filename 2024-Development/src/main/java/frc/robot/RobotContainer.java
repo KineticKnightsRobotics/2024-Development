@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.lib.Constants;
 import frc.robot.lib.LimeLight;
 
 import frc.robot.lib.Constants.OIConstants;
@@ -15,6 +16,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -34,7 +36,7 @@ public class RobotContainer {
   private final LimeLight SUBSYSTEM_LIMELIGHT = new LimeLight();
   private final Intake SUBSYSTEM_INTAKE = new Intake();
   private final Conveyer SUBSYSTEM_CONVEYER = new Conveyer();
-  private final Shooter SUBSYSTEM_SHOOTERE = new Shooter();
+  private final Shooter SUBSYSTEM_SHOOTER = new Shooter();
 
   private final CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
 
@@ -120,6 +122,18 @@ public class RobotContainer {
     OP_1.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(0));
     OP_2.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(SUBSYSTEM_INTAKE.getIntakePosition() + 1 ));
     OP_3.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(SUBSYSTEM_INTAKE.getIntakePosition() - 1 ));
+
+
+
+    OP_4.whileTrue(new SHOOTER_runShooter(1.0, SUBSYSTEM_SHOOTER));
+
+    OP_20.whileTrue(
+      new SequentialCommandGroup(
+        SUBSYSTEM_INTAKE.setIntakePosition(Constants.IntakeSubsystemConstants.Forward_Schwoop_Position),
+        new INTAKECONVEYER_intakeGamePiece(SUBSYSTEM_INTAKE, SUBSYSTEM_CONVEYER)
+      )
+    );
+
 
 
   }
