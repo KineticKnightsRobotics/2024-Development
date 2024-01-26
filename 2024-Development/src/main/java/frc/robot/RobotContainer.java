@@ -15,7 +15,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -35,6 +34,7 @@ public class RobotContainer {
   private final LimeLight SUBSYSTEM_LIMELIGHT = new LimeLight();
   private final Intake SUBSYSTEM_INTAKE = new Intake();
   private final Conveyer SUBSYSTEM_CONVEYER = new Conveyer();
+  private final Shooter SUBSYSTEM_SHOOTERE = new Shooter();
 
   private final CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
 
@@ -116,19 +116,12 @@ public class RobotContainer {
     DRIVER_R1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 1.0));
     DRIVER_L1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, -1.0));
 
-    OP_4.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 0.4));
 
-    OP_5.onTrue(SUBSYSTEM_INTAKE.toggleSolenoids(false));
-    OP_6.onTrue(SUBSYSTEM_INTAKE.toggleSolenoids(true));
-    OP_7.whileTrue(
-      new SequentialCommandGroup(
-        SUBSYSTEM_INTAKE.toggleSolenoids(true),
-        new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 0.4)
-      )
-    );
+    OP_1.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(0));
+    OP_2.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(SUBSYSTEM_INTAKE.getIntakePosition() + 1 ));
+    OP_3.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(SUBSYSTEM_INTAKE.getIntakePosition() - 1 ));
 
-    OP_8.whileTrue(SUBSYSTEM_CONVEYER.runConveyer(0.3));
-    
+
   }
 
   public Command getAutonomousCommand() {

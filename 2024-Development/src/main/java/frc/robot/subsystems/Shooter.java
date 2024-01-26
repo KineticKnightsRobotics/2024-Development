@@ -2,11 +2,12 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 import frc.robot.lib.Constants.ShooterSubsystemConstants;
@@ -14,13 +15,16 @@ import frc.robot.lib.Constants.ShooterSubsystemConstants;
 public class Shooter extends SubsystemBase {
 
 
-    CANSparkMax tiltMotor;
-    SparkPIDController tiltController;
+    private final CANSparkMax tiltMotor;
+    private final SparkPIDController tiltController;
+    private final RelativeEncoder tiltEncoder;
 
-    CANSparkMax shooterMotorL;
-    CANSparkMax shooterMotorF;
+    private final CANSparkMax shooterMotorL; //TOP roller
+    private final CANSparkMax shooterMotorF; //BOTTOM roller
 
-    CANSparkMax feedMotor;
+    private final CANSparkMax feedMotor;
+
+    private double tiltPosition = 0.0;
 
 
     public Shooter() {
@@ -28,19 +32,21 @@ public class Shooter extends SubsystemBase {
         tiltMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER, CANSparkLowLevel.MotorType.kBrushless);
         tiltMotor.setIdleMode(IdleMode.kBrake);
 
-        tiltController = tiltMotor.getPIDController();
+        tiltEncoder = tiltMotor.getEncoder();
+        //tiltEncoder.setPositionConversionFactor(); TODO: Find this!
 
+        tiltController = tiltMotor.getPIDController();
         tiltController.setP(TilterPIDConfig.Proportional);
         tiltController.setI(TilterPIDConfig.Integral);
         tiltController.setD(TilterPIDConfig.Derivitive);
 
 
 
-        shooterMotorL = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
-        shooterMotorF = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
+        shooterMotorL = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_LEADER, CANSparkLowLevel.MotorType.kBrushless);
+        shooterMotorF = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_FOLLOWER, CANSparkLowLevel.MotorType.kBrushless);
 
-        shooterMotorL.setOpenLoopRampRate(ShooterSubsystemConstants.shooterOpenRampRate);
-        shooterMotorF.setOpenLoopRampRate(ShooterSubsystemConstants.shooterOpenRampRate);
+        //shooterMotorL.setOpenLoopRampRate(ShooterSubsystemConstants.shooterOpenRampRate);
+        //shooterMotorF.setOpenLoopRampRate(ShooterSubsystemConstants.shooterOpenRampRate);
         shooterMotorL.setInverted(false);
         shooterMotorF.setInverted(true);
         shooterMotorF.follow(shooterMotorL);
@@ -51,7 +57,20 @@ public class Shooter extends SubsystemBase {
     
     @Override
     public void periodic() {
+        SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 5 )); // Check if shooter rollers are running within 5 RPM of each other
 
+        SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());
+    }
+
+    public double getShooterLRPM() { 
+        return shooterMotorF.getEncoder().getVelocity();
+    }
+    public double getShooterFRPM() {
+        return shooterMotorL.getEncoder().getVelocity();
+    }
+
+    public boolean limitSwitchTilter() {
+        return (Math.abs(tiltEncoder.getPosition() - tiltPosition) > 0.1) && (Math.abs(tiltEncoder.getVelocity()) <= 0.01);
     }
 
     public void setShooterSpeed(double percentOutput) {
@@ -63,6 +82,7 @@ public class Shooter extends SubsystemBase {
     }
     
     public void setTilterPosition(double position) {
+        tiltPosition = position;
         tiltController.setReference(position, ControlType.kPosition);
     }
     

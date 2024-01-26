@@ -15,22 +15,18 @@ import frc.robot.lib.Constants.ConveyerSubsystemConstants;
 
 public class Conveyer extends SubsystemBase {
 
-    CANSparkMax conveyerMotor;
-
+    CANSparkMax schwoopMotor;
     DigitalInput lineBreakSensor;
-    
+
     public Conveyer() {
-        conveyerMotor = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER, CANSparkLowLevel.MotorType.kBrushless);
-
-        conveyerMotor.setOpenLoopRampRate(2);
-
-
+        schwoopMotor = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER, CANSparkLowLevel.MotorType.kBrushless);
+        schwoopMotor.setOpenLoopRampRate(2);
         lineBreakSensor = new DigitalInput(ConveyerSubsystemConstants.ID_SENSOR_LINEBREAK);
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Ball in Conveyer", false);
+        SmartDashboard.putBoolean("Note in Conveyer", getLineBreak());
     }
 
     public boolean getLineBreak() {
@@ -38,12 +34,10 @@ public class Conveyer extends SubsystemBase {
     }
 
     public void setConveyerSpeed(double percentOutput) {
-        conveyerMotor.set(percentOutput);
+        schwoopMotor.set(percentOutput);
     }
 
     public Command runConveyer(double percentOutput) {
         return Commands.runOnce(() -> setConveyerSpeed(percentOutput), this);
     }
-
-
 }

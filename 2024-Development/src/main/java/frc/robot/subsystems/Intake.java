@@ -1,59 +1,97 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 import frc.robot.lib.Constants.IntakeSubsystemConstants;
+import frc.robot.lib.PID_Config.IntakeSubsystem.*;
+
+
+
+/*
+ * TODO: Intake
+ * Intake schwoop function
+ * find forward position
+ * find backwards position
+ * zeroing encoder with voltage limit switch
+ * 
+ * Commands:
+ * 
+ * Move intake to forward position
+ * Manually run roller, stop on end
+ * Automatically run roller until Conveyer subsystem linebreak returns true
+ * 
+ */
+
 
 public class Intake extends SubsystemBase {
     
-    private final CANSparkMax rollerMotor = new CANSparkMax(9, MotorType.kBrushless);
+    private final CANSparkMax rollerMotor;
 
-    DoubleSolenoid solenoidIntakeLeft = new DoubleSolenoid(
-        PneumaticsModuleType.CTREPCM,
-        IntakeSubsystemConstants.IntakePneumatics.CHANNEL_LEFT_FORWARD, 
-        IntakeSubsystemConstants.IntakePneumatics.CHANNEL_LEFT_REVERSE
-    );
+    private final CANSparkMax schwoopMotor;
 
-    DoubleSolenoid solenoidIntakeRight = new DoubleSolenoid(
-        PneumaticsModuleType.CTREPCM,
-        IntakeSubsystemConstants.IntakePneumatics.CHANNEL_RIGHT_FORWARD, 
-        IntakeSubsystemConstants.IntakePneumatics.CHANNEL_RIGHT_REVERSE
-    );
+    private final SparkPIDController schwoopController;
+    
+    private final RelativeEncoder schwoopEncoder;
 
-    Compressor airCompressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    private double schwoopController_Reference;
 
     public Intake(){
+        rollerMotor = new CANSparkMax(9, MotorType.kBrushless);
+
         rollerMotor.restoreFactoryDefaults();
         rollerMotor.setOpenLoopRampRate(2.0);
         rollerMotor.setInverted(true);
 
-        solenoidIntakeLeft.set (DoubleSolenoid.Value.kReverse);
-        solenoidIntakeRight.set(DoubleSolenoid.Value.kReverse);
+        schwoopMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_SCHWOOP, MotorType.kBrushless);
+        schwoopMotor.setClosedLoopRampRate(2.0);
+        schwoopMotor.setIdleMode(IdleMode.kBrake);
 
-        //airCompressor.enableDigital();
-        airCompressor.disable();
+        schwoopEncoder = schwoopMotor.getEncoder();
+        schwoopEncoder.setPositionConversionFactor(IntakeSubsystemConstants.SCHWOOP_ROTATIONS_TO_DEGRESS);
+
+        schwoopController = schwoopMotor.getPIDController();
+        schwoopController.setP(SchwoopControllerPID.Proportional);
+        schwoopController.setI(SchwoopControllerPID.Integral);
+        schwoopController.setD(SchwoopControllerPID.Derivitive);
+
+        SmartDashboard.putBoolean("Intake is stuck!", limitSwitchActuate());
+
     }
 
-    public void setSolenoids(boolean state){
-        //convert boolean to forward/reverse double solenoid values
-        DoubleSolenoid.Value newState = (state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
-        if (solenoidIntakeLeft.get() != newState){solenoidIntakeLeft.set(newState);}
-        if (solenoidIntakeRight.get() != newState){solenoidIntakeRight.set(newState);}
+    public void actuateIntake(double position) {
+        schwoopController_Reference = position;
+        schwoopController.setReference(position, ControlType.kPosition);
     }
+
+    public boolean limitSwitchActuate() {
+        return (Math.abs(schwoopEncoder.getPosition() - schwoopController_Reference) > 0.1) && (Math.abs(schwoopEncoder.getVelocity()) <= 0.01);
+    }
+    
+    public double getIntakePosition() {
+        return schwoopEncoder.getPosition();
+    }
+
     public void setRollerSpeed(double percentOutput) {
         rollerMotor.set(percentOutput);
     }
 
-    public Command toggleSolenoids(boolean state){
-        return Commands.runOnce(() -> setSolenoids(state));
+    public void stopactuateIntake() {
+        schwoopController.setReference(schwoopEncoder.getPosition(), ControlType.kPosition);
+        schwoopMotor.set(0.0);
+    }
+
+    public Command setIntakePosition(double position) {
+        return Commands.runOnce(() -> actuateIntake(position));
     }
 
 }

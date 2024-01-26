@@ -44,10 +44,10 @@ public class LIMELIGHT_Steer extends Command {
         targetState = ChassisSpeeds.fromFieldRelativeSpeeds(0.0,0.0,TurnPID.calculate(currentAngle,targetAngle),SUBSYSTEM_SWERVEDRIVE.getRotation2d());
         SUBSYSTEM_SWERVEDRIVE.setChassisSpeed(targetState);
     }
-    @Override
-    public void end(boolean interrupted) {
 
-    }
+    @Override
+    public void end(boolean interrupted) {}
+    
     @Override
     public boolean isFinished(){
         return false;

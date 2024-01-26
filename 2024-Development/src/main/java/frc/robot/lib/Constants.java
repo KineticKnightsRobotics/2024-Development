@@ -97,6 +97,15 @@ public final class Constants {
 
   public static class IntakeSubsystemConstants {
     public static int ID_MOTOR_ROLLER = 31;
+    public static int ID_MOTOR_SCHWOOP = 32;
+
+
+    public static double SCHWOOP_GEAR_RATIO = (1/50);
+    public static double SCHWOOP_ROTATIONS_TO_DEGRESS = SCHWOOP_GEAR_RATIO * 2*Math.PI;
+
+    public static double Forward_Schwoop_Position;
+    public static double Reverse_Schwoop_Position;
+
 
     public static class IntakePneumatics {
       public static int CHANNEL_LEFT_FORWARD = 1;
@@ -114,11 +123,13 @@ public final class Constants {
 
   public static class ShooterSubsystemConstants {
     public static int ID_MOTOR_TILTER = 51;
-    public static int ID_MOTOR_SHOOTER_LEFT = 52;
-    public static int ID_MOTOR_SHOOTER_RIGHT = 53;
+
+    public static int ID_MOTOR_SHOOTER_LEADER = 52;
+    public static int ID_MOTOR_SHOOTER_FOLLOWER = 53;
     public static int ID_MOTOR_FEEDER = 54;
 
-    public static double shooterOpenRampRate = 0.5;
+
+    //public static double shooterOpenRampRate = 0.5;
 
   }
 
