@@ -89,8 +89,8 @@ public class RobotContainer {
         () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
         () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
         () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
-        () -> true)
-        
+        () -> true
+      )
     );
     // Configure the trigger bindings
     configureBindings();
@@ -106,8 +106,7 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    //new Trigger(m_exampleSubsystem::exampleCondition)
-    //    .onTrue(new ExampleCommand(m_exampleSubsystem));
+    //new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
 
     DRIVER_B.onTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
 
@@ -116,11 +115,6 @@ public class RobotContainer {
 
     DRIVER_R1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 1.0));
     DRIVER_L1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, -1.0));
-
-    //OP_1.whileTrue(SUBSYSTEM_SWERVEDRIVE.startTrajectory());
-
-
-    OP_2.onTrue(SUBSYSTEM_SWERVEDRIVE.zeroRoboOdemetry());
 
     OP_4.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 0.4));
 
@@ -137,11 +131,7 @@ public class RobotContainer {
     
   }
 
-    public Command getAutonomousCommand() {
-   return SUBSYSTEM_SWERVEDRIVE.followPath("BigRob");
-      //new PathPlannerAuto("ilove");
-      //   return autoChooser.getSelected();
-
-    } 
-  
+  public Command getAutonomousCommand() {
+    return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "BigRob");
+  } 
 }

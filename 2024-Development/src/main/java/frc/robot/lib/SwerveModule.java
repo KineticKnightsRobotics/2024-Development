@@ -65,7 +65,7 @@ public class SwerveModule extends SubsystemBase {
         this.MOTOR_TURN.restoreFactoryDefaults();
         //init
         MOTOR_TURN.setInverted(REVERSE_MOTOR_TURN);
-        MOTOR_TURN.setClosedLoopRampRate(3); //TODO: this might mess up the PID when tested on test bot!
+        MOTOR_TURN.setOpenLoopRampRate(1.5); //TODO: this might mess up the PID when tested!
         this.ENCODER_TURN = MOTOR_TURN.getEncoder();
         ENCODER_TURN.setPositionConversionFactor(ModuleConstants.MODULE_TURN_ROTATIONS_TO_RADIANS);
         //init absolute encoder

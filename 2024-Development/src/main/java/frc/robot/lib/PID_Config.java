@@ -9,10 +9,12 @@ public class PID_Config {
         }
     }
 
-    public class ShooterPID {
-        public static final double Proportional = 0.5;
-        public static final double Integral = 0.0;
-        public static final double Derivitive = 0.0;
+    public class ShooterSubsystem {
+        public class TilterPIDConfig {
+            public static final double Proportional = 0.5;
+            public static final double Integral = 0.0;
+            public static final double Derivitive = 0.0;
+        }
     }
 
     public class VisionDriving {

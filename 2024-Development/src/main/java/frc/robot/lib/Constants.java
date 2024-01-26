@@ -109,6 +109,17 @@ public final class Constants {
   
   public static class ConveyerSubsystemConstants {
     public static int ID_MOTOR_CONVEYER = 41;
+    public static int ID_SENSOR_LINEBREAK = 0;
+  }
+
+  public static class ShooterSubsystemConstants {
+    public static int ID_MOTOR_TILTER = 51;
+    public static int ID_MOTOR_SHOOTER_LEFT = 52;
+    public static int ID_MOTOR_SHOOTER_RIGHT = 53;
+    public static int ID_MOTOR_FEEDER = 54;
+
+    public static double shooterOpenRampRate = 0.5;
+
   }
 
   public static final class OIConstants {
@@ -123,28 +134,8 @@ public final class Constants {
     public static final int ID_CONTROLLER_OPERATOR = 1;
   }
 
-  public static final class POIGeometryConstants {
-    public static final double TrackingTolerance = 0.03;
-    public static final class Test1 {
-      public static final double OFFSET_POI_X = Units.inchesToMeters(0.0);
-      public static final double OFFSET_POI_Z = Units.inchesToMeters(60.0);
-    }
-    public static final class Test2 {
-      public static final double OFFSET_POI_X = Units.inchesToMeters(-24.0);
-      public static final double OFFSET_POI_Z = Units.inchesToMeters(60.0);
-    }
-    public static final class Test3 {
-      public static final double OFFSET_POI_X = Units.inchesToMeters(24.0);
-      public static final double OFFSET_POI_Z = Units.inchesToMeters(60.0);
-    }
-    public static final class Test4 {
-      public static final double OFFSET_POI_X = Units.inchesToMeters(0.0);
-      public static final double OFFSET_POI_Z = Units.inchesToMeters(48.0);
-    }
-  }
-
   public static class AutonomousConstants{
     public static double LIMIT_AUTOSPEED_DRIVE = 0.30;
-    public static double LIMIT_AUTOSPEED_ROTATE = 0.5 * Math.PI;
+    public static double LIMIT_AUTOSPEED_ROTATE = 180;
   }
 }
