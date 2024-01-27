@@ -108,7 +108,8 @@ public final class Constants {
   }
   
   public static class ConveyerSubsystemConstants {
-    public static int ID_MOTOR_CONVEYER = 41;
+    public static int ID_MOTOR_CONVEYER_LEFT = 11;
+    public static int ID_MOTOR_CONVEYER_RIGHT = 12;
   }
 
   public static final class OIConstants {

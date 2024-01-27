@@ -119,9 +119,6 @@ public class RobotContainer {
 
     //OP_1.whileTrue(SUBSYSTEM_SWERVEDRIVE.startTrajectory());
 
-
-    OP_2.onTrue(SUBSYSTEM_SWERVEDRIVE.zeroRoboOdemetry());
-
     OP_4.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 0.4));
 
     OP_5.onTrue(SUBSYSTEM_INTAKE.toggleSolenoids(false));
@@ -129,11 +126,11 @@ public class RobotContainer {
     OP_7.whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.toggleSolenoids(true),
-        new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 0.4)
+        new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 0.7)
       )
     );
 
-    OP_8.whileTrue(SUBSYSTEM_CONVEYER.runConveyer(0.3));
+    DRIVER_R1.whileTrue(SUBSYSTEM_CONVEYER.runConveyer(0.5));
     
   }
 

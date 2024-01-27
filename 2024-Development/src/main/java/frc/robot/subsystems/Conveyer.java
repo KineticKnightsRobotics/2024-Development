@@ -18,10 +18,10 @@ public class Conveyer extends SubsystemBase {
     
     public Conveyer() {
         conveyerMotorLeft = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
-        conveyerMotorLeft = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
+        conveyerMotorRight = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
         
         conveyerMotorLeft.setOpenLoopRampRate(2);
-        conveyerMotorLeft.setOpenLoopRampRate(2);
+        conveyerMotorRight.setOpenLoopRampRate(2);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class Conveyer extends SubsystemBase {
     }
 
     public void setConveyerSpeed(double percentOutput) {
-        conveyerMotorRight.set(-percentOutput);
-        conveyerMotorLeft.set(percentOutput);
+        conveyerMotorRight.set(percentOutput);
+        conveyerMotorLeft.set(-percentOutput);
     }
 
     public Command runConveyer(double percentOutput) {
