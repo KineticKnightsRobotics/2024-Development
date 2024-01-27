@@ -35,6 +35,7 @@ public class RobotContainer {
   private final LimeLight SUBSYSTEM_LIMELIGHT = new LimeLight();
   private final Intake SUBSYSTEM_INTAKE = new Intake();
   private final Conveyer SUBSYSTEM_CONVEYER = new Conveyer();
+  private final Shooter SUBSYSTEM_SHOOTER = new Shooter();
 
   private final CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
 
@@ -129,9 +130,11 @@ public class RobotContainer {
         new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 0.7)
       )
     );
+   // OP_12.whileTrue(SUBSYSTEM_SHOOTER.setShooterSpeed(0.9));
 
     DRIVER_R1.whileTrue(SUBSYSTEM_CONVEYER.runConveyer(0.5));
-    
+
+
   }
 
     public Command getAutonomousCommand() {

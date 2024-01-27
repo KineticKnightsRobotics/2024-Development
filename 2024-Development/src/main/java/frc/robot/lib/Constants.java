@@ -97,6 +97,8 @@ public final class Constants {
 
   public static class IntakeSubsystemConstants {
     public static int ID_MOTOR_ROLLER = 31;
+    public static int ID_MOTOR_SCHWOOP = 9;
+    public static int SCHWOOP_ROTATIONS_TO_DEGRESS;
 
     public static class IntakePneumatics {
       public static int CHANNEL_LEFT_FORWARD = 1;
@@ -110,6 +112,8 @@ public final class Constants {
   public static class ConveyerSubsystemConstants {
     public static int ID_MOTOR_CONVEYER_LEFT = 11;
     public static int ID_MOTOR_CONVEYER_RIGHT = 12;
+    public static int ID_MOTOR_CONVEYER = 50;
+    public static int ID_SENSOR_LINEBREAK = 0;
   }
 
   public static final class OIConstants {
@@ -147,5 +151,17 @@ public final class Constants {
   public static class AutonomousConstants{
     public static double LIMIT_AUTOSPEED_DRIVE = 0.30;
     public static double LIMIT_AUTOSPEED_ROTATE = 0.5 * Math.PI;
+  }
+
+  public static class ShooterSubsystemConstants {
+    public static int ID_MOTOR_TILTER = 51;
+    public static int ID_MOTOR_SHOOTER_LEADER = 52;
+    public static int ID_MOTOR_SHOOTER_FOLLOWER = 53;
+    public static int ID_MOTOR_FEEDER = 54;
+    public static class ShooterBlockPneumatics {
+      public static int CHANNEL_FORWARD = 1;
+      public static int CHANNEL_REVERSE = 2;
+    }
+
   }
 }
