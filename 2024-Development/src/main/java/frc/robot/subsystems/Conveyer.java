@@ -11,14 +11,17 @@ import frc.robot.lib.Constants.ConveyerSubsystemConstants;
 
 public class Conveyer extends SubsystemBase {
 
-    CANSparkMax conveyerMotor;
+    CANSparkMax conveyerMotorLeft;
+    CANSparkMax conveyerMotorRight;
 
 
     
     public Conveyer() {
-        conveyerMotor = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER, CANSparkLowLevel.MotorType.kBrushless);
-
-        conveyerMotor.setOpenLoopRampRate(2);
+        conveyerMotorLeft = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
+        conveyerMotorLeft = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
+        
+        conveyerMotorLeft.setOpenLoopRampRate(2);
+        conveyerMotorLeft.setOpenLoopRampRate(2);
     }
 
     @Override
@@ -27,7 +30,8 @@ public class Conveyer extends SubsystemBase {
     }
 
     public void setConveyerSpeed(double percentOutput) {
-        conveyerMotor.set(percentOutput);
+        conveyerMotorRight.set(-percentOutput);
+        conveyerMotorLeft.set(percentOutput);
     }
 
     public Command runConveyer(double percentOutput) {
