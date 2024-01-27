@@ -84,13 +84,6 @@ public class SwerveDrive extends SubsystemBase {
 
     private final SwerveDriveOdometry ODEMETER = new SwerveDriveOdometry(KinematicsConstants.KINEMATICS_DRIVE_CHASSIS, getRotation2d(), getModulePositions());
 
-    private final SwerveDrivePoseEstimator POSITION_ESTIMATOR = new SwerveDrivePoseEstimator(
-        Constants.KinematicsConstants.KINEMATICS_DRIVE_CHASSIS,
-        getRotation2d(),
-        getModulePositions(),
-        new Pose2d()
-        );
-
     public SwerveDrive() {
         try {TimeUnit.SECONDS.sleep(1);}
         catch(InterruptedException e){}
@@ -133,18 +126,12 @@ public class SwerveDrive extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Robot Heading", getRobotHeading());
-        //SmartDashboard.putNumber("/timer", Timer.getMatchTime());
-        SmartDashboard.putNumber("FL ABS ENC", MODULE_FRONT_LEFT.getAbsoluteEncoder());
-        SmartDashboard.putNumber("FR ABS ENC", MODULE_FRONT_RIGHT.getAbsoluteEncoder());
-        SmartDashboard.putNumber("BL ABS ENC", MODULE_BACK_LEFT.getAbsoluteEncoder());
-        SmartDashboard.putNumber("BR ABS ENC",Math.toDegrees(MODULE_BACK_RIGHT.getAbsoluteEncoder()));
+
 
         MODULE_FRONT_LEFT.moduleData2Dashboard();
         MODULE_FRONT_RIGHT.moduleData2Dashboard();
         MODULE_BACK_LEFT.moduleData2Dashboard();
         MODULE_BACK_RIGHT.moduleData2Dashboard();
-
-        //POSITION_ESTIMATOR.update(getRotation2d(), getModulePositions());
 
         ODEMETER.update(
             getRotation2d(),
@@ -217,14 +204,9 @@ public class SwerveDrive extends SubsystemBase {
         return Commands.runOnce(()-> zeroModules());
     }
 
-    public Command zeroRoboOdemetry() {
-        return Commands.runOnce(()-> zeroModules());
-    } 
-
     public Command followPath(String pathName) {
 
         PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-
         Pose2d initialPose = path.getPreviewStartingHolonomicPose();
 
         return new SequentialCommandGroup(
@@ -239,7 +221,7 @@ public class SwerveDrive extends SubsystemBase {
                 new HolonomicPathFollowerConfig(
                     new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
                     new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
-                    0.1,
+                    0.3,
                     KinematicsConstants.RADIUS_DRIVE_CHASSIS,
                     new ReplanningConfig()
                 ),
@@ -253,59 +235,4 @@ public class SwerveDrive extends SubsystemBase {
         );
 
     }
-
-    // public Pose2d getPose() {
-    //     return Pose2d(x, y, Rotation2d.fromDegrees(deg));
-    // }
-
-    /*
-     *     public SwerveControllerCommand startTrajectory() {
-        //Config Trajectory Settings
-
-        TrajectoryConfig config = new TrajectoryConfig(
-            AutonomousConstants.LIMIT_AUTOSPEED_DRIVE,
-            AutonomousConstants.LIMIT_AUTOSPEED_ROTATE
-        );
-        config.setKinematics(KinematicsConstants.KINEMATICS_DRIVE_CHASSIS);
-
-        //Create trajectory
-
-        Trajectory newTrajectory = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(
-                new Translation2d(0.0, 50.0),
-                new Translation2d(50.0, 0.0)
-            ),
-            new Pose2d(50.0,50.0,new Rotation2d(0)),
-            config);
-
-        resetOdometer(newTrajectory.getInitialPose());
-        
-        //Create Controllers
-        PIDController strafePID = new PIDController(
-            PID_Config.VisionDriving.Strafing.Proportional,
-            PID_Config.VisionDriving.Strafing.Integral,
-            PID_Config.VisionDriving.Strafing.Derivitive
-        );
-        ProfiledPIDController rotationPID = new ProfiledPIDController(
-            PID_Config.VisionDriving.Steering.Proportional,
-            PID_Config.VisionDriving.Steering.Integral,
-            PID_Config.VisionDriving.Steering.Derivitive,
-            new TrapezoidProfile.Constraints(0.5 * Math.PI, 0.1 * Math.PI)
-        );
-        rotationPID.enableContinuousInput(-180,180);
-
-        return new SwerveControllerCommand(
-            newTrajectory, 
-            ()->ODEMETER.getPoseMeters(), 
-            KinematicsConstants.KINEMATICS_DRIVE_CHASSIS,
-            strafePID,
-            strafePID,
-            rotationPID,
-            this::setModuleStates,
-            this
-        );
-    }
-     */
-
 }
