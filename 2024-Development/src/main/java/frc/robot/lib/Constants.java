@@ -97,23 +97,27 @@ public final class Constants {
 
   public static class IntakeSubsystemConstants {
     public static int ID_MOTOR_ROLLER = 31;
-    public static int ID_MOTOR_SCHWOOP = 32;
+    public static int ID_MOTOR_SCHWOOP = 9;
 
 
     public static double SCHWOOP_GEAR_RATIO = (1/50);
     public static double SCHWOOP_ROTATIONS_TO_DEGRESS = SCHWOOP_GEAR_RATIO * 2*Math.PI;
 
     public static double Forward_Schwoop_Position;
-    public static double Reverse_Schwoop_Position;
+    public static double Reverse_Schwoop_Position; //TODO: Find these!                                                                                                                                                              -
 
   }
   
   public static class ConveyerSubsystemConstants {
-    public static int ID_MOTOR_CONVEYER = 41;
+    public static int ID_MOTOR_CONVEYER_LEFT = 11;
+    public static int ID_MOTOR_CONVEYER_RIGHT = 12;
+
+
     public static int ID_SENSOR_LINEBREAK = 0;
   }
 
   public static class ShooterSubsystemConstants {
+
     public static int ID_MOTOR_TILTER = 51;
     public static int ID_MOTOR_SHOOTER_LEADER = 52;
     public static int ID_MOTOR_SHOOTER_FOLLOWER = 53;
@@ -123,6 +127,8 @@ public final class Constants {
       public static int CHANNEL_REVERSE = 2;
     }
 
+    public static int ID_MOTOR_CONVEYER = 50;
+    public static int ID_SENSOR_LINEBREAK = 0;
   }
 
   public static final class OIConstants {

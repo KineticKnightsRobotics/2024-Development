@@ -133,6 +133,10 @@ public class RobotContainer {
         new INTAKECONVEYER_intakeGamePiece(SUBSYSTEM_INTAKE, SUBSYSTEM_CONVEYER)
       )
     );
+   // OP_12.whileTrue(SUBSYSTEM_SHOOTER.setShooterSpeed(0.9));
+
+    DRIVER_R1.whileTrue(SUBSYSTEM_CONVEYER.runConveyer(0.5));
+
 
 
 

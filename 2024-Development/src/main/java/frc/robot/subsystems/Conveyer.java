@@ -8,33 +8,39 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.DigitalInput;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //robot
 import frc.robot.lib.Constants.ConveyerSubsystemConstants;
 
 public class Conveyer extends SubsystemBase {
-
-    CANSparkMax schwoopMotor;
-    DigitalInput lineBreakSensor;
+    //DigitalInput lineBreakSensor;
+    CANSparkMax conveyerMotorLeft;
+    CANSparkMax conveyerMotorRight;
 
     public Conveyer() {
-        schwoopMotor = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER, CANSparkLowLevel.MotorType.kBrushless);
-        schwoopMotor.setOpenLoopRampRate(2);
-        lineBreakSensor = new DigitalInput(ConveyerSubsystemConstants.ID_SENSOR_LINEBREAK);
+        //lineBreakSensor = new DigitalInput(ConveyerSubsystemConstants.ID_SENSOR_LINEBREAK);
+        conveyerMotorLeft = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
+        conveyerMotorRight = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
+        
+        conveyerMotorLeft.setOpenLoopRampRate(2);
+        conveyerMotorRight.setOpenLoopRampRate(2);
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Note in Conveyer", getLineBreak());
+        //SmartDashboard.putBoolean("Note in Conveyer", getLineBreak());
     }
 
+    /*
     public boolean getLineBreak() {
         return ! lineBreakSensor.get();
     }
+    */
 
     public void setConveyerSpeed(double percentOutput) {
-        schwoopMotor.set(percentOutput);
+        conveyerMotorRight.set(percentOutput);
+        conveyerMotorLeft.set(-percentOutput);
     }
 
     public Command runConveyer(double percentOutput) {
