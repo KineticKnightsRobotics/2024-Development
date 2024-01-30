@@ -116,12 +116,22 @@ public class RobotContainer {
     //DRIVER_R1.whileTrue(new LIMELIGHT__Strafe(SUBSYSTEM_LIMELIGHT,SUBSYSTEM_SWERVEDRIVE,POIGeometryConstants.Test1.OFFSET_POI_X,() -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y)));
 
     DRIVER_R1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 1.0));
-    DRIVER_L1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, -1.0));
+   // DRIVER_L1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, -1.0));
+
+    DRIVER_L1.whileTrue(new SHOOTER_runFeeder(-0.50, SUBSYSTEM_SHOOTER));
+
+    DRIVER_A.whileTrue(new SHOOTER_runShooter(0.80, SUBSYSTEM_SHOOTER));
 
 
-    OP_1.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(0));
-    OP_2.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(SUBSYSTEM_INTAKE.getIntakePosition() + 1 ));
-    OP_3.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(SUBSYSTEM_INTAKE.getIntakePosition() - 1 ));
+    DRIVER_Y.whileTrue(new SHOOTER_runFeeder(0.8, SUBSYSTEM_SHOOTER));
+
+    DRIVER_X.whileTrue(new RUNALLTHEMFELLAS(SUBSYSTEM_SHOOTER, SUBSYSTEM_INTAKE, SUBSYSTEM_CONVEYER));
+
+
+
+    //OP_1.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(0));
+    //OP_2.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(SUBSYSTEM_INTAKE.getIntakePosition() + 1 ));
+    //OP_3.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(SUBSYSTEM_INTAKE.getIntakePosition() - 1 ));
 
 
 
@@ -133,13 +143,8 @@ public class RobotContainer {
         new INTAKECONVEYER_intakeGamePiece(SUBSYSTEM_INTAKE, SUBSYSTEM_CONVEYER)
       )
     );
-   // OP_12.whileTrue(SUBSYSTEM_SHOOTER.setShooterSpeed(0.9));
-
-    DRIVER_R1.whileTrue(SUBSYSTEM_CONVEYER.runConveyer(0.5));
-
-
-
-
+    //OP_12.whileTrue(SUBSYSTEM_SHOOTER.setShooterSpeed(0.9));
+    //DRIVER_R1.whileTrue(SUBSYSTEM_CONVEYER.runConveyer(0.5));
   }
 
   public Command getAutonomousCommand() {

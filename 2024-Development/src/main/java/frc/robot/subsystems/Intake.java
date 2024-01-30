@@ -46,10 +46,10 @@ public class Intake extends SubsystemBase {
     private double schwoopController_Reference;
 
     public Intake(){
-        rollerMotor = new CANSparkMax(9, MotorType.kBrushless);
+        rollerMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_ROLLER, MotorType.kBrushless);
 
         rollerMotor.restoreFactoryDefaults();
-        rollerMotor.setOpenLoopRampRate(2.0);
+        rollerMotor.setOpenLoopRampRate(0.5);
         rollerMotor.setInverted(true);
 
         schwoopMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_SCHWOOP, MotorType.kBrushless);

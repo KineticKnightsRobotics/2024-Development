@@ -38,6 +38,7 @@ public class INTAKECONVEYER_intakeGamePiece extends Command {
 
     @Override
     public boolean isFinished() {
-        return conveyer.getLineBreak();
+        //return conveyer.getLineBreak();
+        return false;
     }
 }

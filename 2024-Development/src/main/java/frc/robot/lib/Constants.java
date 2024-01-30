@@ -96,8 +96,8 @@ public final class Constants {
   }
 
   public static class IntakeSubsystemConstants {
-    public static int ID_MOTOR_ROLLER = 31;
-    public static int ID_MOTOR_SCHWOOP = 9;
+    public static int ID_MOTOR_ROLLER = 9;
+    public static int ID_MOTOR_SCHWOOP = 31;
 
 
     public static double SCHWOOP_GEAR_RATIO = (1/50);

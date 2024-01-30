@@ -20,7 +20,7 @@ public class INTAKE_SetRollerSpeed extends Command {
     }
     @Override
     public void end(boolean Interrupted){
-        if (Interrupted){subsystem.setRollerSpeed(0.0);}
+        subsystem.setRollerSpeed(0.0);
     }
     @Override
     public boolean isFinished(){

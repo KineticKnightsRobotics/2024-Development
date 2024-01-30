@@ -7,16 +7,16 @@ import com.revrobotics.SparkPIDController;
 //import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
-//import edu.wpi.first.wpilibj.Compressor;
-//import edu.wpi.first.wpilibj.DoubleSolenoid;
-//import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 //import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 import frc.robot.lib.Constants.ShooterSubsystemConstants;
-//import frc.robot.lib.Constants.ShooterSubsystemConstants.ShooterBlockPneumatics;
+import frc.robot.lib.Constants.ShooterSubsystemConstants.ShooterBlockPneumatics;
 
 
 public class Shooter extends SubsystemBase {
@@ -32,8 +32,8 @@ public class Shooter extends SubsystemBase {
 
     private final CANSparkMax feedMotor;
 
-  //  private final Compressor compressor;
-   // private final DoubleSolenoid shooterBlock;
+    //private final Compressor compressor;
+    //private final DoubleSolenoid shooterBlock;
 
     private double tiltPosition = 0.0;
 
@@ -65,7 +65,7 @@ public class Shooter extends SubsystemBase {
         shooterMotorF.setInverted(true);
         shooterMotorF.follow(shooterMotorL);
 
-        feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER, CANSparkLowLevel.MotorType.kBrushless);
+        feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
         feedMotor.setIdleMode(IdleMode.kBrake);
     }
     
@@ -73,7 +73,10 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 5 )); // Check if shooter rollers are running within 5 RPM of each other
 
+        SmartDashboard.putNumber("Shooter RPM", getShooterFRPM());
+
         //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
+
         //SmartDashboard.putString("Shooter Block State", shooterBlock.get().toString());
     }
 
@@ -86,9 +89,9 @@ public class Shooter extends SubsystemBase {
 
   
     
-    //public void toggleShooterBlock(DoubleSolenoid.Value value) {
-    //     shooterBlock.set(value);
-    //}
+    public void toggleShooterBlock(DoubleSolenoid.Value value) {
+         //shooterBlock.set(value);
+    }
 
 
     public void setShooterSpeed(double percentOutput) {
