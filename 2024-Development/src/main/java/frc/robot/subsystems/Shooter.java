@@ -31,6 +31,7 @@ public class Shooter extends SubsystemBase {
     private final CANSparkMax shooterMotorF; //BOTTOM roller
 
     private final CANSparkMax feedMotor;
+    private final RelativeEncoder feedEncoder;
 
     //private final Compressor compressor;
     //private final DoubleSolenoid shooterBlock;
@@ -66,14 +67,18 @@ public class Shooter extends SubsystemBase {
         shooterMotorF.follow(shooterMotorL);
 
         feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
+        feedEncoder = feedMotor.getEncoder();
+        feedEncoder.setPositionConversionFactor(ShooterSubsystemConstants.MOTOR_FEEDER_GEARRATIO);
+
         feedMotor.setIdleMode(IdleMode.kBrake);
     }
     
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 5 )); // Check if shooter rollers are running within 5 RPM of each other
+        SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
 
-        SmartDashboard.putNumber("Shooter RPM", getShooterFRPM());
+        SmartDashboard.putNumber("Shooter RPM Top", getShooterLRPM());
+        SmartDashboard.putNumber("Shooter RPM Bottom", getShooterFRPM());
 
         //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
 
@@ -87,6 +92,9 @@ public class Shooter extends SubsystemBase {
         return shooterMotorL.getEncoder().getVelocity();
     }
 
+    public double getFeedPostition() {
+        return feedEncoder.getPosition();
+    }
   
     
     public void toggleShooterBlock(DoubleSolenoid.Value value) {

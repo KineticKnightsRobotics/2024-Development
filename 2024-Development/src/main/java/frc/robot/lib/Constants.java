@@ -113,7 +113,7 @@ public final class Constants {
     public static int ID_MOTOR_CONVEYER_RIGHT = 12;
 
 
-    public static int ID_SENSOR_LINEBREAK = 0;
+    public static int ID_SENSOR_LINEBREAK = 1;
   }
 
   public static class ShooterSubsystemConstants {
@@ -121,7 +121,11 @@ public final class Constants {
     public static int ID_MOTOR_TILTER = 51;
     public static int ID_MOTOR_SHOOTER_LEADER = 52;
     public static int ID_MOTOR_SHOOTER_FOLLOWER = 53;
+
+
     public static int ID_MOTOR_FEEDER = 54;
+    public static double MOTOR_FEEDER_GEARRATIO = 1 / 3;
+
     public static class ShooterBlockPneumatics {
       public static int CHANNEL_FORWARD = 1;
       public static int CHANNEL_REVERSE = 2;

@@ -51,6 +51,7 @@ public class Intake extends SubsystemBase {
         rollerMotor.restoreFactoryDefaults();
         rollerMotor.setOpenLoopRampRate(0.5);
         rollerMotor.setInverted(true);
+        rollerMotor.setIdleMode(IdleMode.kBrake);
 
         schwoopMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_SCHWOOP, MotorType.kBrushless);
         schwoopMotor.setClosedLoopRampRate(2.0);

@@ -7,24 +7,26 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 
-public class SHOOTER_runShooter extends Command {
+public class SHOOTER_runShooter_Backwards extends Command {
 
     Shooter subsystem;
-    double speed;
+    double percentOutput;
 
-    public SHOOTER_runShooter(double _speed, Shooter _subsystem) {
+    public SHOOTER_runShooter_Backwards(double _speed, Shooter _subsystem) {
         addRequirements(_subsystem);
         subsystem = _subsystem;
-        speed = _speed;
+        percentOutput = _speed;
     }
 
     @Override
     public void initialize() {
-        subsystem.setShooterSpeed(0.8);
+        subsystem.setShooterSpeed(percentOutput);
+        subsystem.setFeederSpeed(percentOutput);
     }
     @Override
     public void execute() {
-        if (subsystem.getShooterFRPM() > speed && subsystem.getShooterLRPM() > speed && (Math.abs(subsystem.getShooterFRPM() - subsystem.getShooterLRPM()) <= 100 ) ) {
+        /*
+        if (subsystem.getShooterFRPM() > speed && subsystem.getShooterLRPM() > speed) {
             subsystem.toggleShooterBlock(DoubleSolenoid.Value.kReverse);
             subsystem.setFeederSpeed(0.8);
         }
@@ -32,6 +34,7 @@ public class SHOOTER_runShooter extends Command {
             subsystem.toggleShooterBlock(DoubleSolenoid.Value.kForward);
             //asubsystem.setFeederSpeed(0.0);
         }
+        */
     }
     @Override
     public void end(boolean interrupted) {

@@ -16,6 +16,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -115,18 +116,48 @@ public class RobotContainer {
     //DRIVER_L1.whileTrue(new LIMELIGHT_Steer(SUBSYSTEM_SWERVEDRIVE, SUBSYSTEM_LIMELIGHT));
     //DRIVER_R1.whileTrue(new LIMELIGHT__Strafe(SUBSYSTEM_LIMELIGHT,SUBSYSTEM_SWERVEDRIVE,POIGeometryConstants.Test1.OFFSET_POI_X,() -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y)));
 
-    DRIVER_R1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 1.0));
+    //DRIVER_R1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 1.0));
+    DRIVER_R1.whileTrue(
+      new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER, SUBSYSTEM_INTAKE)
+      );
    // DRIVER_L1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, -1.0));
 
-    DRIVER_L1.whileTrue(new SHOOTER_runFeeder(-0.50, SUBSYSTEM_SHOOTER));
+    DRIVER_L1.whileTrue(
+      new ParallelCommandGroup(  
+        //new SHOOTER_runFeeder(-0.40, SUBSYSTEM_SHOOTER),
+        new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, -0.5),
+        new CONVEYER_RunConveyer(-0.2, SUBSYSTEM_CONVEYER),
+        new SHOOTER_runShooter_Backwards(-0.30, SUBSYSTEM_SHOOTER)
+      )
+    );
 
-    DRIVER_A.whileTrue(new SHOOTER_runShooter(0.80, SUBSYSTEM_SHOOTER));
+    DRIVER_A.whileTrue(new SHOOTER_runShooter(4300, SUBSYSTEM_SHOOTER));
+
+    DRIVER_X.whileTrue(
+        new SequentialCommandGroup(
+        new CONVEYERSHOOTER_loadFeeder(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER,SUBSYSTEM_INTAKE)
+        //new SHOOTER_moveFeederDistance(SUBSYSTEM_SHOOTER, -20),
+        //new SHOOTER_runShooter(0, SUBSYSTEM_SHOOTER)
+        )
+    );
+
+    DRIVER_Y.whileTrue(
+      new SHOOTER_runFeeder(0.8, SUBSYSTEM_SHOOTER)
+    );
+
+    //DRIVER_X.whileTrue(new RUNALLTHEMFELLAS(SUBSYSTEM_SHOOTER, SUBSYSTEM_INTAKE, SUBSYSTEM_CONVEYER));
 
 
-    DRIVER_Y.whileTrue(new SHOOTER_runFeeder(0.8, SUBSYSTEM_SHOOTER));
+    //OP_1.whileTrue(new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER));
+    OP_1.onTrue(new SHOOTER_moveFeederDistance(SUBSYSTEM_SHOOTER, -20));
 
-    DRIVER_X.whileTrue(new RUNALLTHEMFELLAS(SUBSYSTEM_SHOOTER, SUBSYSTEM_INTAKE, SUBSYSTEM_CONVEYER));
-
+    OP_2.whileTrue(
+      new SequentialCommandGroup(
+        new CONVEYERSHOOTER_loadFeeder(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER,SUBSYSTEM_INTAKE),
+        new SHOOTER_moveFeederDistance(SUBSYSTEM_SHOOTER, -20),
+        new SHOOTER_runShooter(0, SUBSYSTEM_SHOOTER)
+        )
+    );
 
 
     //OP_1.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(0));
@@ -134,15 +165,15 @@ public class RobotContainer {
     //OP_3.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(SUBSYSTEM_INTAKE.getIntakePosition() - 1 ));
 
 
+    OP_12.onTrue(SUBSYSTEM_CONVEYER.setLED(-0.95));
+    OP_13.onTrue(SUBSYSTEM_CONVEYER.setLED(-0.5));
+    OP_15.onTrue(SUBSYSTEM_CONVEYER.setLED(0.35));
+    OP_11.onTrue(SUBSYSTEM_CONVEYER.setLED(-0.99));
+    OP_14.onTrue(SUBSYSTEM_CONVEYER.setLED(0.91));
+
 
     OP_4.whileTrue(new SHOOTER_runShooter(1.0, SUBSYSTEM_SHOOTER));
 
-    OP_20.whileTrue(
-      new SequentialCommandGroup(
-        SUBSYSTEM_INTAKE.setIntakePosition(Constants.IntakeSubsystemConstants.Forward_Schwoop_Position),
-        new INTAKECONVEYER_intakeGamePiece(SUBSYSTEM_INTAKE, SUBSYSTEM_CONVEYER)
-      )
-    );
     //OP_12.whileTrue(SUBSYSTEM_SHOOTER.setShooterSpeed(0.9));
     //DRIVER_R1.whileTrue(SUBSYSTEM_CONVEYER.runConveyer(0.5));
   }
