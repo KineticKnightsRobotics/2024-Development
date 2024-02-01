@@ -117,7 +117,7 @@ public class RobotContainer {
 
     DRIVER_R1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 1.0));
     DRIVER_L1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, -1.0));
-
+    
 
     OP_1.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(0));
     OP_2.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(SUBSYSTEM_INTAKE.getIntakePosition() + 1 ));
@@ -127,12 +127,16 @@ public class RobotContainer {
 
     OP_4.whileTrue(new SHOOTER_runShooter(1.0, SUBSYSTEM_SHOOTER));
 
-    OP_20.whileTrue(
+    OP_19.whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.setIntakePosition(Constants.IntakeSubsystemConstants.Forward_Schwoop_Position),
         new INTAKECONVEYER_intakeGamePiece(SUBSYSTEM_INTAKE, SUBSYSTEM_CONVEYER)
       )
     );
+    OP_20.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(Constants.IntakeSubsystemConstants.Reverse_Schwoop_Position));
+
+    OP_17.whileTrue(SUBSYSTEM_INTAKE.zeroIntakeCommand());
+
 
 
 

@@ -65,7 +65,7 @@ public class Shooter extends SubsystemBase {
         shooterMotorF.setInverted(true);
         shooterMotorF.follow(shooterMotorL);
 
-        feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER, CANSparkLowLevel.MotorType.kBrushless);
+        feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
         feedMotor.setIdleMode(IdleMode.kBrake);
     }
     

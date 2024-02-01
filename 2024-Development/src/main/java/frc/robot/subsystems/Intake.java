@@ -53,7 +53,7 @@ public class Intake extends SubsystemBase {
         rollerMotor.setInverted(true);
 
         schwoopMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_SCHWOOP, MotorType.kBrushless);
-        schwoopMotor.setClosedLoopRampRate(2.0);
+        schwoopMotor.setClosedLoopRampRate(1.0);
         schwoopMotor.setIdleMode(IdleMode.kBrake);
 
         schwoopEncoder = schwoopMotor.getEncoder();
@@ -63,6 +63,7 @@ public class Intake extends SubsystemBase {
         schwoopController.setP(SchwoopControllerPID.Proportional);
         schwoopController.setI(SchwoopControllerPID.Integral);
         schwoopController.setD(SchwoopControllerPID.Derivitive);
+        schwoopController.setOutputRange(-0.8,0.8);
 
         SmartDashboard.putBoolean("Intake is stuck!", limitSwitchActuate());
 
@@ -99,5 +100,16 @@ public class Intake extends SubsystemBase {
     public void unlockSchwoop(boolean unlocked) {
         if (unlocked) {schwoopMotor.setIdleMode(IdleMode.kCoast);}
         else          {schwoopMotor.setIdleMode(IdleMode.kBrake);}
+    }
+    @Override
+    public void periodic() {
+    SmartDashboard.putNumber("Intake Position", getIntakePosition());
+    //zeroIntake(0);
+    }
+    public void zeroIntake(int position){
+        schwoopEncoder.setPosition(position);
+    }
+    public Command zeroIntakeCommand() {
+        return Commands.runOnce(() -> zeroIntake(0));
     }
 }
