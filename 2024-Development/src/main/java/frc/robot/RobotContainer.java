@@ -174,8 +174,19 @@ public class RobotContainer {
 
     OP_4.whileTrue(new SHOOTER_runShooter(1.0, SUBSYSTEM_SHOOTER));
 
-    //OP_12.whileTrue(SUBSYSTEM_SHOOTER.setShooterSpeed(0.9));
-    //DRIVER_R1.whileTrue(SUBSYSTEM_CONVEYER.runConveyer(0.5));
+    OP_19.whileTrue(
+      new SequentialCommandGroup(
+        SUBSYSTEM_INTAKE.setIntakePosition(Constants.IntakeSubsystemConstants.Forward_Schwoop_Position),
+        new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE)
+      )
+    );
+    OP_20.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(Constants.IntakeSubsystemConstants.Reverse_Schwoop_Position));
+
+    OP_17.whileTrue(SUBSYSTEM_INTAKE.zeroIntakeCommand());
+
+
+
+
   }
 
   public Command getAutonomousCommand() {

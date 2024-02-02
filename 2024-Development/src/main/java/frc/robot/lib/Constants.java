@@ -103,8 +103,8 @@ public final class Constants {
     public static double SCHWOOP_GEAR_RATIO = (1/50);
     public static double SCHWOOP_ROTATIONS_TO_DEGRESS = SCHWOOP_GEAR_RATIO * 2*Math.PI;
 
-    public static double Forward_Schwoop_Position;
-    public static double Reverse_Schwoop_Position; //TODO: Find these!                                                                                                                                                              -
+    public static double Forward_Schwoop_Position = 0;
+    public static double Reverse_Schwoop_Position = 18.5;
 
   }
   

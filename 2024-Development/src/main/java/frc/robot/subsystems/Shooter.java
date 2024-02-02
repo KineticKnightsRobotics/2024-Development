@@ -69,7 +69,6 @@ public class Shooter extends SubsystemBase {
         feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
         feedEncoder = feedMotor.getEncoder();
         feedEncoder.setPositionConversionFactor(ShooterSubsystemConstants.MOTOR_FEEDER_GEARRATIO);
-
         feedMotor.setIdleMode(IdleMode.kBrake);
     }
     
