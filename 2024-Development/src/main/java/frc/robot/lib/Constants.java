@@ -97,14 +97,14 @@ public final class Constants {
 
   public static class IntakeSubsystemConstants {
     public static int ID_MOTOR_ROLLER = 9;
-    public static int ID_MOTOR_SCHWOOP = 31;
+    public static int ID_MOTOR_INTAKE_PIVOT = 31;
 
 
-    public static double SCHWOOP_GEAR_RATIO = (1/50);
-    public static double SCHWOOP_ROTATIONS_TO_DEGRESS = SCHWOOP_GEAR_RATIO * 2*Math.PI;
+    public static double INTAKE_PIVOT_GEAR_RATIO = (1/50);
+    public static double INTAKE_PIVOT_ROTATIONS_TO_DEGRESS = INTAKE_PIVOT_GEAR_RATIO * 2*Math.PI;
 
-    public static double Forward_Schwoop_Position = -17.25;
-    public static double Reverse_Schwoop_Position = 0.0;
+    public static double Forward_IntakePivot_Position = -18.5;
+    public static double Reverse_IntakePivot_Position = 0.0;
 
   }
   

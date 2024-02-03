@@ -19,7 +19,7 @@ import frc.robot.lib.PID_Config.IntakeSubsystem.*;
 
 /*
  * TODO: Intake
- * Intake schwoop function
+ * Intake Intake Pivot function
  * find forward position
  * find backwards position
  * zeroing encoder with voltage limit switch
@@ -37,13 +37,13 @@ public class Intake extends SubsystemBase {
     
     private final CANSparkMax rollerMotor;
 
-    private final CANSparkMax schwoopMotor;
+    private final CANSparkMax intakePivotMotor;
 
-    private final SparkPIDController schwoopController;
+    private final SparkPIDController intakePivotController;
     
-    private final RelativeEncoder schwoopEncoder;
+    private final RelativeEncoder intakePivotEncoder;
 
-    private double schwoopController_Reference;
+    private double intakePivotController_Reference;
 
     public Intake(){
         rollerMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_ROLLER, MotorType.kBrushless);
@@ -52,35 +52,36 @@ public class Intake extends SubsystemBase {
         rollerMotor.setOpenLoopRampRate(0.5);
         rollerMotor.setInverted(true);
         rollerMotor.setIdleMode(IdleMode.kBrake);
+        rollerMotor.setSmartCurrentLimit(80);
 
-        schwoopMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_SCHWOOP, MotorType.kBrushless);
-        schwoopMotor.setClosedLoopRampRate(0.5);
-        schwoopMotor.setIdleMode(IdleMode.kBrake);
+        intakePivotMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_INTAKE_PIVOT, MotorType.kBrushless);
+        intakePivotMotor.setClosedLoopRampRate(0.5);
+        intakePivotMotor.setIdleMode(IdleMode.kBrake);
+        intakePivotMotor.setSmartCurrentLimit(20);
+        intakePivotEncoder = intakePivotMotor.getEncoder();
+        intakePivotEncoder.setPositionConversionFactor(IntakeSubsystemConstants.INTAKE_PIVOT_ROTATIONS_TO_DEGRESS);
 
-        schwoopEncoder = schwoopMotor.getEncoder();
-        schwoopEncoder.setPositionConversionFactor(IntakeSubsystemConstants.SCHWOOP_ROTATIONS_TO_DEGRESS);
+        intakePivotController = intakePivotMotor.getPIDController();
+        intakePivotController.setP(IntakePivotControllerPID.Proportional);
+        intakePivotController.setI(IntakePivotControllerPID.Integral);
+        intakePivotController.setD(IntakePivotControllerPID.Derivitive);
+        intakePivotController.setOutputRange(-0.8,0.8);
 
-        schwoopController = schwoopMotor.getPIDController();
-        schwoopController.setP(SchwoopControllerPID.Proportional);
-        schwoopController.setI(SchwoopControllerPID.Integral);
-        schwoopController.setD(SchwoopControllerPID.Derivitive);
-        schwoopController.setOutputRange(-0.8,0.8);
-
-        SmartDashboard.putBoolean("Intake is stuck!", limitSwitchActuate());
+        SmartDashboard.putBoolean("Intake is stuck! sigma", limitSwitchActuate());
 
     }
 
     public void actuateIntake(double position) {
-        schwoopController_Reference = position;
-        schwoopController.setReference(position, ControlType.kPosition);
+        intakePivotController_Reference = position;
+        intakePivotController.setReference(position, ControlType.kPosition);
     }
 
     public boolean limitSwitchActuate() {
-        return (Math.abs(schwoopEncoder.getPosition() - schwoopController_Reference) > 0.1) && (Math.abs(schwoopEncoder.getVelocity()) <= 0.01);
+        return (Math.abs(intakePivotEncoder.getPosition() - intakePivotController_Reference) > 0.1) && (Math.abs(intakePivotEncoder.getVelocity()) <= 0.01);
     }
     
     public double getIntakePosition() {
-        return schwoopEncoder.getPosition();
+        return intakePivotEncoder.getPosition();
     }
 
     public void setRollerSpeed(double percentOutput) {
@@ -88,30 +89,31 @@ public class Intake extends SubsystemBase {
     }
 
     public void stopactuateIntake() {
-        schwoopController.setReference(schwoopEncoder.getPosition(), ControlType.kPosition);
-        schwoopMotor.set(0.0);
+        intakePivotController.setReference(intakePivotEncoder.getPosition(), ControlType.kPosition);
+        intakePivotMotor.set(0.0);
     }
 
     public Command setIntakePosition(double position) {
         return Commands.runOnce(() -> actuateIntake(position));
     }
 
-    public void unlockSchwoop(boolean unlocked) {
-        if (unlocked) {schwoopMotor.setIdleMode(IdleMode.kCoast);}
-        else          {schwoopMotor.setIdleMode(IdleMode.kBrake);}
+    public void unlockIntakePivot(boolean unlocked) {
+        if (unlocked) {intakePivotMotor.setIdleMode(IdleMode.kCoast);}
+        else          {intakePivotMotor.setIdleMode(IdleMode.kBrake);}
     }
 
 
     @Override
     public void periodic() {
     SmartDashboard.putNumber("Intake Actuator Position", getIntakePosition());
+    SmartDashboard.putNumber("roller Current", rollerMotor.getOutputCurrent());
     //zeroIntake(0);
     }
     public Command unlockIntake(boolean unlocked) {
-        return Commands.runOnce(() -> unlockSchwoop(unlocked));
+        return Commands.runOnce(() -> unlockIntakePivot(unlocked));
     }
     public void zeroIntake(int position){
-        schwoopEncoder.setPosition(position);
+        intakePivotEncoder.setPosition(position);
     }
     public Command zeroIntakeCommand() {
         return Commands.runOnce(() -> zeroIntake(0));

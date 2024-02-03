@@ -95,9 +95,9 @@ public class RobotContainer {
         () -> true
       )
     );
-    SUBSYSTEM_CONVEYER.setDefaultCommand(
-      new CONVEYER_DEFAULT(SUBSYSTEM_CONVEYER)
-    );
+    //SUBSYSTEM_CONVEYER.setDefaultCommand(
+      //new CONVEYER_DEFAULT(SUBSYSTEM_CONVEYER)
+    //);
     // Configure the trigger bindings
     configureBindings();
 
@@ -118,27 +118,29 @@ public class RobotContainer {
 
     DRIVER_R1.whileTrue(
       new SequentialCommandGroup(
-        SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_Schwoop_Position),
+        SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position),
         new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE),
-        SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_Schwoop_Position)
+        SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position)
       )
     );
-    DRIVER_R1.onFalse(SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_Schwoop_Position));
+    DRIVER_R1.onFalse(SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position));
 
     DRIVER_L1.whileTrue(
       new ParallelCommandGroup(  
         //new SHOOTER_runFeeder(-0.40, SUBSYSTEM_SHOOTER),
-        new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, -0.5),
-        new CONVEYER_RunConveyer(-0.2, SUBSYSTEM_CONVEYER),
+        new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, -0.8),
+        new CONVEYER_RunConveyer(0.4, SUBSYSTEM_CONVEYER),
         new SHOOTER_runShooter_Backwards(-0.30, SUBSYSTEM_SHOOTER)
       )
     );
 
     DRIVER_A.whileTrue(new SHOOTER_runShooter_OpenLoop(4300, SUBSYSTEM_SHOOTER));
 
-    DRIVER_X.whileTrue(
+    DRIVER_X.onTrue(
         new SequentialCommandGroup(
-        new CONVEYERSHOOTER_loadFeeder(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER,SUBSYSTEM_INTAKE)
+          //new CONVEYERSHOOTER_loadFeeder(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER,SUBSYSTEM_INTAKE)
+          new CONVEYER_RunUntilLineBreak(SUBSYSTEM_CONVEYER)
+        
         //new SHOOTER_moveFeederDistance(SUBSYSTEM_SHOOTER, -20),
         //new SHOOTER_runShooter(0, SUBSYSTEM_SHOOTER)
         )
@@ -172,7 +174,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     //return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Shop Pickup Note 2");
 
-    return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "BigRob");
+    return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Straight");
 
   } 
 }

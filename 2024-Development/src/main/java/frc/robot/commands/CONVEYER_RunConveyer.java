@@ -9,17 +9,18 @@ public class CONVEYER_RunConveyer extends Command {
 
 
     Conveyer m_Conveyer;
+    double percentOutput;
 
-
-    public CONVEYER_RunConveyer(double speed, Conveyer subsystem) {
+    public CONVEYER_RunConveyer(double new_speed, Conveyer subsystem) {
         addRequirements(subsystem);
-
+ 
         m_Conveyer = subsystem;
+        percentOutput = new_speed;
     }
 
     @Override
     public void initialize() {
-        m_Conveyer.setConveyerSpeed(0.4);
+        m_Conveyer.setConveyerSpeed(percentOutput);
     }
 
     @Override

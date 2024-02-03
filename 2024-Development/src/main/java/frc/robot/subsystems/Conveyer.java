@@ -43,7 +43,8 @@ public class Conveyer extends SubsystemBase {
 
         conveyerMotorLeft.setIdleMode(IdleMode.kBrake);
         conveyerMotorRight.setIdleMode(IdleMode.kBrake);
-        
+        conveyerMotorLeft.setSmartCurrentLimit(25);
+        conveyerMotorRight.setSmartCurrentLimit(25);
         //conveyerMotorLeft.setOpenLoopRampRate(2);
         //conveyerMotorRight.setOpenLoopRampRate(2);
 
@@ -65,6 +66,9 @@ public class Conveyer extends SubsystemBase {
         if (DriverStation.isDisabled()) {
             setLED(0.53);
         }
+        SmartDashboard.putNumber("convey_Left", conveyerMotorLeft.getOutputCurrent());
+        SmartDashboard.putNumber("convey_Right", conveyerMotorRight.getOutputCurrent());
+
     }
 
     public boolean getLineBreak() {

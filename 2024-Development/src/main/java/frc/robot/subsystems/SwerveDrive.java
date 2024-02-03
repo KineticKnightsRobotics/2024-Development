@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
@@ -132,11 +133,23 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_BACK_LEFT.moduleData2Dashboard();
         MODULE_BACK_RIGHT.moduleData2Dashboard();
 
+        //Ticks
+        SmartDashboard.putNumber("FRONT left ticks", MODULE_FRONT_LEFT.getDrivePosition());
+        SmartDashboard.putNumber("FRONT right ticks", MODULE_FRONT_RIGHT.getDrivePosition());
+        SmartDashboard.putNumber("BACK left ticks", MODULE_BACK_LEFT.getDrivePosition());
+        SmartDashboard.putNumber("BACK right ticks", MODULE_BACK_RIGHT.getDrivePosition());
+
+        //RPM
+        SmartDashboard.putNumber("FRONT left RPM", MODULE_FRONT_LEFT.getDriveVelocity());
+        SmartDashboard.putNumber("FRONT right RPM", MODULE_FRONT_RIGHT.getDriveVelocity());
+        SmartDashboard.putNumber("BACK left RPM", MODULE_BACK_LEFT.getDriveVelocity());
+        SmartDashboard.putNumber("BACK right RPM", MODULE_BACK_RIGHT.getDriveVelocity());
+
         ODEMETER.update(
             getRotation2d(),
             getModulePositions()
         );
-
+        
         SmartDashboard.putString("Robot Odemeter position", ODEMETER.getPoseMeters().toString());
 
     }
