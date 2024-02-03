@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 //import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
@@ -12,7 +13,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.lib.PID_Config.ShooterSubsystem.ShooterVelocityPID;
 import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 //import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 import frc.robot.lib.Constants.ShooterSubsystemConstants;
@@ -29,6 +30,7 @@ public class Shooter extends SubsystemBase {
    
     private final CANSparkMax shooterMotorL; //TOP roller
     private final CANSparkMax shooterMotorF; //BOTTOM roller
+    private final SparkPIDController shooterController;
 
     private final CANSparkMax feedMotor;
     private final RelativeEncoder feedEncoder;
@@ -66,6 +68,12 @@ public class Shooter extends SubsystemBase {
         shooterMotorF.setInverted(true);
         shooterMotorF.follow(shooterMotorL);
 
+        shooterController = shooterMotorL.getPIDController();
+
+        shooterController.setP(ShooterVelocityPID.Proportional);
+        shooterController.setI(ShooterVelocityPID.Integral);
+        shooterController.setD(ShooterVelocityPID.Derivitive);
+
         feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
         feedEncoder = feedMotor.getEncoder();
         feedEncoder.setPositionConversionFactor(ShooterSubsystemConstants.MOTOR_FEEDER_GEARRATIO);
@@ -100,20 +108,21 @@ public class Shooter extends SubsystemBase {
          //shooterBlock.set(value);
     }
 
-
     public void setShooterSpeed(double percentOutput) {
         shooterMotorL.set(percentOutput);
+    }
+
+    public void setShooterRPM(double desiredRPM) {
+        shooterController.setReference(desiredRPM, ControlType.kVelocity);
     }
 
     public void setFeederSpeed(double percentOutput) {
         feedMotor.set(percentOutput);
     }
 
-    /*
     public void setTilterPosition(double position) {
         tiltPosition = position;
         tiltController.setReference(position, ControlType.kPosition);
     }
-    */
     
 }

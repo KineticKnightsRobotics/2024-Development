@@ -134,7 +134,7 @@ public class RobotContainer {
       )
     );
 
-    DRIVER_A.whileTrue(new SHOOTER_runShooter(4300, SUBSYSTEM_SHOOTER));
+    DRIVER_A.whileTrue(new SHOOTER_runShooter_OpenLoop(4300, SUBSYSTEM_SHOOTER));
 
     DRIVER_X.whileTrue(
         new SequentialCommandGroup(
@@ -155,7 +155,7 @@ public class RobotContainer {
       new SequentialCommandGroup(
         new CONVEYERSHOOTER_loadFeeder(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER,SUBSYSTEM_INTAKE),
         new SHOOTER_moveFeederDistance(SUBSYSTEM_SHOOTER, -20),
-        new SHOOTER_runShooter(0, SUBSYSTEM_SHOOTER)
+        new SHOOTER_runShooter_OpenLoop(0, SUBSYSTEM_SHOOTER)
         )
     );
 

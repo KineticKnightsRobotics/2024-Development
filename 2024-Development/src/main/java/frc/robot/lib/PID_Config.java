@@ -23,12 +23,14 @@ public class PID_Config {
             public static final double Integral = 0.0;
             public static final double Derivitive = 0.0;
         }
-        public class FlywheelVelocityPID {
+        public class ShooterVelocityPID {
             public static final double Proportional = 0.5;
             public static final double Integral = 0.0;
             public static final double Derivitive = 0.0;
         }
 
+
+        //Currently unused
         public class FeederPositionKinematicsPID {
             public static final double Proportional = 0.1;
             public static final double Integral = 0.0;
