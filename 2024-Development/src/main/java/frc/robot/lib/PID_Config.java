@@ -52,7 +52,7 @@ public class PID_Config {
     }
 
     public class TrajectoryDriving {
-            public static final double Proportional = 0.10;
+            public static final double Proportional = 0.001;
             public static final double Integral = 0.0;
             public static final double Derivitive = 0.0;
     }
