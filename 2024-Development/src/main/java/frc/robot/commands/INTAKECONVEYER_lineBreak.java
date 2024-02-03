@@ -24,7 +24,7 @@ public class INTAKECONVEYER_lineBreak extends Command{
     @Override
     public void initialize() {
         m_Conveyer.setConveyerSpeed(0.7);
-        m_Intake.setRollerSpeed(0.7);
+        m_Intake.setRollerSpeed(0.8);
     }
 
     @Override

@@ -11,7 +11,7 @@ public class PID_Config {
 
     public class IntakeSubsystem {
         public class SchwoopControllerPID {
-            public static final double Proportional = 0.027;
+            public static final double Proportional = 0.03;
             public static final double Integral = 0.0;
             public static final double Derivitive = 0.0;
         }

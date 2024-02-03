@@ -54,7 +54,7 @@ public class Intake extends SubsystemBase {
         rollerMotor.setIdleMode(IdleMode.kBrake);
 
         schwoopMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_SCHWOOP, MotorType.kBrushless);
-        schwoopMotor.setClosedLoopRampRate(1.0);
+        schwoopMotor.setClosedLoopRampRate(0.5);
         schwoopMotor.setIdleMode(IdleMode.kBrake);
 
         schwoopEncoder = schwoopMotor.getEncoder();
@@ -96,16 +96,19 @@ public class Intake extends SubsystemBase {
         return Commands.runOnce(() -> actuateIntake(position));
     }
 
-
-
     public void unlockSchwoop(boolean unlocked) {
         if (unlocked) {schwoopMotor.setIdleMode(IdleMode.kCoast);}
         else          {schwoopMotor.setIdleMode(IdleMode.kBrake);}
     }
+
+
     @Override
     public void periodic() {
-    SmartDashboard.putNumber("Intake Position", getIntakePosition());
+    SmartDashboard.putNumber("Intake Actuator Position", getIntakePosition());
     //zeroIntake(0);
+    }
+    public Command unlockIntake(boolean unlocked) {
+        return Commands.runOnce(() -> unlockSchwoop(unlocked));
     }
     public void zeroIntake(int position){
         schwoopEncoder.setPosition(position);

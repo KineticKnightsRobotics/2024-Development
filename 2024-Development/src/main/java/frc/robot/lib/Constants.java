@@ -35,7 +35,7 @@ public final class Constants {
 
     //Robot Geometry
     public static final double MODULE_WHEEL_DIAMETER = Units.inchesToMeters(4.0);
-    public static final double MODULE_DRIVE_GEAR_RATIO = 8.14 / 1.0; // Drive ratio of 8.14 : 1
+    public static final double MODULE_DRIVE_GEAR_RATIO = 6.75 / 1.0; // Drive ratio of 8.14 : 1
     public static final double MODULE_TURN_GEAR_RATIO = 1.0 / (150.0 / 7.0); // Turning ratio of (150 / 7) : 1
     public static final double MODULE_DRIVE_ROTATIONS_TO_METERS = (MODULE_WHEEL_DIAMETER * Math.PI) / MODULE_DRIVE_GEAR_RATIO;
     public static final double MODULE_TURN_ROTATIONS_TO_RADIANS = MODULE_TURN_GEAR_RATIO * 2 * Math.PI;
@@ -79,7 +79,7 @@ public final class Constants {
 
     // Turning encoder offsets
     public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE = Math.toRadians(-96.0 +  7.6);
-    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians( 34 +    8.4);
+    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians(40 + 2.78);
     public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE= Math.toRadians(-77.0 +  6);
     public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE = Math.toRadians( 62.0 + -3.6);
 
@@ -103,8 +103,8 @@ public final class Constants {
     public static double SCHWOOP_GEAR_RATIO = (1/50);
     public static double SCHWOOP_ROTATIONS_TO_DEGRESS = SCHWOOP_GEAR_RATIO * 2*Math.PI;
 
-    public static double Forward_Schwoop_Position = 0;
-    public static double Reverse_Schwoop_Position = 18.5;
+    public static double Forward_Schwoop_Position = -17.25;
+    public static double Reverse_Schwoop_Position = 0.0;
 
   }
   

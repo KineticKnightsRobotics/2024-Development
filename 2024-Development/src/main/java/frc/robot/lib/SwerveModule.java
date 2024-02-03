@@ -59,6 +59,7 @@ public class SwerveModule extends SubsystemBase {
         MOTOR_DRIVE.setClosedLoopRampRate(2);
         this.ENCODER_DRIVE = MOTOR_DRIVE.getEncoder();
         ENCODER_DRIVE.setPositionConversionFactor(ModuleConstants.MODULE_DRIVE_ROTATIONS_TO_METERS);
+
         //init the turning motor and encoder
         this.MOTOR_TURN = new CANSparkMax(ID_MOTOR_TURN, MotorType.kBrushless);
         //reset to defaults
@@ -81,8 +82,10 @@ public class SwerveModule extends SubsystemBase {
         MODULE_NAME = _NAME;
     }
     public void moduleData2Dashboard(){
-        SmartDashboard.putNumber(MODULE_NAME + ENCODER_ABSOLUTE.getDeviceID() + " angle", Math.toDegrees(getTurningPosition()));
-        SmartDashboard.putNumber(MODULE_NAME + ENCODER_ABSOLUTE.getDeviceID() + " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
+        SmartDashboard.putNumber(MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " angle", Math.toDegrees(getTurningPosition()));
+        SmartDashboard.putNumber(MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
+
+        SmartDashboard.putNumber(MODULE_NAME + "Distance Travelled",getDrivePosition());
     }
 
     /** 

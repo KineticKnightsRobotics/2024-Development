@@ -8,7 +8,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.lib.Constants;
 import frc.robot.lib.LimeLight;
-
+import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.Constants.OIConstants;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -95,6 +95,9 @@ public class RobotContainer {
         () -> true
       )
     );
+    SUBSYSTEM_CONVEYER.setDefaultCommand(
+      new CONVEYER_DEFAULT(SUBSYSTEM_CONVEYER)
+    );
     // Configure the trigger bindings
     configureBindings();
 
@@ -113,14 +116,14 @@ public class RobotContainer {
 
     DRIVER_B.onTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
 
-    //DRIVER_L1.whileTrue(new LIMELIGHT_Steer(SUBSYSTEM_SWERVEDRIVE, SUBSYSTEM_LIMELIGHT));
-    //DRIVER_R1.whileTrue(new LIMELIGHT__Strafe(SUBSYSTEM_LIMELIGHT,SUBSYSTEM_SWERVEDRIVE,POIGeometryConstants.Test1.OFFSET_POI_X,() -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y)));
-
-    //DRIVER_R1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, 1.0));
     DRIVER_R1.whileTrue(
-      new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER, SUBSYSTEM_INTAKE)
-      );
-   // DRIVER_L1.whileTrue(new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, -1.0));
+      new SequentialCommandGroup(
+        SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_Schwoop_Position),
+        new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE),
+        SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_Schwoop_Position)
+      )
+    );
+    DRIVER_R1.onFalse(SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_Schwoop_Position));
 
     DRIVER_L1.whileTrue(
       new ParallelCommandGroup(  
@@ -145,11 +148,8 @@ public class RobotContainer {
       new SHOOTER_runFeeder(0.8, SUBSYSTEM_SHOOTER)
     );
 
-    //DRIVER_X.whileTrue(new RUNALLTHEMFELLAS(SUBSYSTEM_SHOOTER, SUBSYSTEM_INTAKE, SUBSYSTEM_CONVEYER));
 
-
-    //OP_1.whileTrue(new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER));
-    OP_1.onTrue(new SHOOTER_moveFeederDistance(SUBSYSTEM_SHOOTER, -20));
+    //OP_1.onTrue(new SHOOTER_moveFeederDistance(SUBSYSTEM_SHOOTER, -20));
 
     OP_2.whileTrue(
       new SequentialCommandGroup(
@@ -160,36 +160,19 @@ public class RobotContainer {
     );
 
 
-    //OP_1.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(0));
-    //OP_2.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(SUBSYSTEM_INTAKE.getIntakePosition() + 1 ));
-    //OP_3.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(SUBSYSTEM_INTAKE.getIntakePosition() - 1 ));
-
-
+    /*
     OP_12.onTrue(SUBSYSTEM_CONVEYER.setLED(-0.95));
     OP_13.onTrue(SUBSYSTEM_CONVEYER.setLED(-0.5));
     OP_15.onTrue(SUBSYSTEM_CONVEYER.setLED(0.35));
     OP_11.onTrue(SUBSYSTEM_CONVEYER.setLED(-0.99));
     OP_14.onTrue(SUBSYSTEM_CONVEYER.setLED(0.91));
-
-
-    OP_4.whileTrue(new SHOOTER_runShooter(1.0, SUBSYSTEM_SHOOTER));
-
-    OP_19.whileTrue(
-      new SequentialCommandGroup(
-        SUBSYSTEM_INTAKE.setIntakePosition(Constants.IntakeSubsystemConstants.Forward_Schwoop_Position),
-        new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE)
-      )
-    );
-    OP_20.whileTrue(SUBSYSTEM_INTAKE.setIntakePosition(Constants.IntakeSubsystemConstants.Reverse_Schwoop_Position));
-
-    OP_17.whileTrue(SUBSYSTEM_INTAKE.zeroIntakeCommand());
-
-
-
-
+    */
   }
 
   public Command getAutonomousCommand() {
+    //return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Shop Pickup Note 2");
+
     return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "BigRob");
+
   } 
 }
