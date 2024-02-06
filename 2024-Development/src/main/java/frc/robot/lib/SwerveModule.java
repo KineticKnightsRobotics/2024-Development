@@ -59,6 +59,7 @@ public class SwerveModule extends SubsystemBase {
         MOTOR_DRIVE.setClosedLoopRampRate(2);
         this.ENCODER_DRIVE = MOTOR_DRIVE.getEncoder();
         ENCODER_DRIVE.setPositionConversionFactor(ModuleConstants.MODULE_DRIVE_ROTATIONS_TO_METERS);
+        ENCODER_DRIVE.setVelocityConversionFactor(ModuleConstants.MODULE_DRIVE_RPM_TO_MPS);
 
         //init the turning motor and encoder
         this.MOTOR_TURN = new CANSparkMax(ID_MOTOR_TURN, MotorType.kBrushless);
@@ -68,6 +69,7 @@ public class SwerveModule extends SubsystemBase {
         MOTOR_TURN.setInverted(REVERSE_MOTOR_TURN);
         this.ENCODER_TURN = MOTOR_TURN.getEncoder();
         ENCODER_TURN.setPositionConversionFactor(ModuleConstants.MODULE_TURN_ROTATIONS_TO_RADIANS);
+        ENCODER_TURN.setVelocityConversionFactor(ModuleConstants.TurningEncoderRPM2RadPerSec);
         //init absolute encoder
         this.ENCODER_ABSOLUTE = new CANCoder(ID_ENCODER_ABSOLUTE);
         ENCODER_ABSOLUTE.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);

@@ -31,6 +31,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.lib.Constants;
 import frc.robot.lib.SwerveModule;
 import frc.robot.lib.Constants.KinematicsConstants;
+import frc.robot.lib.Constants.ModuleConstants;
+import frc.robot.lib.Constants.SwerveSubsystemConstants;
 import frc.robot.lib.PID_Config.TrajectoryDriving;
 import frc.robot.lib.PID_Config.TrajectoryTurning;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -107,7 +109,7 @@ public class SwerveDrive extends SubsystemBase {
                         new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive), // Translation PID constants
                         new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive), // Rotation PID constants
                         0.05, // Max module speed, in m/s
-                       16, // Drive base radius in meters. Distance from robot center to furthest module.
+                        KinematicsConstants.RADIUS_DRIVE_CHASSIS, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 () -> {
