@@ -9,6 +9,7 @@ import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 //wpi
@@ -126,6 +127,10 @@ public class SwerveDrive extends SubsystemBase {
                 this // Reference to this subsystem to set requirements
         );
 
+        PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
+                field.setRobotPose(getPose());
+
+
 
     }
 
@@ -173,7 +178,6 @@ public class SwerveDrive extends SubsystemBase {
         );
         
         SmartDashboard.putString("Robot Odemeter position", ODEMETER.getPoseMeters().toString());
-        field.setRobotPose(getPose());
 
 
     }
@@ -263,7 +267,7 @@ public class SwerveDrive extends SubsystemBase {
                 new HolonomicPathFollowerConfig(
                     new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
                     new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
-                    0.3,
+                    1.0,
                     KinematicsConstants.RADIUS_DRIVE_CHASSIS,
                     new ReplanningConfig()
                 ),
