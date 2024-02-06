@@ -32,12 +32,17 @@ import frc.robot.lib.Constants;
 import frc.robot.lib.SwerveModule;
 import frc.robot.lib.Constants.KinematicsConstants;
 import frc.robot.lib.PID_Config.TrajectoryDriving;
+import frc.robot.lib.PID_Config.TrajectoryTurning;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+
 
 //java
 import java.util.concurrent.TimeUnit;
 
 
 public class SwerveDrive extends SubsystemBase {
+    private Field2d field = new Field2d();
+
     
     private final SwerveModule MODULE_FRONT_LEFT = new SwerveModule(
         "Front Left",
@@ -100,11 +105,9 @@ public class SwerveDrive extends SubsystemBase {
                 this::setChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                         new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive), // Translation PID constants
-                        new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive), // Rotation PID constants
+                        new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive), // Rotation PID constants
                         0.05, // Max module speed, in m/s
-                        Math.sqrt(KinematicsConstants.KINEMATICS_CHASSIS_LENGTH * KinematicsConstants.KINEMATICS_CHASSIS_LENGTH 
-                                      + 
-                                  KinematicsConstants.KINEMATICS_CHASSIS_WIDTH * KinematicsConstants.KINEMATICS_CHASSIS_WIDTH ), // Drive base radius in meters. Distance from robot center to furthest module.
+                       16, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 () -> {
@@ -121,11 +124,13 @@ public class SwerveDrive extends SubsystemBase {
                 this // Reference to this subsystem to set requirements
         );
 
+
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Robot Heading", getRobotHeading());
+        SmartDashboard.putData("Field", field);
 
 
         MODULE_FRONT_LEFT.moduleData2Dashboard();
@@ -145,14 +150,35 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putNumber("BACK left RPM", MODULE_BACK_LEFT.getDriveVelocity());
         SmartDashboard.putNumber("BACK right RPM", MODULE_BACK_RIGHT.getDriveVelocity());
 
+        SmartDashboard.putNumber("BACK left Absolute Encoder", MODULE_BACK_LEFT.getAbsoluteEncoder());
+        SmartDashboard.putNumber("BACK right Absolute Encoder", MODULE_BACK_RIGHT.getAbsoluteEncoder());
+        SmartDashboard.putNumber("FRONT right Absolute Encoder", MODULE_FRONT_RIGHT.getAbsoluteEncoder());
+        SmartDashboard.putNumber("FRONT left Absolute Encoder", MODULE_FRONT_LEFT.getAbsoluteEncoder());
+
+        SmartDashboard.putNumber("BACK right Turning Position", MODULE_BACK_RIGHT.getTurningPosition());
+        SmartDashboard.putNumber("BACK left Turning Position", MODULE_BACK_LEFT.getTurningPosition());
+        SmartDashboard.putNumber("FRONT right Turning Position", MODULE_FRONT_RIGHT.getTurningPosition());
+        SmartDashboard.putNumber("FRONT left Turning Position", MODULE_FRONT_LEFT.getTurningPosition());
+
+
+
+
+
+
         ODEMETER.update(
             getRotation2d(),
             getModulePositions()
         );
         
         SmartDashboard.putString("Robot Odemeter position", ODEMETER.getPoseMeters().toString());
+        field.setRobotPose(getPose());
+
 
     }
+
+    public Pose2d getPose() {
+        return ODEMETER.getPoseMeters();
+      }
 
     public ChassisSpeeds getChassisSpeeds() {
         return KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toChassisSpeeds(getModuleStates()); //TODO:This needs to be tested!
@@ -169,6 +195,11 @@ public class SwerveDrive extends SubsystemBase {
     public void resetOdometer(Pose2d pose){
         ODEMETER.resetPosition(getRotation2d(), getModulePositions(), pose);
     }
+    public Command resetDriveOdemeter(Pose2d pose) {
+        return Commands.runOnce(()-> resetOdometer(pose));
+    }
+
+    
 
     public SwerveModulePosition[] getModulePositions() {
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
@@ -207,6 +238,7 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_BACK_LEFT.resetEncoders();
         MODULE_BACK_RIGHT.resetEncoders();   
     }
+  
 
     public Command zeroRobotHeading() {
         return Commands.runOnce(() -> navX.zeroYaw());

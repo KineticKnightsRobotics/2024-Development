@@ -13,6 +13,8 @@ import frc.robot.lib.Constants.OIConstants;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -38,7 +41,8 @@ public class RobotContainer {
   private final Intake SUBSYSTEM_INTAKE = new Intake();
   private final Conveyer SUBSYSTEM_CONVEYER = new Conveyer();
   private final Shooter SUBSYSTEM_SHOOTER = new Shooter();
-
+  private final Rotation2d rotation = new Rotation2d(135);
+private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
   private final CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
 
   Trigger DRIVER_A = new Trigger(JOYSTICK_DRIVER.button(1));
@@ -160,7 +164,9 @@ public class RobotContainer {
         new SHOOTER_runShooter_OpenLoop(0, SUBSYSTEM_SHOOTER)
         )
     );
+    OP_20.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
 
+OP_19.whileTrue(SUBSYSTEM_SWERVEDRIVE.resetDriveOdemeter(pose));
 
     /*
     OP_12.onTrue(SUBSYSTEM_CONVEYER.setLED(-0.95));
