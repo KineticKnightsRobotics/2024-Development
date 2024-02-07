@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.lib.Constants.ModuleConstants;
+import frc.robot.lib.Constants.SwerveSubsystemConstants;
 import frc.robot.lib.PID_Config;
 
 public class SwerveModule extends SubsystemBase {
@@ -72,6 +73,7 @@ public class SwerveModule extends SubsystemBase {
         PID_VELOCITY.setP(PID_Config.SwereModule.ModuleVelocity.Proportional);
         PID_VELOCITY.setI(PID_Config.SwereModule.ModuleVelocity.Integral);
         PID_VELOCITY.setD(PID_Config.SwereModule.ModuleVelocity.Derivitive);
+        PID_VELOCITY.setOutputRange(-SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE, SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE);
 
         //init the turning motor and encoder
         this.MOTOR_TURN = new CANSparkMax(ID_MOTOR_TURN, MotorType.kBrushless);
@@ -138,6 +140,9 @@ public class SwerveModule extends SubsystemBase {
      * Set new speed for the driving motors
      */
     public void setSpeed(SwerveModuleState state) {
+
+        //TODO: Convert from MPS to RPM
+
         PID_VELOCITY.setReference(state.speedMetersPerSecond, ControlType.kVelocity);
     }
 
