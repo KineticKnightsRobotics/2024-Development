@@ -6,7 +6,7 @@ import java.util.function.DoubleSupplier;
 //import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.lib.Constants;
+import frc.robot.lib.Constants.SwerveSubsystemConstants;
 import frc.robot.subsystems.SwerveDrive;
 
 public class DRIVE_JoystickDrive extends Command {
@@ -40,22 +40,22 @@ public class DRIVE_JoystickDrive extends Command {
 
     @Override
     public void execute() {
-
-
+        /*
         //Get joystick input from double suppliers
         double xSpeed = SUPPLIER_xSpeed.getAsDouble() * Constants.SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * 0.2 * (Math.abs(SUPPLIER_xSpeed.getAsDouble()) > 0.1 ? 1.0 : 0.0);
         double ySpeed = SUPPLIER_ySpeed.getAsDouble() * Constants.SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * 0.2 * (Math.abs(SUPPLIER_ySpeed.getAsDouble()) > 0.1 ? 1.0 : 0.0);
         double rotSpeed = SUPPLIER_zSpeed.getAsDouble()* Constants.SwerveSubsystemConstants.LIMIT_SOFT_SPEED_TURN * 0.2;
-        
+        */
 
-        
+        double joystickX = SUPPLIER_xSpeed.getAsDouble() * (Math.abs(SUPPLIER_xSpeed.getAsDouble()) > 0.1 ? 1.0 : 0.0);
+        double joystickY = SUPPLIER_ySpeed.getAsDouble() * (Math.abs(SUPPLIER_xSpeed.getAsDouble()) > 0.1 ? 1.0 : 0.0); //grab speeds and apply deadband
+        double joystickZ = SUPPLIER_zSpeed.getAsDouble() * (Math.abs(SUPPLIER_xSpeed.getAsDouble()) > 0.1 ? 1.0 : 0.0);
 
-        //apply Slew Rate Limiters
-        //xSpeed = xLimiter.calculate(xSpeed);
-        //xSpeed = yLimiter.calculate(ySpeed);
-        //rotSpeed = zLimiter.calculate(rotSpeed);
 
-        //set chassis speeds depending on what orientation the robot is in
+        double xSpeed   = (joystickX/1.0) * SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;
+        double ySpeed   = (joystickY/1.0) * SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE; //Determine new velocity
+        double rotSpeed = (joystickZ/1.0) * SwerveSubsystemConstants.LIMIT_SOFT_SPEED_TURN;
+
         ChassisSpeeds chassisSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, subsystem.getRotation2d());
         subsystem.setChassisSpeed(chassisSpeed);
     }

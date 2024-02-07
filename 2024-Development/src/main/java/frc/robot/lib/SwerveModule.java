@@ -1,10 +1,13 @@
 package frc.robot.lib;
+
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 //pheonix
 import com.ctre.phoenix.sensors.CANCoder;
 //rev
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 //import com.revrobotics.CANSparkMax.ControlType;
 //wpi
@@ -14,7 +17,9 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.lib.Constants.ModuleConstants;
+import frc.robot.lib.PID_Config;
 
 public class SwerveModule extends SubsystemBase {
     
@@ -23,6 +28,8 @@ public class SwerveModule extends SubsystemBase {
 
     private final RelativeEncoder ENCODER_TURN;
     private final RelativeEncoder ENCODER_DRIVE;
+
+    private final SparkPIDController PID_VELOCITY;
 
     private final PIDController PID_TURNING;
 
@@ -61,6 +68,11 @@ public class SwerveModule extends SubsystemBase {
         ENCODER_DRIVE.setPositionConversionFactor(ModuleConstants.MODULE_DRIVE_ROTATIONS_TO_METERS);
         ENCODER_DRIVE.setVelocityConversionFactor(ModuleConstants.MODULE_DRIVE_RPM_TO_MPS);
 
+        PID_VELOCITY = MOTOR_DRIVE.getPIDController();
+        PID_VELOCITY.setP(PID_Config.SwereModule.ModuleVelocity.Proportional);
+        PID_VELOCITY.setI(PID_Config.SwereModule.ModuleVelocity.Integral);
+        PID_VELOCITY.setD(PID_Config.SwereModule.ModuleVelocity.Derivitive);
+
         //init the turning motor and encoder
         this.MOTOR_TURN = new CANSparkMax(ID_MOTOR_TURN, MotorType.kBrushless);
         //reset to defaults
@@ -76,6 +88,7 @@ public class SwerveModule extends SubsystemBase {
         ENCODER_ABSOLUTE.configMagnetOffset(OFFSET_ENCODER_ABSOLUTE);
         this.OFFSET_ABSOLUTEENCODER = OFFSET_ENCODER_ABSOLUTE;
         //init PID for turning
+
         this.PID_TURNING = new PIDController(PID_Config.SwereModule.ModuleTurning.Proportional,PID_Config.SwereModule.ModuleTurning.Integral,PID_Config.SwereModule.ModuleTurning.Derivitive);
         PID_TURNING.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -120,19 +133,12 @@ public class SwerveModule extends SubsystemBase {
      */
     public void setAngle(SwerveModuleState state) {
         MOTOR_TURN.set(PID_TURNING.calculate(getTurningPosition(), state.angle.getRadians()));
-        /*
-        double currentAngle = getTurningPosition();
-        double delta = PID_TURNING.calculate(currentAngle, state.angle.getRadians());
-        MOTOR_TURN.set(delta);
-        */
-        //MOTOR_TURN.set(delta < 0.01 ? 0.0 : delta); // if delta is less than 1% output, just stop the motor so it doesn't jitter
     }
     /**
      * Set new speed for the driving motors
      */
     public void setSpeed(SwerveModuleState state) {
-        //the speed limit is full power 
-        MOTOR_DRIVE.set(state.speedMetersPerSecond/Constants.SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE);
+        PID_VELOCITY.setReference(state.speedMetersPerSecond, ControlType.kVelocity);
     }
 
     /**
