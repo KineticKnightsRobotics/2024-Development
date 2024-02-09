@@ -48,16 +48,16 @@ public class DRIVE_JoystickDrive extends Command {
         */
 
         double joystickX = SUPPLIER_xSpeed.getAsDouble() * (Math.abs(SUPPLIER_xSpeed.getAsDouble()) > 0.1 ? 1.0 : 0.0);
-        double joystickY = SUPPLIER_ySpeed.getAsDouble() * (Math.abs(SUPPLIER_xSpeed.getAsDouble()) > 0.1 ? 1.0 : 0.0); //grab speeds and apply deadband
-        double joystickZ = SUPPLIER_zSpeed.getAsDouble() * (Math.abs(SUPPLIER_xSpeed.getAsDouble()) > 0.1 ? 1.0 : 0.0);
+        double joystickY = SUPPLIER_ySpeed.getAsDouble() * (Math.abs(SUPPLIER_ySpeed.getAsDouble()) > 0.1 ? 1.0 : 0.0); //grab speeds and apply deadband
+        double joystickZ = SUPPLIER_zSpeed.getAsDouble() * (Math.abs(SUPPLIER_zSpeed.getAsDouble()) > 0.1 ? 1.0 : 0.0);
 
 
         double xSpeed   = (joystickX/1.0) * SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;
         double ySpeed   = (joystickY/1.0) * SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE; //Determine new velocity
-        double rotSpeed = (joystickZ/1.0) * SwerveSubsystemConstants.LIMIT_SOFT_SPEED_TURN;
+        double rotSpeed = (joystickZ/1.0) * SwerveSubsystemConstants.LIMIT_SOFT_SPEED_TURN * 0.5; //* 0.2 to make SLOW */
 
         ChassisSpeeds chassisSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, subsystem.getRotation2d());
-        subsystem.setChassisSpeed(chassisSpeed);
+        subsystem.setChassisSpeed(chassisSpeed,true);
     }
     @Override
     public void end(boolean interrupted) {

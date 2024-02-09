@@ -75,14 +75,14 @@ public class LIMELIGHT__Strafe extends Command {
 
         chassis_Speed = new ChassisSpeeds(speedX,zSpeed,0.0);
 
-        SUBSYSTEM_SWERVEDRIVE.setChassisSpeed(chassis_Speed);
+        SUBSYSTEM_SWERVEDRIVE.setAutoChassisSpeed(chassis_Speed);
 
 
 
     }
     @Override
     public void end(boolean interrupted){
-        chassis_Speed = new ChassisSpeeds(0,0,0);SUBSYSTEM_SWERVEDRIVE.setChassisSpeed(chassis_Speed);
+        chassis_Speed = new ChassisSpeeds(0,0,0);SUBSYSTEM_SWERVEDRIVE.setAutoChassisSpeed(chassis_Speed);
     }
     @Override
     public boolean isFinished(){

@@ -11,6 +11,11 @@ public class PID_Config {
             public static final double Proportional = 0.1;
             public static final double Integral = 0.0;
             public static final double Derivitive = 0.0;
+            public class FeedForward{
+                public static final double driveKS = 0.667;
+                public static final double driveKV = 2.44;
+                public static final double driveKA = 0.27;
+            }
         }
     }
 
@@ -57,12 +62,12 @@ public class PID_Config {
     }
 
     public class TrajectoryDriving {
-            public static final double Proportional = 0.000000000001;
+            public static final double Proportional = 5.0;
             public static final double Integral = 0.0;
             public static final double Derivitive = 0.0;
     }
     public class TrajectoryTurning {
-        public static final double Proportional = 0.05;
+        public static final double Proportional = 5.0;
         public static final double Integral = 0.0;
         public static final double Derivitive = 0.0;
 }

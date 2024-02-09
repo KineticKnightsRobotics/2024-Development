@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 //import com.revrobotics.CANSparkMax.ControlType;
 //wpi
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -38,6 +39,8 @@ public class SwerveModule extends SubsystemBase {
     private final double OFFSET_ABSOLUTEENCODER;
 
     private final String MODULE_NAME;
+
+    private final SimpleMotorFeedforward FEEDFORWARD_VELOCITY;
 
     /**
     *@param int ID_MOTOR_DRIVE,
@@ -74,6 +77,12 @@ public class SwerveModule extends SubsystemBase {
         PID_VELOCITY.setI(PID_Config.SwereModule.ModuleVelocity.Integral);
         PID_VELOCITY.setD(PID_Config.SwereModule.ModuleVelocity.Derivitive);
         PID_VELOCITY.setOutputRange(-SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE, SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE);
+        
+        FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(
+            PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKS,
+            PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKS,
+            PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKS
+        );
 
         //init the turning motor and encoder
         this.MOTOR_TURN = new CANSparkMax(ID_MOTOR_TURN, MotorType.kBrushless);
@@ -117,18 +126,20 @@ public class SwerveModule extends SubsystemBase {
     /**
      * Turns SwerveModuleState into turning and driving speed
      */
-    public void setDesiredState(SwerveModuleState state) {
+    public void setDesiredState(SwerveModuleState state, boolean isOpenLoop) {
 
         state = SwerveModuleState.optimize(state, getModuleState().angle);
 
         setAngle(state);
-        setSpeed(state);
 
-        //SmartDashboard.putNumber(MODULE_NAME + ENCODER_ABSOLUTE.getDeviceID() + " angle", Math.toDegrees(getTurningPosition()));
-        //SmartDashboard.putNumber(MODULE_NAME + ENCODER_ABSOLUTE.getDeviceID() + " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
+        if (isOpenLoop) {
+            setPercentOutput(state);
+        }
+        else {
+            setSpeed(state);
+        }
+
         SmartDashboard.putString(MODULE_NAME + ENCODER_ABSOLUTE.getDeviceID() + " state", state.toString());
-
-        //SmartDashboard.putNumber("Swerve[" + ENCODER_ABSOLUTE.getDeviceID() + "] offset", OFFSET_ABSOLUTEENCODER);
     }
     /**
      * Set a new angle to the turning motor
@@ -143,7 +154,15 @@ public class SwerveModule extends SubsystemBase {
 
         //TODO: Convert from MPS to RPM
 
-        PID_VELOCITY.setReference(state.speedMetersPerSecond, ControlType.kVelocity);
+        PID_VELOCITY.setReference(state.speedMetersPerSecond, ControlType.kVelocity,0,FEEDFORWARD_VELOCITY.calculate(state.speedMetersPerSecond));
+        //double percentOutput = state.speedMetersPerSecond/SwerveSubsystemConstants.LIMIT_HARD_SPEED_DRIVE;
+        //MOTOR_DRIVE.set(percentOutput);
+
+    }
+
+    public void setPercentOutput(SwerveModuleState state) {
+        double percentOutput = state.speedMetersPerSecond/SwerveSubsystemConstants.LIMIT_HARD_SPEED_DRIVE;
+        MOTOR_DRIVE.set(percentOutput);
     }
 
     /**

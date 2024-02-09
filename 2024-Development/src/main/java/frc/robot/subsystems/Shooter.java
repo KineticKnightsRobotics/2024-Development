@@ -64,9 +64,15 @@ public class Shooter extends SubsystemBase {
         shooterMotorL = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_LEADER, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotorF = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_FOLLOWER, CANSparkLowLevel.MotorType.kBrushless);
 
-        shooterMotorL.setInverted(false);
-        shooterMotorF.setInverted(true);
-        shooterMotorF.follow(shooterMotorL);
+        shooterMotorL.restoreFactoryDefaults();
+        shooterMotorF.restoreFactoryDefaults();
+
+        shooterMotorL.setInverted(true);
+        shooterMotorF.setInverted(false);
+        //shooterMotorF.follow(shooterMotorL);
+
+        shooterMotorL.setIdleMode(IdleMode.kCoast);
+        shooterMotorF.setIdleMode(IdleMode.kCoast);
 
         shooterController = shooterMotorL.getPIDController();
 
@@ -75,6 +81,7 @@ public class Shooter extends SubsystemBase {
         shooterController.setD(ShooterVelocityPID.Derivitive);
 
         feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
+        feedMotor.setInverted(true);
         feedEncoder = feedMotor.getEncoder();
         feedEncoder.setPositionConversionFactor(ShooterSubsystemConstants.MOTOR_FEEDER_GEARRATIO);
         feedMotor.setIdleMode(IdleMode.kBrake);
@@ -86,6 +93,8 @@ public class Shooter extends SubsystemBase {
 
         SmartDashboard.putNumber("Shooter RPM Top", getShooterLRPM());
         SmartDashboard.putNumber("Shooter RPM Bottom", getShooterFRPM());
+
+        SmartDashboard.putNumber("Tiler Position", tiltEncoder.getPosition());
 
         //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
 
@@ -110,6 +119,7 @@ public class Shooter extends SubsystemBase {
 
     public void setShooterSpeed(double percentOutput) {
         shooterMotorL.set(percentOutput);
+        shooterMotorF.set(percentOutput);
     }
 
     public void setShooterRPM(double desiredRPM) {

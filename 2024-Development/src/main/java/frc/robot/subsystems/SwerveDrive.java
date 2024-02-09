@@ -106,7 +106,7 @@ public class SwerveDrive extends SubsystemBase {
                 () -> ODEMETER.getPoseMeters(), // Robot pose supplier
                 this::resetOdometer, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                this::setChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                this::setAutoChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                         new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive), // Translation PID constants
                         new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive), // Rotation PID constants
@@ -229,19 +229,24 @@ public class SwerveDrive extends SubsystemBase {
         return newModuleStates;
     }
 
-    public void setChassisSpeed(ChassisSpeeds speed) {
+    public void setChassisSpeed(ChassisSpeeds speed,boolean isOpenLoop) {
         SwerveModuleState states[] = Constants.KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toSwerveModuleStates(speed);
-        setModuleStates(states);
+        setModuleStates(states,true);
     }
 
-    public void setModuleStates(SwerveModuleState states[]) {
+    public void setAutoChassisSpeed(ChassisSpeeds speed) {
+        SwerveModuleState states[] = Constants.KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toSwerveModuleStates(speed);
+        setModuleStates(states,false);
+    }
+
+    public void setModuleStates(SwerveModuleState states[], boolean isOpenLoop) {
 
         SwerveDriveKinematics.desaturateWheelSpeeds(states, SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE);
 
-        MODULE_FRONT_LEFT.setDesiredState(states[0]);
-        MODULE_FRONT_RIGHT.setDesiredState(states[1]);
-        MODULE_BACK_LEFT.setDesiredState(states[2]);
-        MODULE_BACK_RIGHT.setDesiredState(states[3]);
+        MODULE_FRONT_LEFT.setDesiredState(states[0],isOpenLoop);
+        MODULE_FRONT_RIGHT.setDesiredState(states[1],isOpenLoop);
+        MODULE_BACK_LEFT.setDesiredState(states[2],isOpenLoop);
+        MODULE_BACK_RIGHT.setDesiredState(states[3],isOpenLoop);
     }
 
     public void zeroModules(){
@@ -262,18 +267,24 @@ public class SwerveDrive extends SubsystemBase {
 
 
 
-    public Command followPath(String pathName) {
-        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+    public Command followPath(String pathName,Boolean isChoreo) {
+        PathPlannerPath path;
+        if (isChoreo){
+            path = PathPlannerPath.fromPathFile(pathName);
+        }
+        else {
+            path = PathPlannerPath.fromChoreoTrajectory(pathName);
+        }
         return new SequentialCommandGroup(
             new FollowPathHolonomic(
                 path,
                 () -> ODEMETER.getPoseMeters(),
                 () -> getChassisSpeeds(),
-                this::setChassisSpeed,
+                this::setAutoChassisSpeed, 
                 new HolonomicPathFollowerConfig(
                     new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
-                    new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
-                    1.0,
+                    new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive),
+                    0.5,
                     KinematicsConstants.RADIUS_DRIVE_CHASSIS,
                     new ReplanningConfig()
                 ),
@@ -282,7 +293,7 @@ public class SwerveDrive extends SubsystemBase {
                 },
                 this
             ),
-            new InstantCommand( () -> setChassisSpeed(new ChassisSpeeds(0,0,0)))
+            new InstantCommand( () -> setChassisSpeed(new ChassisSpeeds(0,0,0),true))
         );
     }
 }

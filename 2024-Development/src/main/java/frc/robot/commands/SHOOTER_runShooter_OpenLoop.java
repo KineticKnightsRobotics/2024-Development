@@ -24,7 +24,7 @@ public class SHOOTER_runShooter_OpenLoop extends Command {
     }
     @Override
     public void execute() {
-        if (subsystem.getShooterFRPM() > speed && subsystem.getShooterLRPM() > speed && (Math.abs(subsystem.getShooterFRPM() - subsystem.getShooterLRPM()) <= 100 ) ) {
+        if (subsystem.getShooterFRPM() > speed && subsystem.getShooterLRPM() > speed){// && (Math.abs(subsystem.getShooterFRPM() - subsystem.getShooterLRPM()) <= 100 ) ) {
             subsystem.toggleShooterBlock(DoubleSolenoid.Value.kReverse);
             subsystem.setFeederSpeed(0.8);
         }

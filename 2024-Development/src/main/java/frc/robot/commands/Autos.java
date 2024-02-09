@@ -23,16 +23,21 @@ public final class Autos {
   }
 
   public static Command simpleFollowPath(SwerveDrive subsystem, String pathName) {
-
     PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
     Pose2d initialPose2d = path.getPreviewStartingHolonomicPose();
-
     return new SequentialCommandGroup(
       Commands.runOnce(() -> subsystem.resetOdometer(initialPose2d)),
-      subsystem.followPath(pathName)
+      subsystem.followPath(pathName,false)
     );
+  }
 
-
+  public static Command simpleFollowChoreo(SwerveDrive subsystem, String pathName) {
+    PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory("ChoreoTest");
+    Pose2d initialPose2d = path.getPreviewStartingHolonomicPose();
+    return new SequentialCommandGroup(
+      Commands.runOnce(() -> subsystem.resetOdometer(initialPose2d)),
+      subsystem.followPath(pathName,true)
+    );
   }
 
   /*

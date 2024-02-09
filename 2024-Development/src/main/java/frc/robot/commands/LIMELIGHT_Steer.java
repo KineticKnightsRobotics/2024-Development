@@ -42,7 +42,7 @@ public class LIMELIGHT_Steer extends Command {
         currentAngle = SUBSYSTEM_SWERVEDRIVE.getRobotHeading();
         targetAngle = currentAngle + LL_Angle;
         targetState = ChassisSpeeds.fromFieldRelativeSpeeds(0.0,0.0,TurnPID.calculate(currentAngle,targetAngle),SUBSYSTEM_SWERVEDRIVE.getRotation2d());
-        SUBSYSTEM_SWERVEDRIVE.setChassisSpeed(targetState);
+        SUBSYSTEM_SWERVEDRIVE.setAutoChassisSpeed(targetState);
     }
 
     @Override

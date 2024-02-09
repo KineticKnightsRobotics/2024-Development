@@ -58,6 +58,7 @@ public class Intake extends SubsystemBase {
         intakePivotMotor.setClosedLoopRampRate(0.5);
         intakePivotMotor.setIdleMode(IdleMode.kBrake);
         intakePivotMotor.setSmartCurrentLimit(20);
+
         intakePivotEncoder = intakePivotMotor.getEncoder();
         intakePivotEncoder.setPositionConversionFactor(IntakeSubsystemConstants.INTAKE_PIVOT_ROTATIONS_TO_DEGRESS);
 
@@ -67,12 +68,12 @@ public class Intake extends SubsystemBase {
         intakePivotController.setD(IntakePivotControllerPID.Derivitive);
         intakePivotController.setOutputRange(-0.8,0.8);
 
-        SmartDashboard.putBoolean("Intake is stuck! sigma", limitSwitchActuate());
+        SmartDashboard.putBoolean("Intake is stuck!", limitSwitchActuate());
 
     }
 
     public void actuateIntake(double position) {
-        intakePivotController_Reference = position;
+        //intakePivotController_Reference = position;
         intakePivotController.setReference(position, ControlType.kPosition);
     }
 
@@ -97,21 +98,13 @@ public class Intake extends SubsystemBase {
         return Commands.runOnce(() -> actuateIntake(position));
     }
 
-    public void unlockIntakePivot(boolean unlocked) {
-        if (unlocked) {intakePivotMotor.setIdleMode(IdleMode.kCoast);}
-        else          {intakePivotMotor.setIdleMode(IdleMode.kBrake);}
-    }
-
-
     @Override
     public void periodic() {
     SmartDashboard.putNumber("Intake Actuator Position", getIntakePosition());
     SmartDashboard.putNumber("roller Current", rollerMotor.getOutputCurrent());
     //zeroIntake(0);
     }
-    public Command unlockIntake(boolean unlocked) {
-        return Commands.runOnce(() -> unlockIntakePivot(unlocked));
-    }
+
     public void zeroIntake(int position){
         intakePivotEncoder.setPosition(position);
     }
