@@ -134,7 +134,6 @@ public class SwerveDrive extends SubsystemBase {
                 field.setRobotPose(getPose());
 
 
-
     }
 
     @Override
@@ -169,11 +168,6 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putNumber("BACK left Turning Position", MODULE_BACK_LEFT.getTurningPosition());
         SmartDashboard.putNumber("FRONT right Turning Position", MODULE_FRONT_RIGHT.getTurningPosition());
         SmartDashboard.putNumber("FRONT left Turning Position", MODULE_FRONT_LEFT.getTurningPosition());
-
-
-
-
-
 
         ODEMETER.update(
             getRotation2d(),
@@ -269,7 +263,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public Command followPath(String pathName,Boolean isChoreo) {
         PathPlannerPath path;
-        if (isChoreo){
+        if ( ! isChoreo){
             path = PathPlannerPath.fromPathFile(pathName);
         }
         else {
@@ -284,7 +278,7 @@ public class SwerveDrive extends SubsystemBase {
                 new HolonomicPathFollowerConfig(
                     new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
                     new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive),
-                    0.5,
+                    1.5,
                     KinematicsConstants.RADIUS_DRIVE_CHASSIS,
                     new ReplanningConfig()
                 ),

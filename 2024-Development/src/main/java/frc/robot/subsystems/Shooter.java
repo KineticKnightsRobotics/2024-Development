@@ -64,10 +64,10 @@ public class Shooter extends SubsystemBase {
         shooterMotorL = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_LEADER, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotorF = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_FOLLOWER, CANSparkLowLevel.MotorType.kBrushless);
 
-        shooterMotorL.restoreFactoryDefaults();
-        shooterMotorF.restoreFactoryDefaults();
+        //shooterMotorL.restoreFactoryDefaults();
+        //shooterMotorF.restoreFactoryDefaults();
 
-        shooterMotorL.setInverted(true);
+        shooterMotorL.setInverted(false);
         shooterMotorF.setInverted(false);
         //shooterMotorF.follow(shooterMotorL);
 
@@ -93,6 +93,8 @@ public class Shooter extends SubsystemBase {
 
         SmartDashboard.putNumber("Shooter RPM Top", getShooterLRPM());
         SmartDashboard.putNumber("Shooter RPM Bottom", getShooterFRPM());
+
+        SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
 
         SmartDashboard.putNumber("Tiler Position", tiltEncoder.getPosition());
 

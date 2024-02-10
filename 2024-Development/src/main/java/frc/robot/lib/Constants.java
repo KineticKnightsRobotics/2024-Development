@@ -68,7 +68,7 @@ public final class Constants {
     public static final boolean REVERSED_ENCODER_TURN = true;
     public static final boolean REVERSED_ENCODER_DRIVE = false;
     public static final boolean REVERSED_ENCODER_ABSOLUTE = false;
-    public static final boolean REVERSED_GYRO = true;
+    public static final boolean REVERSED_GYRO = false;
 
     // Invert Specific Motors
 
@@ -119,6 +119,7 @@ public final class Constants {
   public static class ShooterSubsystemConstants {
 
     public static int ID_MOTOR_TILTER = 51;
+    
     public static int ID_MOTOR_SHOOTER_LEADER = 52;
     public static int ID_MOTOR_SHOOTER_FOLLOWER = 53;
 
@@ -151,7 +152,7 @@ public final class Constants {
   public static class AutonomousConstants{
 
     // Shop zone 332cm x 173cm
-    public static double LIMIT_AUTOSPEED_DRIVE = 0.30;
+    public static double LIMIT_AUTOSPEED_DRIVE = 3.5;
     public static double LIMIT_AUTOSPEED_ROTATE = 180;
   }
 }

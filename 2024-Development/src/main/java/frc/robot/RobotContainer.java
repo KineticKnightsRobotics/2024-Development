@@ -138,7 +138,7 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
       )
     );
 
-    DRIVER_A.whileTrue(new SHOOTER_runShooter_OpenLoop(3850, SUBSYSTEM_SHOOTER));
+    DRIVER_A.whileTrue(new SHOOTER_runShooter_OpenLoop(3000, SUBSYSTEM_SHOOTER));
     //DRIVER_A.whileTrue(new SHOOTER_runShooter_ClosedLoop(4300, SUBSYSTEM_SHOOTER));
 
     DRIVER_X.onTrue(
@@ -182,8 +182,8 @@ OP_19.whileTrue(SUBSYSTEM_SWERVEDRIVE.resetDriveOdemeter(pose));
 
   public Command getAutonomousCommand() {
     //return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Shop Pickup Note 2");
+    return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Funky");
+    //return Autos.simpleFollowChoreo(SUBSYSTEM_SWERVEDRIVE, "ChoreoTest");
 
-    //return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Funky");
-    return Autos.simpleFollowChoreo(SUBSYSTEM_SWERVEDRIVE, "ChoreoTest1");
   } 
 }

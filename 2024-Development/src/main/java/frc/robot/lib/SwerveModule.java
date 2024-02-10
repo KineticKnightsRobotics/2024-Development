@@ -18,7 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.lib.Constants.AutonomousConstants;
 import frc.robot.lib.Constants.ModuleConstants;
 import frc.robot.lib.Constants.SwerveSubsystemConstants;
 import frc.robot.lib.PID_Config;
@@ -67,7 +67,7 @@ public class SwerveModule extends SubsystemBase {
         this.MOTOR_DRIVE.restoreFactoryDefaults();
         //init
         MOTOR_DRIVE.setInverted(REVERSE_MOTOR_DRIVE);
-        MOTOR_DRIVE.setClosedLoopRampRate(2);
+        //MOTOR_DRIVE.setClosedLoopRampRate(2);
         this.ENCODER_DRIVE = MOTOR_DRIVE.getEncoder();
         ENCODER_DRIVE.setPositionConversionFactor(ModuleConstants.MODULE_DRIVE_ROTATIONS_TO_METERS);
         ENCODER_DRIVE.setVelocityConversionFactor(ModuleConstants.MODULE_DRIVE_RPM_TO_MPS);
@@ -76,7 +76,7 @@ public class SwerveModule extends SubsystemBase {
         PID_VELOCITY.setP(PID_Config.SwereModule.ModuleVelocity.Proportional);
         PID_VELOCITY.setI(PID_Config.SwereModule.ModuleVelocity.Integral);
         PID_VELOCITY.setD(PID_Config.SwereModule.ModuleVelocity.Derivitive);
-        PID_VELOCITY.setOutputRange(-SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE, SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE);
+        PID_VELOCITY.setOutputRange(-AutonomousConstants.LIMIT_AUTOSPEED_DRIVE, AutonomousConstants.LIMIT_AUTOSPEED_DRIVE);
         
         FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(
             PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKS,
