@@ -72,10 +72,10 @@ public final class Constants {
 
     // Invert Specific Motors
 
-    public static final boolean REVERSED_FRONT_LEFT_MOTOR_DRIVE = false;
-    public static final boolean REVERSED_FRONT_RIGHT_MOTOR_DRIVE = true;
-    public static final boolean REVERSED_BACK_LEFT_MOTOR_DRIVE = false;
-    public static final boolean REVERSED_BACK_RIGHT_MOTOR_DRIVE = true;
+    public static final boolean REVERSED_FRONT_LEFT_MOTOR_DRIVE = true;
+    public static final boolean REVERSED_FRONT_RIGHT_MOTOR_DRIVE = false;
+    public static final boolean REVERSED_BACK_LEFT_MOTOR_DRIVE = true;
+    public static final boolean REVERSED_BACK_RIGHT_MOTOR_DRIVE = false;
 
     // Turning encoder offsets
     public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE = Math.toRadians(-96.0 +  7.6);
@@ -85,7 +85,7 @@ public final class Constants {
 
     // Robot drive speeds
     public static final double LIMIT_HARD_SPEED_DRIVE = 3.6; // hard limit for speed of chassis
-    public static final double LIMIT_SOFT_SPEED_DRIVE = 0.4; // soft limit for speed of chassis
+    public static final double LIMIT_SOFT_SPEED_DRIVE = 2; // soft limit for speed of chassis
 
     // Robot turning speeds
     public static final double LIMIT_SOFT_SPEED_TURN = 1 * 2*Math.PI; // soft limit for module rotation
@@ -153,6 +153,6 @@ public final class Constants {
 
     // Shop zone 332cm x 173cm
     public static double LIMIT_AUTOSPEED_DRIVE = 3.5;
-    public static double LIMIT_AUTOSPEED_ROTATE = 180;
+    public static double LIMIT_AUTOSPEED_ROTATE = 360;
   }
 }

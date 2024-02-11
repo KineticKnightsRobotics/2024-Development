@@ -67,11 +67,10 @@ public class SwerveModule extends SubsystemBase {
         this.MOTOR_DRIVE.restoreFactoryDefaults();
         //init
         MOTOR_DRIVE.setInverted(REVERSE_MOTOR_DRIVE);
-        //MOTOR_DRIVE.setClosedLoopRampRate(2);
+        MOTOR_DRIVE.setClosedLoopRampRate(0.0001);
         this.ENCODER_DRIVE = MOTOR_DRIVE.getEncoder();
         ENCODER_DRIVE.setPositionConversionFactor(ModuleConstants.MODULE_DRIVE_ROTATIONS_TO_METERS);
         ENCODER_DRIVE.setVelocityConversionFactor(ModuleConstants.MODULE_DRIVE_RPM_TO_MPS);
-
         PID_VELOCITY = MOTOR_DRIVE.getPIDController();
         PID_VELOCITY.setP(PID_Config.SwereModule.ModuleVelocity.Proportional);
         PID_VELOCITY.setI(PID_Config.SwereModule.ModuleVelocity.Integral);
@@ -162,7 +161,7 @@ public class SwerveModule extends SubsystemBase {
 
     public void setPercentOutput(SwerveModuleState state) {
         double percentOutput = state.speedMetersPerSecond/SwerveSubsystemConstants.LIMIT_HARD_SPEED_DRIVE;
-        MOTOR_DRIVE.set(percentOutput);
+        MOTOR_DRIVE.set(-percentOutput);
     }
 
     /**

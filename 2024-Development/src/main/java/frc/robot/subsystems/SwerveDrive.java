@@ -110,7 +110,7 @@ public class SwerveDrive extends SubsystemBase {
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                         new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive), // Translation PID constants
                         new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive), // Rotation PID constants
-                        0.05, // Max module speed, in m/s
+                        2, // Max module speed, in m/s
                         KinematicsConstants.RADIUS_DRIVE_CHASSIS, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig(
                             
@@ -188,7 +188,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getRobotHeading() {
-        return Math.IEEEremainder(Constants.SwerveSubsystemConstants.REVERSED_GYRO ? -navX.getAngle() : navX.getAngle() , 360);
+        return Math.IEEEremainder(Constants.SwerveSubsystemConstants.REVERSED_GYRO ? navX.getAngle() : -navX.getAngle() , 360);
     }
 
     public Rotation2d getRotation2d() {
@@ -278,7 +278,7 @@ public class SwerveDrive extends SubsystemBase {
                 new HolonomicPathFollowerConfig(
                     new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
                     new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive),
-                    1.5,
+                    2,
                     KinematicsConstants.RADIUS_DRIVE_CHASSIS,
                     new ReplanningConfig()
                 ),

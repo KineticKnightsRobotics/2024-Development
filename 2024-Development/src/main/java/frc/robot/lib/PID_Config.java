@@ -11,7 +11,7 @@ public class PID_Config {
         }
         public class ModuleVelocity {
             //(0.001, 0.00005, 0.0005
-            public static final double Proportional = 0.001;
+            public static final double Proportional = 0.0002;
             public static final double Integral = 0.00005;
             public static final double Derivitive = 0.0005;
             public class FeedForward{
@@ -68,14 +68,14 @@ public class PID_Config {
 
     //public static final PIDConstants translationPID = new PIDConstants(3, 0.5, 0);
     //public static final PIDConstants rotationPID = new PIDConstants(2, 0.002, 0.05);
-        public static final double Proportional = 5.0;
+        public static final double Proportional = 4.0;
         public static final double Integral = 0.0;
         public static final double Derivitive = 0.0;
     }
     public class TrajectoryTurning {
-        public static final double Proportional = 2.0;
-        public static final double Integral = 0.002;
-        public static final double Derivitive = 0.005;
+        public static final double Proportional = 0.0075;
+        public static final double Integral = 0.0;
+        public static final double Derivitive = 0.00;
 }
 
 }

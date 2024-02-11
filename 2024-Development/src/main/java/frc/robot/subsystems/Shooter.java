@@ -67,7 +67,7 @@ public class Shooter extends SubsystemBase {
         //shooterMotorL.restoreFactoryDefaults();
         //shooterMotorF.restoreFactoryDefaults();
 
-        shooterMotorL.setInverted(false);
+        shooterMotorL.setInverted(true);
         shooterMotorF.setInverted(false);
         //shooterMotorF.follow(shooterMotorL);
 
