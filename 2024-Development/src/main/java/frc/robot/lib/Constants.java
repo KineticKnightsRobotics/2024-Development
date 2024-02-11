@@ -85,7 +85,7 @@ public final class Constants {
 
     // Robot drive speeds
     public static final double LIMIT_HARD_SPEED_DRIVE = 3.6; // hard limit for speed of chassis
-    public static final double LIMIT_SOFT_SPEED_DRIVE = 2; // soft limit for speed of chassis
+    public static final double LIMIT_SOFT_SPEED_DRIVE = 1; // soft limit for speed of chassis
 
     // Robot turning speeds
     public static final double LIMIT_SOFT_SPEED_TURN = 1 * 2*Math.PI; // soft limit for module rotation
@@ -103,7 +103,7 @@ public final class Constants {
     public static double INTAKE_PIVOT_GEAR_RATIO = (1/50);
     public static double INTAKE_PIVOT_ROTATIONS_TO_DEGRESS = INTAKE_PIVOT_GEAR_RATIO * 2*Math.PI;
 
-    public static double Forward_IntakePivot_Position = -18.5;
+    public static double Forward_IntakePivot_Position = -14;
     public static double Reverse_IntakePivot_Position = 0.0;
 
   }

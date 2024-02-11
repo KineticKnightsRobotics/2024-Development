@@ -12,7 +12,8 @@ public class SHOOTER_runShooter_OpenLoop extends Command {
     Shooter subsystem;
     double speed;
 
-    public SHOOTER_runShooter_OpenLoop(double _speed, Shooter _subsystem) {
+    public 
+    SHOOTER_runShooter_OpenLoop(double _speed, Shooter _subsystem) {
         addRequirements(_subsystem);
         subsystem = _subsystem;
         speed = _speed;
@@ -20,7 +21,7 @@ public class SHOOTER_runShooter_OpenLoop extends Command {
 
     @Override
     public void initialize() {
-        subsystem.setShooterSpeed(0.8);
+        subsystem.setShooterSpeed(0.3);
     }
     @Override
     public void execute() {
