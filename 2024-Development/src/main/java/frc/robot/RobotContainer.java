@@ -138,8 +138,8 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
       )
     );
 
-    DRIVER_A.whileTrue(new SHOOTER_runShooter_OpenLoop(1100, SUBSYSTEM_SHOOTER));
-    //DRIVER_A.whileTrue(new SHOOTER_runShooter_ClosedLoop(4300, SUBSYSTEM_SHOOTER));
+    //DRIVER_A.whileTrue(new SHOOTER_runShooter_OpenLoop(1100, SUBSYSTEM_SHOOTER));
+    DRIVER_A.whileTrue(new SHOOTER_runShooter_ClosedLoop(4300, SUBSYSTEM_SHOOTER));
 
     DRIVER_X.onTrue(
         new SequentialCommandGroup(

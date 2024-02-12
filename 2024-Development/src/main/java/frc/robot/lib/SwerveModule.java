@@ -79,8 +79,8 @@ public class SwerveModule extends SubsystemBase {
         
         FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(
             PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKS,
-            PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKS,
-            PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKS
+            PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKV,
+            PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKA
         );
 
         //init the turning motor and encoder

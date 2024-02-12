@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -8,6 +9,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 //import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -15,13 +17,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.lib.PID_Config.ShooterSubsystem.ShooterVelocityPID;
 import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
+import frc.robot.lib.PID_Config.ShooterSubsystem.ShooterVelocityPID.ShooterFeedForward;
 //import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 import frc.robot.lib.Constants.ShooterSubsystemConstants;
 import frc.robot.lib.Constants.ShooterSubsystemConstants.ShooterBlockPneumatics;
+import frc.robot.lib.PID_Config;
 
 
 public class Shooter extends SubsystemBase {
 
+    private final SimpleMotorFeedforward SHOOTER_FEEDFORWARD_VELOCITY;
 
     private final CANSparkMax tiltMotor;
     private final SparkPIDController tiltController;
@@ -40,8 +45,12 @@ public class Shooter extends SubsystemBase {
 
     private double tiltPosition = 0.0;
 
-
     public Shooter() {
+SHOOTER_FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(
+            0,
+            PID_Config.ShooterSubsystem.ShooterVelocityPID.ShooterFeedForward.shooterKV,
+            PID_Config.ShooterSubsystem.ShooterVelocityPID.ShooterFeedForward.shooterKA
+        );
 
         tiltMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER, CANSparkLowLevel.MotorType.kBrushless);
         tiltMotor.setIdleMode(IdleMode.kBrake);
@@ -69,12 +78,13 @@ public class Shooter extends SubsystemBase {
 
         shooterMotorL.setInverted(true);
         shooterMotorF.setInverted(false);
-        //shooterMotorF.follow(shooterMotorL);
+        shooterMotorF.follow(shooterMotorL);
 
         shooterMotorL.setIdleMode(IdleMode.kCoast);
         shooterMotorF.setIdleMode(IdleMode.kCoast);
 
         shooterController = shooterMotorL.getPIDController();
+
 
         shooterController.setP(ShooterVelocityPID.Proportional);
         shooterController.setI(ShooterVelocityPID.Integral);
@@ -121,11 +131,11 @@ public class Shooter extends SubsystemBase {
 
     public void setShooterSpeed(double percentOutput) {
         shooterMotorL.set(percentOutput);
-        shooterMotorF.set(percentOutput);
+        //shooterMotorF.set(percentOutput);
     }
 
     public void setShooterRPM(double desiredRPM) {
-        shooterController.setReference(desiredRPM, ControlType.kVelocity);
+        shooterController.setReference(desiredRPM, CANSparkBase.ControlType.kVelocity,0,SHOOTER_FEEDFORWARD_VELOCITY.calculate(desiredRPM));
     }
 
     public void setFeederSpeed(double percentOutput) {

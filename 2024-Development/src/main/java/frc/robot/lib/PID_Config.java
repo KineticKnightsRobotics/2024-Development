@@ -37,9 +37,13 @@ public class PID_Config {
             public static final double Derivitive = 0.0;
         }
         public class ShooterVelocityPID {
-            public static final double Proportional = 0.5;
+            public static final double Proportional = 6e-5;
             public static final double Integral = 0.0;
             public static final double Derivitive = 0.0;
+            public class ShooterFeedForward{
+                public static final double shooterKV = 0.38;
+                public static final double shooterKA = 0.20;
+            }
         }
 
 

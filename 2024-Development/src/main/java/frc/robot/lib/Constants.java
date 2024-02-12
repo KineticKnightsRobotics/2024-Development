@@ -104,6 +104,7 @@ public final class Constants {
     public static double INTAKE_PIVOT_ROTATIONS_TO_DEGRESS = INTAKE_PIVOT_GEAR_RATIO * 2*Math.PI;
 
     public static double Forward_IntakePivot_Position = -14;
+    
     public static double Reverse_IntakePivot_Position = 0.0;
 
   }
