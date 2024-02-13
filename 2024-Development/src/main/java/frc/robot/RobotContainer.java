@@ -12,6 +12,7 @@ import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.Constants.OIConstants;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -45,6 +46,9 @@ public class RobotContainer {
   private final Rotation2d rotation = new Rotation2d(0);
 private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
   private final CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
+
+
+
 
   Trigger DRIVER_A = new Trigger(JOYSTICK_DRIVER.button(1));
   Trigger DRIVER_B = new Trigger(JOYSTICK_DRIVER.button(2));
@@ -100,7 +104,13 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
         () -> true
       )
     );
-    //SUBSYSTEM_CONVEYER.setDefaultCommand(
+
+      NamedCommands.registerCommand("AutoIntake" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
+ NamedCommands.registerCommand("AutoConveyer", new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
+
+      NamedCommands.registerCommand("AutoIntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
+
+    //SUBSYSTEM_CONVEYER.setDefaultCommqajhand(
       //new CONVEYER_DEFAULT(SUBSYSTEM_CONVEYER)
     //);
     // Configure the trigger bindings
