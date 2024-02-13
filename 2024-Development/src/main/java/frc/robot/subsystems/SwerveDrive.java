@@ -90,6 +90,7 @@ public class SwerveDrive extends SubsystemBase {
         );  
 
     private final AHRS navX = new AHRS();
+    
 
     private final SwerveDriveOdometry ODEMETER = new SwerveDriveOdometry(KinematicsConstants.KINEMATICS_DRIVE_CHASSIS, getRotation2d(), getModulePositions());
 
@@ -100,7 +101,6 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_FRONT_RIGHT.resetEncoders();
         MODULE_BACK_LEFT.resetEncoders();
         MODULE_BACK_RIGHT.resetEncoders();
-
         // Configure AutoBuilder last
         AutoBuilder.configureHolonomic(
                 () -> ODEMETER.getPoseMeters(), // Robot pose supplier
@@ -108,10 +108,10 @@ public class SwerveDrive extends SubsystemBase {
                 this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::setAutoChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive), // Translation PID constants
-                        new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive), // Rotation PID constants
-                        2, // Max module speed, in m/s
-                        KinematicsConstants.RADIUS_DRIVE_CHASSIS, // Drive base radius in meters. Distance from robot center to furthest module.
+                        new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
+                    new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive),
+                    2,
+                    KinematicsConstants.RADIUS_DRIVE_CHASSIS, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig(
                             
                         ) // Default path replanning config. See the API for the options here
@@ -138,8 +138,10 @@ public class SwerveDrive extends SubsystemBase {
 
     @Override
     public void periodic() {
+
         SmartDashboard.putNumber("Robot Heading", getRobotHeading());
         SmartDashboard.putData("Field", field);
+                        field.setRobotPose(getPose());
 
 
         MODULE_FRONT_LEFT.moduleData2Dashboard();

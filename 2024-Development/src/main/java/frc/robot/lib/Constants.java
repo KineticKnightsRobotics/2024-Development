@@ -22,10 +22,10 @@ public final class Constants {
     public static final double KINEMATICS_CHASSIS_WIDTH = Units.inchesToMeters(22.5); // Distance between right and left wheels
     public static final double KINEMATICS_CHASSIS_LENGTH = Units.inchesToMeters(22.5); // Distance between front and back wheels
     public static final SwerveDriveKinematics KINEMATICS_DRIVE_CHASSIS = new SwerveDriveKinematics(
-      new Translation2d(-KINEMATICS_CHASSIS_WIDTH / 2, +KINEMATICS_CHASSIS_LENGTH / 2),
       new Translation2d(+KINEMATICS_CHASSIS_WIDTH / 2, +KINEMATICS_CHASSIS_LENGTH / 2),
-      new Translation2d(-KINEMATICS_CHASSIS_WIDTH / 2, -KINEMATICS_CHASSIS_LENGTH / 2),
-      new Translation2d(+KINEMATICS_CHASSIS_WIDTH / 2, -KINEMATICS_CHASSIS_LENGTH / 2)
+      new Translation2d(+KINEMATICS_CHASSIS_WIDTH / 2, -KINEMATICS_CHASSIS_LENGTH / 2),
+      new Translation2d(-KINEMATICS_CHASSIS_WIDTH / 2, +KINEMATICS_CHASSIS_LENGTH / 2),
+      new Translation2d(-KINEMATICS_CHASSIS_WIDTH / 2, -KINEMATICS_CHASSIS_LENGTH / 2)
     );
 
     public static final double RADIUS_DRIVE_CHASSIS = Math.sqrt((KINEMATICS_CHASSIS_LENGTH/2)*(KINEMATICS_CHASSIS_LENGTH/2) + (KINEMATICS_CHASSIS_WIDTH/2)*(KINEMATICS_CHASSIS_WIDTH/2));
@@ -72,16 +72,16 @@ public final class Constants {
 
     // Invert Specific Motors
 
-    public static final boolean REVERSED_FRONT_LEFT_MOTOR_DRIVE = true;
-    public static final boolean REVERSED_FRONT_RIGHT_MOTOR_DRIVE = false;
-    public static final boolean REVERSED_BACK_LEFT_MOTOR_DRIVE = true;
-    public static final boolean REVERSED_BACK_RIGHT_MOTOR_DRIVE = false;
+    public static final boolean REVERSED_FRONT_LEFT_MOTOR_DRIVE = false;
+    public static final boolean REVERSED_FRONT_RIGHT_MOTOR_DRIVE = true;
+    public static final boolean REVERSED_BACK_LEFT_MOTOR_DRIVE = false;
+    public static final boolean REVERSED_BACK_RIGHT_MOTOR_DRIVE = true;
 
     // Turning encoder offsets
-    public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE = Math.toRadians(-96.0 +  7.6);
-    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians(40 + 2.78);
-    public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE= Math.toRadians(-77.0 +  6);
-    public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE = Math.toRadians( 62.0 + -3.6);
+    public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE = Math.toRadians(-96.0 +  7.6+90);
+    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians(40 + 2.78+90);
+    public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE= Math.toRadians(-77.0 +  6+90);
+    public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE = Math.toRadians( 62.0 + -3.6+90);
 
     // Robot drive speeds
     public static final double LIMIT_HARD_SPEED_DRIVE = 3.6; // hard limit for speed of chassis

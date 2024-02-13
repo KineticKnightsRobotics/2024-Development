@@ -12,6 +12,7 @@ import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.Constants.OIConstants;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -41,7 +42,7 @@ public class RobotContainer {
   private final Intake SUBSYSTEM_INTAKE = new Intake();
   private final Conveyer SUBSYSTEM_CONVEYER = new Conveyer();
   private final Shooter SUBSYSTEM_SHOOTER = new Shooter();
-  private final Rotation2d rotation = new Rotation2d(135);
+  private final Rotation2d rotation = new Rotation2d(0);
 private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
   private final CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
 
@@ -93,8 +94,8 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
     SUBSYSTEM_SWERVEDRIVE.setDefaultCommand(
       new DRIVE_JoystickDrive(
         SUBSYSTEM_SWERVEDRIVE, 
-        () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
         () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
+        () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
         () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
         () -> true
       )
@@ -182,8 +183,10 @@ OP_19.whileTrue(SUBSYSTEM_SWERVEDRIVE.resetDriveOdemeter(pose));
 
   public Command getAutonomousCommand() {
     //return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Shop Pickup Note 2");
-    return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Test1");
+  //  return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Test1");
     //return Autos.simpleFollowChoreo(SUBSYSTEM_SWERVEDRIVE, "Test3");
+        return new PathPlannerAuto("FourNoteAuto");
+
 
   } 
 }
