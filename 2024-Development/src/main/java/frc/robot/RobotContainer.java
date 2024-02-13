@@ -106,8 +106,7 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
     );
 
       NamedCommands.registerCommand("AutoIntake" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
- NamedCommands.registerCommand("AutoConveyer", new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
-
+      NamedCommands.registerCommand("AutoConveyer", new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
       NamedCommands.registerCommand("AutoIntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
 
     //SUBSYSTEM_CONVEYER.setDefaultCommqajhand(
@@ -178,7 +177,17 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
         new SHOOTER_runShooter_OpenLoop(0, SUBSYSTEM_SHOOTER)
         )
     );
-    OP_20.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
+
+
+    OP_11.onTrue(SUBSYSTEM_SHOOTER.zeroTilter(60.0));
+
+    OP_12.onTrue(SUBSYSTEM_SHOOTER.setTilter(60.0));
+
+    OP_14.onTrue(SUBSYSTEM_SHOOTER.setTilter(80.0));
+
+    OP_16.onTrue(SUBSYSTEM_SHOOTER.setTilter(100.0));
+
+    //OP_20.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
 
 OP_19.whileTrue(SUBSYSTEM_SWERVEDRIVE.resetDriveOdemeter(pose));
 

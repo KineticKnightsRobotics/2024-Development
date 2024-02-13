@@ -9,11 +9,13 @@ import com.revrobotics.CANSparkBase.ControlType;
 //import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.lib.PID_Config.ShooterSubsystem.ShooterVelocityPID;
 import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
@@ -46,7 +48,7 @@ public class Shooter extends SubsystemBase {
     private double tiltPosition = 0.0;
 
     public Shooter() {
-SHOOTER_FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(
+        SHOOTER_FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(
             0,
             PID_Config.ShooterSubsystem.ShooterVelocityPID.ShooterFeedForward.shooterKV,
             PID_Config.ShooterSubsystem.ShooterVelocityPID.ShooterFeedForward.shooterKA
@@ -54,14 +56,19 @@ SHOOTER_FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(
 
         tiltMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER, CANSparkLowLevel.MotorType.kBrushless);
         tiltMotor.setIdleMode(IdleMode.kBrake);
+        tiltMotor.setSmartCurrentLimit(45);
 
         tiltEncoder = tiltMotor.getEncoder();
-        //tiltEncoder.setPositionConversionFactor(); TODO: Find this!
+        tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES); //TODO: Find this!
+
+        tiltEncoder.setPosition(60.0);
 
         tiltController = tiltMotor.getPIDController();
         tiltController.setP(TilterPIDConfig.Proportional);
         tiltController.setI(TilterPIDConfig.Integral);
         tiltController.setD(TilterPIDConfig.Derivitive);
+
+        tiltController.setOutputRange(-0.05,0.05);
 
 
         //Pneumatics stuff is not on the robot yet...
@@ -106,7 +113,7 @@ SHOOTER_FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(
 
         SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
 
-        SmartDashboard.putNumber("Tiler Position", tiltEncoder.getPosition());
+        SmartDashboard.putNumber("Tiler Position", getTilterPosition());
 
         //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
 
@@ -142,9 +149,25 @@ SHOOTER_FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(
         feedMotor.set(percentOutput);
     }
 
+    public double getTilterPosition () {
+        return tiltEncoder.getPosition();
+    }
+
     public void setTilterPosition(double position) {
         tiltPosition = position;
         tiltController.setReference(position, ControlType.kPosition);
+    }
+
+    public void zeroTilterPosition(double newPosition) {
+        tiltEncoder.setPosition(newPosition);
+    }
+
+    public Command setTilter(double angle) {
+        return Commands.runOnce(() -> setTilterPosition(angle), this);
+    }
+
+    public Command zeroTilter(double angle) {
+        return Commands.runOnce(() -> zeroTilterPosition(angle), this);
     }
     
 }

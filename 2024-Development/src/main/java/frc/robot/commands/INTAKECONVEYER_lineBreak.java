@@ -6,11 +6,7 @@ import frc.robot.subsystems.Conveyer;
 import frc.robot.subsystems.Intake;
 
 public class INTAKECONVEYER_lineBreak extends Command{
-    
-
-    Conveyer m_Conveyer;
-    
-    Intake m_Intake;
+    Conveyer m_Conveyer;Intake m_Intake;
 
 
 

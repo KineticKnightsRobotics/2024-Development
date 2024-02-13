@@ -71,7 +71,6 @@ public final class Constants {
     public static final boolean REVERSED_GYRO = false;
 
     // Invert Specific Motors
-
     public static final boolean REVERSED_FRONT_LEFT_MOTOR_DRIVE = false;
     public static final boolean REVERSED_FRONT_RIGHT_MOTOR_DRIVE = true;
     public static final boolean REVERSED_BACK_LEFT_MOTOR_DRIVE = false;
@@ -79,7 +78,7 @@ public final class Constants {
 
     // Turning encoder offsets
     public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE = Math.toRadians(-96.0 +  7.6+90);
-    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians(40 + 2.78+90);
+    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians( 40 + 2.78+90);
     public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE= Math.toRadians(-77.0 +  6+90);
     public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE = Math.toRadians( 62.0 + -3.6+90);
 
@@ -103,7 +102,7 @@ public final class Constants {
     public static double INTAKE_PIVOT_GEAR_RATIO = (1/50);
     public static double INTAKE_PIVOT_ROTATIONS_TO_DEGRESS = INTAKE_PIVOT_GEAR_RATIO * 2*Math.PI;
 
-    public static double Forward_IntakePivot_Position = -14;
+    public static double Forward_IntakePivot_Position = -18.5;
     
     public static double Reverse_IntakePivot_Position = 0.0;
 
@@ -128,6 +127,10 @@ public final class Constants {
     public static int ID_MOTOR_FEEDER = 54;
     
     public static double MOTOR_FEEDER_GEARRATIO = 1 / 3;
+
+    public static double SHOOTER_GEAR_RATIO = 36/1; // 36 : 1
+
+    public static double SHOOTER_TICKS_TO_DEGREES = 360 / SHOOTER_GEAR_RATIO;
 
     public static class ShooterBlockPneumatics {
       public static int CHANNEL_FORWARD = 1;

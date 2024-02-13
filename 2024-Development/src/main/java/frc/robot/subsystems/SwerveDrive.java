@@ -12,6 +12,7 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 //wpi
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -92,7 +93,13 @@ public class SwerveDrive extends SubsystemBase {
     private final AHRS navX = new AHRS();
     
 
-    private final SwerveDriveOdometry ODEMETER = new SwerveDriveOdometry(KinematicsConstants.KINEMATICS_DRIVE_CHASSIS, getRotation2d(), getModulePositions());
+    //private final SwerveDriveOdometry ODEMETER = new SwerveDriveOdometry(KinematicsConstants.KINEMATICS_DRIVE_CHASSIS, getRotation2d(), getModulePositions());
+    private final SwerveDrivePoseEstimator ODEMETER = new SwerveDrivePoseEstimator(
+        KinematicsConstants.KINEMATICS_DRIVE_CHASSIS,
+        getRotation2d(),
+        getModulePositions(),
+        new Pose2d(0,0,new Rotation2d(0))
+    );
 
     public SwerveDrive() {
         try {TimeUnit.SECONDS.sleep(1);}
@@ -103,7 +110,7 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_BACK_RIGHT.resetEncoders();
         // Configure AutoBuilder last
         AutoBuilder.configureHolonomic(
-                () -> ODEMETER.getPoseMeters(), // Robot pose supplier
+                () -> ODEMETER.getEstimatedPosition(), // Robot pose supplier
                 this::resetOdometer, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::setAutoChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
@@ -176,13 +183,13 @@ public class SwerveDrive extends SubsystemBase {
             getModulePositions()
         );
         
-        SmartDashboard.putString("Robot Odemeter position", ODEMETER.getPoseMeters().toString());
+        SmartDashboard.putString("Robot Odemeter position", ODEMETER.getEstimatedPosition().toString());
 
 
     }
 
     public Pose2d getPose() {
-        return ODEMETER.getPoseMeters();
+        return ODEMETER.getEstimatedPosition();
       }
 
     public ChassisSpeeds getChassisSpeeds() {
@@ -275,7 +282,7 @@ public class SwerveDrive extends SubsystemBase {
         return new SequentialCommandGroup(
             new FollowPathHolonomic(
                 path,
-                () -> ODEMETER.getPoseMeters(),
+                () -> ODEMETER.getEstimatedPosition(),
                 () -> getChassisSpeeds(),
                 this::setAutoChassisSpeed, 
                 new HolonomicPathFollowerConfig(
