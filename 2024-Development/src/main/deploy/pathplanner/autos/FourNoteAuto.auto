@@ -12,7 +12,7 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -37,27 +37,91 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Note2Score"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note2Score"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoConveyer"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "Note3Capture"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note3Capture"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoIntake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoConveyer"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "Note4Capture"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note4Capture"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoIntake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoConveyer"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "sequential",
           "data": {
-            "pathName": "Note4Score"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note4Score"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoConveyer"
+                }
+              }
+            ]
           }
         }
       ]

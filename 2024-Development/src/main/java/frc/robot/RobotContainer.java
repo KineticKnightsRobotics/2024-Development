@@ -106,8 +106,9 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
     );
 
       NamedCommands.registerCommand("AutoIntake" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
-      NamedCommands.registerCommand("AutoConveyer", new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
+      NamedCommands.registerCommand("AutoConveyerUntilLineBreak", new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
       NamedCommands.registerCommand("AutoIntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
+      NamedCommands.registerCommand("AutoConveyer", new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
 
     //SUBSYSTEM_CONVEYER.setDefaultCommqajhand(
       //new CONVEYER_DEFAULT(SUBSYSTEM_CONVEYER)
@@ -204,9 +205,9 @@ OP_19.whileTrue(SUBSYSTEM_SWERVEDRIVE.resetDriveOdemeter(pose));
     //return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Shop Pickup Note 2");
   //  return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Test1");
     //return Autos.simpleFollowChoreo(SUBSYSTEM_SWERVEDRIVE, "Test3");
-        //return new PathPlannerAuto("FourNoteAuto");
+        return new PathPlannerAuto("FourNoteAuto");
 
-        return null;
+        //return null;
 
 
   } 
