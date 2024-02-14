@@ -148,8 +148,8 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
       )
     );
 
-    //DRIVER_A.whileTrue(new SHOOTER_runShooter_OpenLoop(1100, SUBSYSTEM_SHOOTER));
-    DRIVER_A.whileTrue(new SHOOTER_runShooter_ClosedLoop(4300, SUBSYSTEM_SHOOTER));
+    DRIVER_A.whileTrue(new SHOOTER_runShooter_OpenLoop(2000, SUBSYSTEM_SHOOTER));
+    //DRIVER_A.whileTrue(new SHOOTER_runShooter_ClosedLoop(4300, SUBSYSTEM_SHOOTER));
 
     DRIVER_X.onTrue(
         new SequentialCommandGroup(
@@ -183,9 +183,9 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
 
     OP_12.onTrue(SUBSYSTEM_SHOOTER.setTilter(60.0));
 
-    OP_14.onTrue(SUBSYSTEM_SHOOTER.setTilter(80.0));
+    OP_14.onTrue(SUBSYSTEM_SHOOTER.setTilter(90.0));
 
-    OP_16.onTrue(SUBSYSTEM_SHOOTER.setTilter(100.0));
+    OP_16.onTrue(SUBSYSTEM_SHOOTER.setTilter(110.0));
 
     //OP_20.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
 
@@ -204,7 +204,9 @@ OP_19.whileTrue(SUBSYSTEM_SWERVEDRIVE.resetDriveOdemeter(pose));
     //return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Shop Pickup Note 2");
   //  return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Test1");
     //return Autos.simpleFollowChoreo(SUBSYSTEM_SWERVEDRIVE, "Test3");
-        return new PathPlannerAuto("FourNoteAuto");
+        //return new PathPlannerAuto("FourNoteAuto");
+
+        return null;
 
 
   } 

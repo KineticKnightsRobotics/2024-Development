@@ -54,7 +54,7 @@ public class DRIVE_JoystickDrive extends Command {
 
         double xSpeed   = (joystickX/1.0) * SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;
         double ySpeed   = (joystickY/1.0) * SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE; //Determine new velocity
-        double rotSpeed = (joystickZ/1.0) * SwerveSubsystemConstants.LIMIT_SOFT_SPEED_TURN * 0.5; //* 0.2 to make SLOW */
+        double rotSpeed = (joystickZ/1.0) * SwerveSubsystemConstants.LIMIT_SOFT_SPEED_TURN *0.8; //* 0.2 to make SLOW */
 
         ChassisSpeeds chassisSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, subsystem.getRotation2d());
         subsystem.setChassisSpeed(chassisSpeed,true);

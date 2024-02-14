@@ -21,7 +21,7 @@ public class SHOOTER_runShooter_OpenLoop extends Command {
 
     @Override
     public void initialize() {
-        subsystem.setShooterSpeed(0.3);
+        subsystem.setShooterSpeed(0.8);
     }
     @Override
     public void execute() {

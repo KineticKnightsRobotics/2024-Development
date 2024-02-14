@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
         tiltController.setI(TilterPIDConfig.Integral);
         tiltController.setD(TilterPIDConfig.Derivitive);
 
-        tiltController.setOutputRange(-0.05,0.05);
+        tiltController.setOutputRange(-0.15,0.15);
 
 
         //Pneumatics stuff is not on the robot yet...
@@ -85,7 +85,7 @@ public class Shooter extends SubsystemBase {
 
         shooterMotorL.setInverted(true);
         shooterMotorF.setInverted(false);
-        shooterMotorF.follow(shooterMotorL);
+        //shooterMotorL.follow(shooterMotorF);
 
         shooterMotorL.setIdleMode(IdleMode.kCoast);
         shooterMotorF.setIdleMode(IdleMode.kCoast);
@@ -97,7 +97,9 @@ public class Shooter extends SubsystemBase {
         shooterController.setI(ShooterVelocityPID.Integral);
         shooterController.setD(ShooterVelocityPID.Derivitive);
 
+        //feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
         feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
+
         feedMotor.setInverted(true);
         feedEncoder = feedMotor.getEncoder();
         feedEncoder.setPositionConversionFactor(ShooterSubsystemConstants.MOTOR_FEEDER_GEARRATIO);
@@ -138,7 +140,7 @@ public class Shooter extends SubsystemBase {
 
     public void setShooterSpeed(double percentOutput) {
         shooterMotorL.set(percentOutput);
-        //shooterMotorF.set(percentOutput);
+        shooterMotorF.set(percentOutput);
     }
 
     public void setShooterRPM(double desiredRPM) {
