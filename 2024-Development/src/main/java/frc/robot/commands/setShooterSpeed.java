@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 
-public class SHOOTER_runShooter_Backwards extends Command {
+public class setShooterSpeed extends Command {
 
     Shooter subsystem;
     double percentOutput;
 
-    public SHOOTER_runShooter_Backwards(double _speed, Shooter _subsystem) {
+    public setShooterSpeed(double _speed, Shooter _subsystem) {
         addRequirements(_subsystem);
         subsystem = _subsystem;
         percentOutput = _speed;

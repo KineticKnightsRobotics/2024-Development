@@ -4,6 +4,7 @@ import com.pathplanner.lib.util.PIDConstants;
 
 public class PID_Config {
     public class SwereModule {
+        //This one is really, REALLY, important all over the driving code. Try not to change it unless absolutely nessecary!
         public class ModuleTurning {
             public static final double Proportional = 0.5;
             public static final double Integral = 0.0;
@@ -45,8 +46,6 @@ public class PID_Config {
                 public static final double shooterKA = 0.20;
             }
         }
-
-
         //Currently unused
         public class FeederPositionKinematicsPID {
             public static final double Proportional = 0.1;
@@ -61,7 +60,7 @@ public class PID_Config {
             public static final double Integral = 0.0;
             public static final double Derivitive = 0.0;
         }
-        public class Strafing {
+        public class Strafing {                                 //TODO: Is this nessecary or could we implement the trajectory driving configs for this? Depends on method of limelight tracking.
             public static final double Proportional = 0.4;
             public static final double Integral = 0.0;
             public static final double Derivitive = 0.0;
@@ -69,9 +68,6 @@ public class PID_Config {
     }
 
     public class TrajectoryDriving {
-
-    //public static final PIDConstants translationPID = new PIDConstants(3, 0.5, 0);
-    //public static final PIDConstants rotationPID = new PIDConstants(2, 0.002, 0.05);
         public static final double Proportional = 5;
         public static final double Integral = 0.0;
         public static final double Derivitive = 0.0;
@@ -80,7 +76,6 @@ public class PID_Config {
         public static final double Proportional = 5;
         public static final double Integral = 0.0;
         public static final double Derivitive = 0.00;
-}
-
+    }
 }
 

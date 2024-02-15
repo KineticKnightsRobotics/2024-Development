@@ -105,10 +105,9 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
       )
     );
 
-      NamedCommands.registerCommand("AutoIntake" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
-      NamedCommands.registerCommand("AutoConveyerUntilLineBreak", new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
-      NamedCommands.registerCommand("AutoIntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
-      NamedCommands.registerCommand("AutoConveyer", new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
+    NamedCommands.registerCommand("IntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
+    NamedCommands.registerCommand("IntakeUp" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
+    NamedCommands.registerCommand("AutoConveyer", new intakeLineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
 
     //SUBSYSTEM_CONVEYER.setDefaultCommqajhand(
       //new CONVEYER_DEFAULT(SUBSYSTEM_CONVEYER)
@@ -134,7 +133,7 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
     DRIVER_R1.whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position),
-        new INTAKECONVEYER_lineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE),
+        new intakeLineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE),
         SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position)
       )
     );
@@ -143,19 +142,19 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
     DRIVER_L1.whileTrue(
       new ParallelCommandGroup(  
         //new SHOOTER_runFeeder(-0.40, SUBSYSTEM_SHOOTER),
-        new INTAKE_SetRollerSpeed(SUBSYSTEM_INTAKE, -0.8),
-        new CONVEYER_RunConveyer(0.4, SUBSYSTEM_CONVEYER),
-        new SHOOTER_runShooter_Backwards(-0.30, SUBSYSTEM_SHOOTER)
+        new setRollerSpeed(SUBSYSTEM_INTAKE, -0.8),
+        new runConveyer(0.4, SUBSYSTEM_CONVEYER),
+        new setShooterSpeed(-0.30, SUBSYSTEM_SHOOTER)
       )
     );
 
-    DRIVER_A.whileTrue(new SHOOTER_runShooter_OpenLoop(2000, SUBSYSTEM_SHOOTER));
+    DRIVER_A.whileTrue(new runShooter_OpenLoop(2000, SUBSYSTEM_SHOOTER));
     //DRIVER_A.whileTrue(new SHOOTER_runShooter_ClosedLoop(4300, SUBSYSTEM_SHOOTER));
 
     DRIVER_X.onTrue(
         new SequentialCommandGroup(
           //new CONVEYERSHOOTER_loadFeeder(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER,SUBSYSTEM_INTAKE)
-          new CONVEYER_RunUntilLineBreak(SUBSYSTEM_CONVEYER)
+          new runConveyerlLineBreak(SUBSYSTEM_CONVEYER)
         
         //new SHOOTER_moveFeederDistance(SUBSYSTEM_SHOOTER, -20),
         //new SHOOTER_runShooter(0, SUBSYSTEM_SHOOTER)
@@ -163,7 +162,7 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
     );
 
     DRIVER_Y.whileTrue(
-      new SHOOTER_runFeeder(0.8, SUBSYSTEM_SHOOTER)
+      new runFeeder(0.8, SUBSYSTEM_SHOOTER)
     );
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
@@ -173,9 +172,9 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
 
     OP_2.whileTrue(
       new SequentialCommandGroup(
-        new CONVEYERSHOOTER_loadFeeder(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER,SUBSYSTEM_INTAKE),
-        new SHOOTER_moveFeederDistance(SUBSYSTEM_SHOOTER, -20),
-        new SHOOTER_runShooter_OpenLoop(0, SUBSYSTEM_SHOOTER)
+        new loadFeeder(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER,SUBSYSTEM_INTAKE),
+        new moveFeederDistance(SUBSYSTEM_SHOOTER, -20),
+        new runShooter_OpenLoop(0, SUBSYSTEM_SHOOTER)
         )
     );
 
@@ -188,17 +187,7 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
 
     OP_16.onTrue(SUBSYSTEM_SHOOTER.setTilter(110.0));
 
-    //OP_20.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
-
-OP_19.whileTrue(SUBSYSTEM_SWERVEDRIVE.resetDriveOdemeter(pose));
-
-    /*
-    OP_12.onTrue(SUBSYSTEM_CONVEYER.setLED(-0.95));
-    OP_13.onTrue(SUBSYSTEM_CONVEYER.setLED(-0.5));
-    OP_15.onTrue(SUBSYSTEM_CONVEYER.setLED(0.35));
-    OP_11.onTrue(SUBSYSTEM_CONVEYER.setLED(-0.99));
-    OP_14.onTrue(SUBSYSTEM_CONVEYER.setLED(0.91));
-    */
+    OP_19.whileTrue(SUBSYSTEM_SWERVEDRIVE.resetDriveOdemeter(pose));
   }
 
   public Command getAutonomousCommand() {

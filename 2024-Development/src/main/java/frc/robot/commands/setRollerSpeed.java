@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.Intake;
 
-public class INTAKE_SetRollerSpeed extends Command {
+public class setRollerSpeed extends Command {
 
     Intake subsystem;
     Double percentOutput;
 
-    public INTAKE_SetRollerSpeed(Intake m_subsystem, double output) {
+    public setRollerSpeed(Intake m_subsystem, double output) {
         subsystem = m_subsystem;
         percentOutput = output;
     }

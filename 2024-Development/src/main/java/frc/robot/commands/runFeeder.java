@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 
-public class SHOOTER_runFeeder extends Command {
+public class runFeeder extends Command {
 
 
     Shooter m_Shooter;
@@ -14,7 +14,7 @@ public class SHOOTER_runFeeder extends Command {
     double m_Speed;
 
 
-    public SHOOTER_runFeeder(double speed, Shooter subsystem) {
+    public runFeeder(double speed, Shooter subsystem) {
         addRequirements(subsystem);
 
         m_Shooter = subsystem;

@@ -7,13 +7,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 
-public class SHOOTER_runShooter_OpenLoop extends Command {
+public class runShooter_OpenLoop extends Command {
 
     Shooter subsystem;
     double speed;
 
     public 
-    SHOOTER_runShooter_OpenLoop(double _speed, Shooter _subsystem) {
+    runShooter_OpenLoop(double _speed, Shooter _subsystem) {
         addRequirements(_subsystem);
         subsystem = _subsystem;
         speed = _speed;

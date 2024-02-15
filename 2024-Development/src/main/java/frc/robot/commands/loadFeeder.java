@@ -7,7 +7,7 @@ import frc.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class CONVEYERSHOOTER_loadFeeder extends Command {
+public class loadFeeder extends Command {
 
 
     Conveyer m_Conveyer;
@@ -16,7 +16,7 @@ public class CONVEYERSHOOTER_loadFeeder extends Command {
 
     int timer;
 
-    public CONVEYERSHOOTER_loadFeeder(Conveyer _Conveyer, Shooter _Shooter, Intake _Intake) {
+    public loadFeeder(Conveyer _Conveyer, Shooter _Shooter, Intake _Intake) {
         addRequirements(_Conveyer, _Shooter);
 
         m_Conveyer = _Conveyer;

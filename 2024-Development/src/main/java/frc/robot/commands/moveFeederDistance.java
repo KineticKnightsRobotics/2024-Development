@@ -7,7 +7,7 @@ import frc.robot.subsystems.Shooter;
 
 import frc.robot.lib.PID_Config.ShooterSubsystem.FeederPositionKinematicsPID;;
 
-public class SHOOTER_moveFeederDistance extends Command {
+public class moveFeederDistance extends Command {
 
     Shooter m_Shooter;
 
@@ -15,7 +15,7 @@ public class SHOOTER_moveFeederDistance extends Command {
 
     PIDController controller;
     
-    public SHOOTER_moveFeederDistance(Shooter _subsystem, double _rotations) {
+    public moveFeederDistance(Shooter _subsystem, double _rotations) {
         addRequirements(_subsystem);
         m_Shooter = _subsystem;
         rotations = _rotations;
@@ -40,7 +40,7 @@ public class SHOOTER_moveFeederDistance extends Command {
     public void execute() {
         //feeder running forwards
         speed = controller.calculate(m_Shooter.getFeedPostition(),endPoint);
-        speed /= 20;
+
         m_Shooter.setFeederSpeed(speed);
     }
     @Override

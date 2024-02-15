@@ -5,13 +5,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.Conveyer;
 
-public class CONVEYER_RunConveyer extends Command {
+public class runConveyer extends Command {
 
 
     Conveyer m_Conveyer;
     double percentOutput;
 
-    public CONVEYER_RunConveyer(double new_speed, Conveyer subsystem) {
+    public runConveyer(double new_speed, Conveyer subsystem) {
         addRequirements(subsystem);
  
         m_Conveyer = subsystem;

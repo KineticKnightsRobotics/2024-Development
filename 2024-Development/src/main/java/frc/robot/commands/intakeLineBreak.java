@@ -5,13 +5,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Conveyer;
 import frc.robot.subsystems.Intake;
 
-public class INTAKECONVEYER_lineBreak extends Command{
+public class intakeLineBreak extends Command{
     Conveyer m_Conveyer;Intake m_Intake;
 
 
 
 
-    public INTAKECONVEYER_lineBreak(Conveyer m_subsystem, Intake m_subsystem2) {
+    public intakeLineBreak(Conveyer m_subsystem, Intake m_subsystem2) {
         addRequirements(m_subsystem);
         m_Conveyer = m_subsystem;
         m_Intake = m_subsystem2;

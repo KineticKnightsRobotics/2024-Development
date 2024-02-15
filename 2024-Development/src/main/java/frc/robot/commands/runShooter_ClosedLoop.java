@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 
-public class SHOOTER_runShooter_ClosedLoop extends Command {
+public class runShooter_ClosedLoop extends Command {
 
     Shooter subsystem;
     double speed;
 
-    public SHOOTER_runShooter_ClosedLoop(double desiredRPM, Shooter _subsystem) {
+    public runShooter_ClosedLoop(double desiredRPM, Shooter _subsystem) {
         addRequirements(_subsystem);
         subsystem = _subsystem;
         speed = desiredRPM;

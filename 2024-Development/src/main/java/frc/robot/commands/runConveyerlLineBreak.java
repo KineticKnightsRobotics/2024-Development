@@ -7,12 +7,12 @@ import frc.robot.subsystems.Conveyer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 // Default command, run at 10% speed unless line break.
-public class CONVEYER_RunUntilLineBreak extends Command {
+public class runConveyerlLineBreak extends Command {
     
 
     Conveyer m_Conveyer;
 
-    public CONVEYER_RunUntilLineBreak(Conveyer _Conveyer) {
+    public runConveyerlLineBreak(Conveyer _Conveyer) {
         addRequirements(_Conveyer);
         m_Conveyer = _Conveyer;
     }
