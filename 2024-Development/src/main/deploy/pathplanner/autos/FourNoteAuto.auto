@@ -12,7 +12,7 @@
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -22,15 +22,22 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "AutoIntake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoConveyer"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoIntake"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoConveyerUntilLineBreak"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -45,12 +52,6 @@
                 "data": {
                   "pathName": "Note2Score"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoConveyer"
-                }
               }
             ]
           }
@@ -63,18 +64,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "Note3Capture"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoIntake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoConveyer"
                 }
               }
             ]
@@ -89,18 +78,6 @@
                 "data": {
                   "pathName": "Note4Capture"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoIntake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoConveyer"
-                }
               }
             ]
           }
@@ -113,12 +90,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "Note4Score"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoConveyer"
                 }
               }
             ]

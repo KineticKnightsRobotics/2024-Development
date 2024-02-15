@@ -72,12 +72,12 @@ public class PID_Config {
 
     //public static final PIDConstants translationPID = new PIDConstants(3, 0.5, 0);
     //public static final PIDConstants rotationPID = new PIDConstants(2, 0.002, 0.05);
-        public static final double Proportional = 5.0;
+        public static final double Proportional = 5;
         public static final double Integral = 0.0;
         public static final double Derivitive = 0.0;
     }
     public class TrajectoryTurning {
-        public static final double Proportional = 6;
+        public static final double Proportional = 5;
         public static final double Integral = 0.0;
         public static final double Derivitive = 0.00;
 }
