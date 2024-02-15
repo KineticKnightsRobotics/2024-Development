@@ -106,20 +106,16 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
     );
 
     NamedCommands.registerCommand("IntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
-    NamedCommands.registerCommand("IntakeUp" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
+    NamedCommands.registerCommand("IntakeUp" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position));
     NamedCommands.registerCommand("AutoConveyer", new intakeLineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
-
-    //SUBSYSTEM_CONVEYER.setDefaultCommqajhand(
-      //new CONVEYER_DEFAULT(SUBSYSTEM_CONVEYER)
-    //);
     // Configure the trigger bindings
     configureBindings();
 
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser("Straight");
 
-        // Another option that allows you to specify the default auto by its name
-        // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+    // Another option that allows you to specify the default auto by its name
+    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

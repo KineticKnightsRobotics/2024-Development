@@ -145,10 +145,9 @@ public class SwerveDrive extends SubsystemBase {
 
     @Override
     public void periodic() {
-
         SmartDashboard.putNumber("Robot Heading", getRobotHeading());
-        SmartDashboard.putData("Field", field);
-                        field.setRobotPose(getPose());
+        SmartDashboard.putData("Field", field);field.setRobotPose(getPose());
+        SmartDashboard.putString("Robot Odemeter position", ODEMETER.getEstimatedPosition().toString());
 
 
         MODULE_FRONT_LEFT.moduleData2Dashboard();
@@ -156,6 +155,8 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_BACK_LEFT.moduleData2Dashboard();
         MODULE_BACK_RIGHT.moduleData2Dashboard();
 
+        //I commented out all this because .moduleData2Dashboard(); puts the same data onto dashboard.
+        /*
         //Ticks
         SmartDashboard.putNumber("FRONT left ticks", MODULE_FRONT_LEFT.getDrivePosition());
         SmartDashboard.putNumber("FRONT right ticks", MODULE_FRONT_RIGHT.getDrivePosition());
@@ -177,15 +178,13 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putNumber("BACK left Turning Position", MODULE_BACK_LEFT.getTurningPosition());
         SmartDashboard.putNumber("FRONT right Turning Position", MODULE_FRONT_RIGHT.getTurningPosition());
         SmartDashboard.putNumber("FRONT left Turning Position", MODULE_FRONT_LEFT.getTurningPosition());
+        */
+
 
         ODEMETER.update(
             getRotation2d(),
             getModulePositions()
         );
-        
-        SmartDashboard.putString("Robot Odemeter position", ODEMETER.getEstimatedPosition().toString());
-
-
     }
 
     public Pose2d getPose() {
@@ -193,7 +192,7 @@ public class SwerveDrive extends SubsystemBase {
       }
 
     public ChassisSpeeds getChassisSpeeds() {
-        return KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toChassisSpeeds(getModuleStates()); //TODO:This needs to be tested!
+        return KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toChassisSpeeds(getModuleStates());
     }
 
     public double getRobotHeading() {
@@ -203,15 +202,6 @@ public class SwerveDrive extends SubsystemBase {
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(getRobotHeading());
     }
-
-    public void resetOdometer(Pose2d pose){
-        ODEMETER.resetPosition(getRotation2d(), getModulePositions(), pose);
-    }
-    public Command resetDriveOdemeter(Pose2d pose) {
-        return Commands.runOnce(()-> resetOdometer(pose));
-    }
-
-    
 
     public SwerveModulePosition[] getModulePositions() {
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
@@ -243,10 +233,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState states[], boolean isOpenLoop) {
-
         SwerveDriveKinematics.desaturateWheelSpeeds(states, SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE);
-
-        
         MODULE_FRONT_LEFT.setDesiredState(states[0],isOpenLoop);
         MODULE_FRONT_RIGHT.setDesiredState(states[1],isOpenLoop);
         MODULE_BACK_LEFT.setDesiredState(states[2],isOpenLoop);
@@ -260,6 +247,13 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_BACK_RIGHT.resetEncoders();   
     }
   
+    public void resetOdometer(Pose2d pose){
+        ODEMETER.resetPosition(getRotation2d(), getModulePositions(), pose);
+    }
+
+    public Command resetDriveOdemeter(Pose2d pose) {
+        return Commands.runOnce(()-> resetOdometer(pose));
+    }
 
     public Command zeroRobotHeading() {
         return Commands.runOnce(() -> navX.zeroYaw());
@@ -268,8 +262,6 @@ public class SwerveDrive extends SubsystemBase {
     public Command zeroModuleAngles() {
         return Commands.runOnce(()-> zeroModules());
     }
-
-
 
     public Command followPath(String pathName,Boolean isChoreo) {
         PathPlannerPath path;

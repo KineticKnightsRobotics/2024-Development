@@ -111,6 +111,7 @@ public class SwerveModule extends SubsystemBase {
         SmartDashboard.putNumber(MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
 
         SmartDashboard.putNumber(MODULE_NAME + "Distance Travelled",getDrivePosition());
+        SmartDashboard.putNumber(MODULE_NAME + "Velocity", getDriveVelocity());
     }
 
     /** 
@@ -126,18 +127,10 @@ public class SwerveModule extends SubsystemBase {
      * Turns SwerveModuleState into turning and driving speed
      */
     public void setDesiredState(SwerveModuleState state, boolean isOpenLoop) {
-
         state = SwerveModuleState.optimize(state, getModuleState().angle);
-
         setAngle(state);
-
-        if (isOpenLoop) {
-            setPercentOutput(state);
-        }
-        else {
-            setSpeed(state);
-        }
-
+        if   (isOpenLoop){setPercentOutput(state);}
+        else             {setSpeed(state);}
         SmartDashboard.putString(MODULE_NAME + ENCODER_ABSOLUTE.getDeviceID() + " state", state.toString());
     }
     /**
