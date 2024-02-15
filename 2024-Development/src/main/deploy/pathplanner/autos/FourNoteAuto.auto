@@ -28,13 +28,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "AutoIntake"
+                        "name": "IntakeDown"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "AutoConveyerUntilLineBreak"
+                        "name": "AutoConveyer"
                       }
                     }
                   ]

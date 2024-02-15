@@ -17,6 +17,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -32,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 //robot
 import frc.robot.lib.Constants;
+import frc.robot.lib.LimeLight;
 import frc.robot.lib.SwerveModule;
 import frc.robot.lib.Constants.KinematicsConstants;
 import frc.robot.lib.Constants.ModuleConstants;
@@ -46,6 +48,9 @@ import java.util.concurrent.TimeUnit;
 
 
 public class SwerveDrive extends SubsystemBase {
+
+    LimeLight m_LimeLight;
+
     private Field2d field = new Field2d();
 
     
@@ -94,20 +99,23 @@ public class SwerveDrive extends SubsystemBase {
     
 
     //private final SwerveDriveOdometry ODEMETER = new SwerveDriveOdometry(KinematicsConstants.KINEMATICS_DRIVE_CHASSIS, getRotation2d(), getModulePositions());
-    private final SwerveDrivePoseEstimator ODEMETER = new SwerveDrivePoseEstimator(
+    public final SwerveDrivePoseEstimator ODEMETER = new SwerveDrivePoseEstimator(
         KinematicsConstants.KINEMATICS_DRIVE_CHASSIS,
         getRotation2d(),
         getModulePositions(),
         new Pose2d(0,0,new Rotation2d(0))
     );
 
-    public SwerveDrive() {
+    public SwerveDrive(LimeLight _limelight) {
         try {TimeUnit.SECONDS.sleep(1);}
         catch(InterruptedException e){}
         MODULE_FRONT_LEFT.resetEncoders();
         MODULE_FRONT_RIGHT.resetEncoders();
         MODULE_BACK_LEFT.resetEncoders();
         MODULE_BACK_RIGHT.resetEncoders();
+
+        m_LimeLight = _limelight;
+
         // Configure AutoBuilder last
         AutoBuilder.configureHolonomic(
                 () -> ODEMETER.getEstimatedPosition(), // Robot pose supplier
@@ -185,6 +193,14 @@ public class SwerveDrive extends SubsystemBase {
             getRotation2d(),
             getModulePositions()
         );
+
+        /*
+        ODEMETER.addVisionMeasurement(
+            null,
+            null
+        );
+        */
+
     }
 
     public Pose2d getPose() {

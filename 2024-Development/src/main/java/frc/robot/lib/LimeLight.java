@@ -20,6 +20,8 @@ public class LimeLight extends SubsystemBase {
 
     NetworkTableEntry targetpose_cameraspace = LIMELIGHT.getEntry("targetpose_cameraspace");
 
+    NetworkTableEntry robotPose_wpiBlue = LIMELIGHT.getEntry("botpose_wpiblue");
+
     //NetworkTableEntry LIMELIGHT_APRILTAG_TRANSLATION = LIMELIGHT.getEntry("targetpose_robotspace");
     //NetworkTableEntry LIMELIGHT_APRILTAG_DISTANCE = 
 
@@ -31,33 +33,43 @@ public class LimeLight extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("LimeLight Has Target",getLimeLightTV());
-        SmartDashboard.putNumber("LimeLight X Delta", getLimeLightTX());
-        SmartDashboard.putNumber("LimeLight Y Delta", getLimeLightTY());
-        SmartDashboard.putNumber("LimeLight Target Area", getLimeLightTA());
+        //SmartDashboard.putNumber("LimeLight X Delta", getLimeLightTX());
+        //SmartDashboard.putNumber("LimeLight Y Delta", getLimeLightTY());
+        //SmartDashboard.putNumber("LimeLight Target Area", getLimeLightTA());
         
-        SmartDashboard.putNumber("Distance Equation TEST",6+27.875/Math.sin(Math.toRadians(getLimeLightTY())));
+        //SmartDashboard.putNumber("Distance Equation TEST",6+27.875/Math.sin(Math.toRadians(getLimeLightTY())));
 
-
+        SmartDashboard.putNumberArray("Vision Robot Coordinates",robotPose_FieldSpace());
     }
 
     public double getLimeLightTX() {
         return LIMELIGHT_TX.getDouble(0.0);
     }
+
     public double getLimeLightTY() {
         return LIMELIGHT_TY.getDouble(0.0);
     }
+
     public double getLimeLightTA() {
         return LIMELIGHT_TA.getDouble(0.0);
     }
+
     public boolean getLimeLightTV() {
         return LIMELIGHT_TV.getDouble(0.0) == 1;
     }
+
     public double[] targetpose_cameraspace(){
         return targetpose_cameraspace.getDoubleArray(new double[0]);
     }
+
+    public double[] robotPose_FieldSpace() {
+        return robotPose_wpiBlue.getDoubleArray(new double[7]);
+    }
+
     public void setPipeline(double pipelineID){
         LIMELIGHT.getEntry("pipeline").setNumber(pipelineID);
     }
+
     public Command changePipeline(double pipelineID) {
         return Commands.runOnce(()->setPipeline(pipelineID));
     }

@@ -38,13 +38,17 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive();
   private final LimeLight SUBSYSTEM_LIMELIGHT = new LimeLight();
   private final Intake SUBSYSTEM_INTAKE = new Intake();
   private final Conveyer SUBSYSTEM_CONVEYER = new Conveyer();
   private final Shooter SUBSYSTEM_SHOOTER = new Shooter();
+  private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive(SUBSYSTEM_LIMELIGHT);
+
+
   private final Rotation2d rotation = new Rotation2d(0);
 private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
+
+
   private final CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
 
 
