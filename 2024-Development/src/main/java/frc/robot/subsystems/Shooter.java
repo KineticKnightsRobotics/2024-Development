@@ -116,6 +116,8 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
 
         SmartDashboard.putNumber("Tiler Position", getTilterPosition());
+        SmartDashboard.putNumber("ShooterCurrentF",shooterMotorF.getOutputCurrent());
+        SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
 
         //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
 
