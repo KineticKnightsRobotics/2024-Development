@@ -1,6 +1,8 @@
 package frc.robot.lib;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -21,9 +23,6 @@ public class LimeLight extends SubsystemBase {
     NetworkTableEntry targetpose_cameraspace = LIMELIGHT.getEntry("targetpose_cameraspace");
 
     NetworkTableEntry robotPose_wpiBlue = LIMELIGHT.getEntry("botpose_wpiblue");
-
-    //NetworkTableEntry LIMELIGHT_APRILTAG_TRANSLATION = LIMELIGHT.getEntry("targetpose_robotspace");
-    //NetworkTableEntry LIMELIGHT_APRILTAG_DISTANCE = 
 
     public PIDController strafePID;
 
@@ -64,6 +63,16 @@ public class LimeLight extends SubsystemBase {
 
     public double[] robotPose_FieldSpace() {
         return robotPose_wpiBlue.getDoubleArray(new double[7]);
+    }
+
+    public Pose2d getRoboPose() {
+        double[] limelightData = robotPose_FieldSpace();
+        Pose2d coordinates = new Pose2d(limelightData[0],limelightData[1],new Rotation2d(limelightData[5]));
+        return coordinates;
+    }
+    public double getRoboPoseLatency() {
+        double[] limelightData = robotPose_FieldSpace();
+        return limelightData[6];
     }
 
     public void setPipeline(double pipelineID){

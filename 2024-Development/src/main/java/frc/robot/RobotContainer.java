@@ -51,9 +51,6 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
 
   private final CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
 
-
-
-
   Trigger DRIVER_A = new Trigger(JOYSTICK_DRIVER.button(1));
   Trigger DRIVER_B = new Trigger(JOYSTICK_DRIVER.button(2));
   Trigger DRIVER_X = new Trigger(JOYSTICK_DRIVER.button(3));

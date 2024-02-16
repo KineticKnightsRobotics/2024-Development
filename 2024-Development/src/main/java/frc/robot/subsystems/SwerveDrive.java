@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj.Timer;
 
 //robot
 import frc.robot.lib.Constants;
@@ -188,18 +189,24 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putNumber("FRONT left Turning Position", MODULE_FRONT_LEFT.getTurningPosition());
         */
 
+        
+        double[] limelightData = m_LimeLight.robotPose_FieldSpace();
+
+
+        SmartDashboard.putNumber("Gyro Heading", -navX.getYaw());
 
         ODEMETER.update(
             getRotation2d(),
             getModulePositions()
         );
+    
 
-        /*
-        ODEMETER.addVisionMeasurement(
-            null,
-            null
-        );
-        */
+        if (m_LimeLight.getLimeLightTV()) {
+            ODEMETER.addVisionMeasurement(
+                m_LimeLight.getRoboPose(),
+                Timer.getFPGATimestamp() - (m_LimeLight.getRoboPoseLatency()/1000)
+            );
+        }
 
     }
 
@@ -212,7 +219,8 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getRobotHeading() {
-        return Math.IEEEremainder(Constants.SwerveSubsystemConstants.REVERSED_GYRO ? navX.getAngle() : -navX.getAngle() , 360);
+        //return Math.IEEEremainder(Constants.SwerveSubsystemConstants.REVERSED_GYRO ? navX.getAngle() : -navX.getAngle() , 360);
+        return -navX.getYaw();
     }
 
     public Rotation2d getRotation2d() {
@@ -279,6 +287,7 @@ public class SwerveDrive extends SubsystemBase {
         return Commands.runOnce(()-> zeroModules());
     }
 
+    /*
     public Command followPath(String pathName,Boolean isChoreo) {
         PathPlannerPath path;
         if ( ! isChoreo){
@@ -308,4 +317,5 @@ public class SwerveDrive extends SubsystemBase {
             new InstantCommand( () -> setChassisSpeed(new ChassisSpeeds(0,0,0),true))
         );
     }
+    */
 }
