@@ -32,13 +32,14 @@ public class LimeLight extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("LimeLight Has Target",getLimeLightTV());
-        //SmartDashboard.putNumber("LimeLight X Delta", getLimeLightTX());
-        //SmartDashboard.putNumber("LimeLight Y Delta", getLimeLightTY());
-        //SmartDashboard.putNumber("LimeLight Target Area", getLimeLightTA());
+        SmartDashboard.putNumber("LimeLight X Delta", getLimeLightTX());
+        SmartDashboard.putNumber("LimeLight Y Delta", getLimeLightTY());
+        SmartDashboard.putNumber("LimeLight Target Area", getLimeLightTA());
         
         //SmartDashboard.putNumber("Distance Equation TEST",6+27.875/Math.sin(Math.toRadians(getLimeLightTY())));
 
         SmartDashboard.putNumberArray("Vision Robot Coordinates",robotPose_FieldSpace());
+    
     }
 
     public double getLimeLightTX() {
