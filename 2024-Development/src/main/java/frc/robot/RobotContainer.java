@@ -176,13 +176,15 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
     );
 
 
-    OP_11.onTrue(SUBSYSTEM_SHOOTER.zeroTilter(60.0));
+    OP_11.onTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
 
-    OP_12.onTrue(SUBSYSTEM_SHOOTER.setTilter(60.0));
+    OP_12.onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0));
 
-    OP_14.onTrue(SUBSYSTEM_SHOOTER.setTilter(90.0));
+    OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER, SUBSYSTEM_LIMELIGHT));
 
-    OP_16.onTrue(SUBSYSTEM_SHOOTER.setTilter(110.0));
+    OP_14.onTrue(SUBSYSTEM_SHOOTER.setTilter(30.0));
+
+    OP_16.onTrue(SUBSYSTEM_SHOOTER.setTilter(50.0));
 
     OP_19.whileTrue(SUBSYSTEM_SWERVEDRIVE.resetDriveOdemeter(pose));
   }

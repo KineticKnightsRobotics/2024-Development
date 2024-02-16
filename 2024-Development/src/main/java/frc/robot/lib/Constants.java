@@ -132,6 +132,8 @@ public final class Constants {
 
     public static double SHOOTER_TICKS_TO_DEGREES = 360 / SHOOTER_GEAR_RATIO;
 
+    public static double SHOOTER_HEIGHT = 23.5;
+
     public static class ShooterBlockPneumatics {
       public static int CHANNEL_FORWARD = 1;
       public static int CHANNEL_REVERSE = 2;
@@ -159,4 +161,15 @@ public final class Constants {
     public static double LIMIT_AUTOSPEED_DRIVE = 3.5;
     public static double LIMIT_AUTOSPEED_ROTATE = 360;
   }
+
+  public static class FieldGeometry {
+    public class Speaker{
+      public class ShootingPosition {
+        public static double shootingPosHeight = 75.712;//78.254 + 2.542;
+        public static double shootingPosDistanceOffset = 18.943/2;
+      }
+    }
+  }
+
+
 }

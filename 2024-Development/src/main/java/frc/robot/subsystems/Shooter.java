@@ -61,7 +61,7 @@ public class Shooter extends SubsystemBase {
         tiltEncoder = tiltMotor.getEncoder();
         tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES); //TODO: Find this!
 
-        tiltEncoder.setPosition(60.0);
+        tiltEncoder.setPosition(0.0);
 
         tiltController = tiltMotor.getPIDController();
         tiltController.setP(TilterPIDConfig.Proportional);
@@ -116,6 +116,8 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
 
         SmartDashboard.putNumber("Tiler Position", getTilterPosition());
+
+        SmartDashboard.putNumber("Tilter Setpoint", tiltPosition);
 
         //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
 

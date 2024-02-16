@@ -3,6 +3,7 @@ package frc.robot.lib;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -68,7 +69,7 @@ public class LimeLight extends SubsystemBase {
 
     public Pose2d getRoboPose() {
         double[] limelightData = robotPose_FieldSpace();
-        Pose2d coordinates = new Pose2d(limelightData[0],limelightData[1],new Rotation2d(limelightData[5]));
+        Pose2d coordinates = new Pose2d(limelightData[0],limelightData[1],new Rotation2d(Units.degreesToRadians(limelightData[5])));
         return coordinates;
     }
     public double getRoboPoseLatency() {

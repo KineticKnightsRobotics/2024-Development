@@ -219,8 +219,8 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getRobotHeading() {
-        //return Math.IEEEremainder(Constants.SwerveSubsystemConstants.REVERSED_GYRO ? navX.getAngle() : -navX.getAngle() , 360);
-        return -navX.getYaw();
+        return Math.IEEEremainder(Constants.SwerveSubsystemConstants.REVERSED_GYRO ? navX.getAngle() : -navX.getAngle() , 360);
+        //return navX.getYaw();
     }
 
     public Rotation2d getRotation2d() {
