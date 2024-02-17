@@ -2,48 +2,35 @@ package frc.robot.subsystems;
 
 //kauai
 import com.kauailabs.navx.frc.AHRS;
-
 //pathplanner
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.FollowPathHolonomic;
-import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 //wpi
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.Timer;
-
 //robot
 import frc.robot.lib.Constants;
 import frc.robot.lib.LimeLight;
 import frc.robot.lib.SwerveModule;
 import frc.robot.lib.Constants.KinematicsConstants;
-import frc.robot.lib.Constants.ModuleConstants;
 import frc.robot.lib.Constants.SwerveSubsystemConstants;
 import frc.robot.lib.PID_Config.TrajectoryDriving;
 import frc.robot.lib.PID_Config.TrajectoryTurning;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-
-
 //java
 import java.util.concurrent.TimeUnit;
 
@@ -190,7 +177,7 @@ public class SwerveDrive extends SubsystemBase {
         */
 
         
-        double[] limelightData = m_LimeLight.robotPose_FieldSpace();
+        //double[] limelightData = m_LimeLight.robotPose_FieldSpace();
 
 
         SmartDashboard.putNumber("Gyro Heading", -navX.getYaw());

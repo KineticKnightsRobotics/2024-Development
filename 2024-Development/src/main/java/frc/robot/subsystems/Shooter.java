@@ -11,18 +11,15 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.lib.PID_Config.ShooterSubsystem.ShooterVelocityPID;
 import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
-import frc.robot.lib.PID_Config.ShooterSubsystem.ShooterVelocityPID.ShooterFeedForward;
 //import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 import frc.robot.lib.Constants.ShooterSubsystemConstants;
-import frc.robot.lib.Constants.ShooterSubsystemConstants.ShooterBlockPneumatics;
 import frc.robot.lib.PID_Config;
 
 
@@ -41,6 +38,8 @@ public class Shooter extends SubsystemBase {
 
     private final CANSparkMax feedMotor;
     private final RelativeEncoder feedEncoder;
+
+    private final DigitalInput lineBreak;
 
     //private final Compressor compressor;
     //private final DoubleSolenoid shooterBlock;
@@ -105,9 +104,7 @@ public class Shooter extends SubsystemBase {
         feedEncoder.setPositionConversionFactor(ShooterSubsystemConstants.MOTOR_FEEDER_GEARRATIO);
         feedMotor.setIdleMode(IdleMode.kBrake);
 
-        //DigitalInput
-
-
+        lineBreak = new DigitalInput(0);
     }
     
     @Override
@@ -141,6 +138,9 @@ public class Shooter extends SubsystemBase {
         return feedEncoder.getPosition();
     }
   
+    public boolean getLineBreak() {
+        return lineBreak.get();
+    }
     
     public void toggleShooterBlock(DoubleSolenoid.Value value) {
          //shooterBlock.set(value);

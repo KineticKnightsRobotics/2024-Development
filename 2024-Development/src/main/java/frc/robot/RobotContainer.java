@@ -6,7 +6,6 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import frc.robot.lib.Constants;
 import frc.robot.lib.LimeLight;
 import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.Constants.OIConstants;

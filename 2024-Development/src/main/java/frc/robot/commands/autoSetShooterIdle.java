@@ -8,12 +8,13 @@ public class autoSetShooterIdle extends Command {
 
     Shooter m_Shooter;
 
-    public autoSetShooterIdle() {
-        
+    public autoSetShooterIdle(Shooter _Shooter) {
+        addRequirements(_Shooter);
+        m_Shooter = _Shooter;
     }
     @Override
     public void initialize() {
-
+        m_Shooter.setShooterSpeed(0.4);
     }
     @Override
     public boolean isFinished() {

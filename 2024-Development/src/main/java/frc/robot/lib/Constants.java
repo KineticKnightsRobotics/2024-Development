@@ -119,12 +119,11 @@ public final class Constants {
   public static class ShooterSubsystemConstants {
 
     public static int ID_MOTOR_TILTER = 51;
-    
     public static int ID_MOTOR_SHOOTER_LEADER = 52;
     public static int ID_MOTOR_SHOOTER_FOLLOWER = 53;
-
-
     public static int ID_MOTOR_FEEDER = 54;
+
+    public static int ID_SHOOTER_BEAMBREAK;
     
     public static double MOTOR_FEEDER_GEARRATIO = 1 / 3;
 

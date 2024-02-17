@@ -27,7 +27,9 @@ public class autoRunShooter extends Command {
     }
     @Override
     public void execute() {
-        if (m_Shooter.getShooterFRPM() > desiredRPM) {m_Shooter.setFeederSpeed(0.8);m_Conveyer.setConveyerSpeed(0.4);}
+        if (m_Shooter.getShooterFRPM() > desiredRPM && m_Shooter.getShooterLRPM() > desiredRPM) {
+            m_Shooter.setFeederSpeed(0.8);
+        }
     }
     @Override
     public void end(boolean interrupted) {
@@ -37,6 +39,6 @@ public class autoRunShooter extends Command {
     }
     @Override
     public boolean isFinished() {
-        return false;
+        return ! m_Shooter.getLineBreak();
     }
 }
