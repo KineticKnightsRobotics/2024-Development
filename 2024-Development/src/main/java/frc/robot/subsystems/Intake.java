@@ -49,15 +49,15 @@ public class Intake extends SubsystemBase {
         rollerMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_ROLLER, MotorType.kBrushless);
 
         rollerMotor.restoreFactoryDefaults();
-        rollerMotor.setOpenLoopRampRate(0.5);
+        rollerMotor.setOpenLoopRampRate(0.0001);
         rollerMotor.setInverted(true);
         rollerMotor.setIdleMode(IdleMode.kBrake);
         rollerMotor.setSmartCurrentLimit(80);
 
         intakePivotMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_INTAKE_PIVOT, MotorType.kBrushless);
-        intakePivotMotor.setClosedLoopRampRate(0.5);
+        intakePivotMotor.setClosedLoopRampRate(0);
         intakePivotMotor.setIdleMode(IdleMode.kBrake);
-        intakePivotMotor.setSmartCurrentLimit(20);
+        intakePivotMotor.setSmartCurrentLimit(60);
 
         intakePivotEncoder = intakePivotMotor.getEncoder();
         intakePivotEncoder.setPositionConversionFactor(IntakeSubsystemConstants.INTAKE_PIVOT_ROTATIONS_TO_DEGRESS);

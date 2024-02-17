@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3145965208186585,
+      "x": 1.481051682482512,
       "y": 7.0
     },
     "rotation": 45.0
@@ -76,23 +76,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note4Capture"
+                  "pathName": "Note3Score"
                 }
               }
             ]
           }
         },
         {
-          "type": "sequential",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note4Score"
-                }
-              }
-            ]
+            "pathName": "Note4Capture"
           }
         }
       ]

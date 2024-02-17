@@ -12,7 +12,7 @@ public class PID_Config {
         }
         public class ModuleVelocity {
             //(0.001, 0.00005, 0.0005
-            public static final double Proportional = 0.0002;
+            public static final double Proportional = 0.0001;
             public static final double Integral = 0.00005;
             public static final double Derivitive = 0.0005;
             public class FeedForward{
@@ -25,15 +25,15 @@ public class PID_Config {
 
     public class IntakeSubsystem {
         public class IntakePivotControllerPID {
-            public static final double Proportional = 0.03;
+            public static final double Proportional = 0.12;
             public static final double Integral = 0.0;
-            public static final double Derivitive = 0.0;
+            public static final double Derivitive = 2.0;
         }
     }
 
     public class ShooterSubsystem {
         public class TilterPIDConfig {
-            public static final double Proportional = 0.05;
+            public static final double Proportional = 0.1;
             public static final double Integral = 0.0;
             public static final double Derivitive = 0.0;
         }

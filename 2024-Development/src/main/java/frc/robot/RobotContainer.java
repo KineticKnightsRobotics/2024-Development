@@ -108,6 +108,12 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
     NamedCommands.registerCommand("IntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
     NamedCommands.registerCommand("IntakeUp" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position));
     NamedCommands.registerCommand("AutoConveyer", new intakeLineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
+    NamedCommands.registerCommand("AutoAimSpeaker", new autoAimSpeaker(SUBSYSTEM_SHOOTER,SUBSYSTEM_LIMELIGHT));
+    NamedCommands.registerCommand("AutoRunShooter", new autoRunShooter(SUBSYSTEM_SHOOTER,SUBSYSTEM_CONVEYER));
+    NamedCommands.registerCommand("AutoSetShooterIdle", new autoSetShooterIdle(SUBSYSTEM_SHOOTER));
+    NamedCommands.registerCommand("AutoLoadShooter", new autoLoadShooter(SUBSYSTEM_CONVEYER,SUBSYSTEM_SHOOTER));
+
+    
     // Configure the trigger bindings
     configureBindings();
 
@@ -192,7 +198,7 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
     //return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Shop Pickup Note 2");
   //  return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Test1");
     //return Autos.simpleFollowChoreo(SUBSYSTEM_SWERVEDRIVE, "Test3");
-        return new PathPlannerAuto("FourNoteAuto");
+        return new PathPlannerAuto("OneNoteAuto");
 
         //return null;
 
