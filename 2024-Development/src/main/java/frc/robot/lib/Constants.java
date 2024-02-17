@@ -134,6 +134,8 @@ public final class Constants {
 
     public static double SHOOTER_HEIGHT = 23.5;
 
+    public static double SHOOTER_HOME_ANGLE = 60.0;
+
     public static class ShooterBlockPneumatics {
       public static int CHANNEL_FORWARD = 1;
       public static int CHANNEL_REVERSE = 2;
@@ -165,7 +167,7 @@ public final class Constants {
   public static class FieldGeometry {
     public class Speaker{
       public class ShootingPosition {
-        public static double shootingPosHeight = 75.712;//78.254 + 2.542;
+        public static double shootingPosHeight = 82;//78.254 + 2.542;
         public static double shootingPosDistanceOffset = 18.943/2;
       }
     }

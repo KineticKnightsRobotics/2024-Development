@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
         tiltController.setI(TilterPIDConfig.Integral);
         tiltController.setD(TilterPIDConfig.Derivitive);
 
-        tiltController.setOutputRange(-0.15,0.15);
+        tiltController.setOutputRange(-0.5,0.5);
 
 
         //Pneumatics stuff is not on the robot yet...
@@ -104,6 +104,10 @@ public class Shooter extends SubsystemBase {
         feedEncoder = feedMotor.getEncoder();
         feedEncoder.setPositionConversionFactor(ShooterSubsystemConstants.MOTOR_FEEDER_GEARRATIO);
         feedMotor.setIdleMode(IdleMode.kBrake);
+
+        //DigitalInput
+
+
     }
     
     @Override

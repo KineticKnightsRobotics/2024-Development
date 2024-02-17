@@ -27,19 +27,21 @@ public class autoAimSpeaker extends Command {
     @Override
     public void execute() {
         double[] positionData = m_LimeLight.targetpose_cameraspace();
-        double roboDistance = Units.metersToInches(positionData[2]) - ShootingPosition.shootingPosDistanceOffset;
+        double roboDistance = Units.metersToInches(positionData[2]) - ShootingPosition.shootingPosDistanceOffset - 14; //14 = half robot length
         double desiredAngle = Units.radiansToDegrees(Math.atan( (ShootingPosition.shootingPosHeight - ShooterSubsystemConstants.SHOOTER_HEIGHT ) / roboDistance));
 
         SmartDashboard.putNumber("Limelight Target Angle", desiredAngle);
 
         if (desiredAngle > 0.0 && desiredAngle < 50.0) {
-            m_Shooter.setTilter(desiredAngle);
+            m_Shooter.setTilterPosition(60 - desiredAngle);
         }
+
+
     }
 
     @Override
     public void end(boolean interrupted) {
-        m_Shooter.setTilter(60.0);
+        m_Shooter.setTilter(0.0);
     }
     @Override
     public boolean isFinished() {
