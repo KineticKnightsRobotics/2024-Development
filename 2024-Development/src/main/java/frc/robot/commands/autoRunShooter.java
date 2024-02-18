@@ -39,6 +39,7 @@ public class autoRunShooter extends Command {
     }
     @Override
     public boolean isFinished() {
-        return ! m_Shooter.getLineBreak();
+       // return ! m_Shooter.getLineBreak();
+       return false;
     }
 }

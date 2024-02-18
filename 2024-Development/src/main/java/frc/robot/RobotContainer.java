@@ -198,7 +198,7 @@ private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
     //return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Shop Pickup Note 2");
   //  return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Test1");
     //return Autos.simpleFollowChoreo(SUBSYSTEM_SWERVEDRIVE, "Test3");
-        return new PathPlannerAuto("OneNoteAuto");
+        return new PathPlannerAuto("TwoNoteAuto");
 
         //return null;
 
