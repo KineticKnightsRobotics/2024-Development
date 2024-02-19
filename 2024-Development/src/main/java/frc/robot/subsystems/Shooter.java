@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 //import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -16,6 +17,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.*;
+
 import frc.robot.lib.PID_Config.ShooterSubsystem.ShooterVelocityPID;
 import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 //import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
@@ -82,6 +85,9 @@ public class Shooter extends SubsystemBase {
         //shooterMotorL.restoreFactoryDefaults();
         //shooterMotorF.restoreFactoryDefaults();
 
+        shooterMotorL.setSmartCurrentLimit(80);
+        shooterMotorF.setSmartCurrentLimit(80);
+
         shooterMotorL.setInverted(true);
         shooterMotorF.setInverted(false);
         //shooterMotorL.follow(shooterMotorF);
@@ -98,6 +104,8 @@ public class Shooter extends SubsystemBase {
 
         //feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
         feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
+
+        feedMotor.setSmartCurrentLimit(60);
 
         feedMotor.setInverted(true);
         feedEncoder = feedMotor.getEncoder();
@@ -179,5 +187,7 @@ public class Shooter extends SubsystemBase {
     public Command zeroTilter(double angle) {
         return Commands.runOnce(() -> zeroTilterPosition(angle), this);
     }
+
+
     
 }

@@ -64,6 +64,7 @@ public class SwerveModule extends SubsystemBase {
         //reset to defaults
         this.MOTOR_DRIVE.restoreFactoryDefaults();
         //init
+        MOTOR_DRIVE.setSmartCurrentLimit(60);
         MOTOR_DRIVE.setInverted(REVERSE_MOTOR_DRIVE);
         MOTOR_DRIVE.setClosedLoopRampRate(0.0001);
         this.ENCODER_DRIVE = MOTOR_DRIVE.getEncoder();
@@ -86,6 +87,7 @@ public class SwerveModule extends SubsystemBase {
         //reset to defaults
         this.MOTOR_TURN.restoreFactoryDefaults();
         //init
+        MOTOR_TURN.setSmartCurrentLimit(60);
         MOTOR_TURN.setInverted(REVERSE_MOTOR_TURN);
         this.ENCODER_TURN = MOTOR_TURN.getEncoder();
         ENCODER_TURN.setPositionConversionFactor(ModuleConstants.MODULE_TURN_ROTATIONS_TO_RADIANS);

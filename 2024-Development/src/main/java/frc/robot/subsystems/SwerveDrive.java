@@ -145,40 +145,10 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putData("Field", field);field.setRobotPose(getPose());
         SmartDashboard.putString("Robot Odemeter position", ODEMETER.getEstimatedPosition().toString());
 
-
         MODULE_FRONT_LEFT.moduleData2Dashboard();
         MODULE_FRONT_RIGHT.moduleData2Dashboard();
         MODULE_BACK_LEFT.moduleData2Dashboard();
         MODULE_BACK_RIGHT.moduleData2Dashboard();
-
-        //I commented out all this because .moduleData2Dashboard(); puts the same data onto dashboard.
-        /*
-        //Ticks
-        SmartDashboard.putNumber("FRONT left ticks", MODULE_FRONT_LEFT.getDrivePosition());
-        SmartDashboard.putNumber("FRONT right ticks", MODULE_FRONT_RIGHT.getDrivePosition());
-        SmartDashboard.putNumber("BACK left ticks", MODULE_BACK_LEFT.getDrivePosition());
-        SmartDashboard.putNumber("BACK right ticks", MODULE_BACK_RIGHT.getDrivePosition());
-
-        //RPM
-        SmartDashboard.putNumber("FRONT left RPM", MODULE_FRONT_LEFT.getDriveVelocity());
-        SmartDashboard.putNumber("FRONT right RPM", MODULE_FRONT_RIGHT.getDriveVelocity());
-        SmartDashboard.putNumber("BACK left RPM", MODULE_BACK_LEFT.getDriveVelocity());
-        SmartDashboard.putNumber("BACK right RPM", MODULE_BACK_RIGHT.getDriveVelocity());
-
-        SmartDashboard.putNumber("BACK left Absolute Encoder", MODULE_BACK_LEFT.getAbsoluteEncoder());
-        SmartDashboard.putNumber("BACK right Absolute Encoder", MODULE_BACK_RIGHT.getAbsoluteEncoder());
-        SmartDashboard.putNumber("FRONT right Absolute Encoder", MODULE_FRONT_RIGHT.getAbsoluteEncoder());
-        SmartDashboard.putNumber("FRONT left Absolute Encoder", MODULE_FRONT_LEFT.getAbsoluteEncoder());
-
-        SmartDashboard.putNumber("BACK right Turning Position", MODULE_BACK_RIGHT.getTurningPosition());
-        SmartDashboard.putNumber("BACK left Turning Position", MODULE_BACK_LEFT.getTurningPosition());
-        SmartDashboard.putNumber("FRONT right Turning Position", MODULE_FRONT_RIGHT.getTurningPosition());
-        SmartDashboard.putNumber("FRONT left Turning Position", MODULE_FRONT_LEFT.getTurningPosition());
-        */
-
-        
-        //double[] limelightData = m_LimeLight.robotPose_FieldSpace();
-
 
         SmartDashboard.putNumber("Gyro Heading", -navX.getYaw());
 
@@ -187,7 +157,6 @@ public class SwerveDrive extends SubsystemBase {
             getModulePositions()
         );
     
-
         if (m_LimeLight.getLimeLightTV()) {
             ODEMETER.addVisionMeasurement(
                 m_LimeLight.getRoboPose(),
