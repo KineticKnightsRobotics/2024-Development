@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3651463756129492,
-        "y": 5.540264085454279
+        "x": 1.2,
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3651463756129492,
-        "y": 5.540264085454279
+        "x": 1.1989787012749378,
+        "y": 5.553919733431884
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3255936167044755,
-        "y": 5.540264085454279
+        "x": 2.6,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 2.3255936167044755,
-        "y": 5.53015411449542
+        "x": 1.6,
+        "y": 7.0
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,31 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "readyIntake",
+      "waypointRelativePos": 0.9,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeDown"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "AutoConveyer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 1.0,
     "maxAcceleration": 2.0,
@@ -39,11 +63,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "UnderSpeakerAutos",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

@@ -2,10 +2,15 @@
   "robotWidth": 0.57,
   "robotLength": 0.57,
   "holonomicMode": true,
-  "pathFolders": [],
-  "autoFolders": [],
+  "pathFolders": [
+    "UnderSpeakerAutos",
+    "test"
+  ],
+  "autoFolders": [
+    "UnderSpeaker"
+  ],
   "defaultMaxVel": 1.0,
-  "defaultMaxAccel": 1.5,
+  "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 700.0,
   "maxModuleSpeed": 3.6
