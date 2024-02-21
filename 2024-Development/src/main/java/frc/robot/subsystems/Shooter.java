@@ -105,7 +105,8 @@ public class Shooter extends SubsystemBase {
         //feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
         feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
 
-        feedMotor.setSmartCurrentLimit(60);
+        feedMotor.setSmartCurrentLimit(80);
+
 
         feedMotor.setInverted(true);
         feedEncoder = feedMotor.getEncoder();
@@ -130,6 +131,8 @@ public class Shooter extends SubsystemBase {
 
         SmartDashboard.putNumber("Tilter Setpoint", tiltPosition);
 
+        SmartDashboard.putBoolean("Shooter Linebreak", getLineBreak());
+
         //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
 
         //SmartDashboard.putString("Shooter Block State", shooterBlock.get().toString());
@@ -147,7 +150,7 @@ public class Shooter extends SubsystemBase {
     }
   
     public boolean getLineBreak() {
-        return lineBreak.get();
+        return !lineBreak.get();
     }
     
     public void toggleShooterBlock(DoubleSolenoid.Value value) {

@@ -102,7 +102,7 @@ public final class Constants {
     public static double INTAKE_PIVOT_GEAR_RATIO = (1/50);
     public static double INTAKE_PIVOT_ROTATIONS_TO_DEGRESS = INTAKE_PIVOT_GEAR_RATIO * 2*Math.PI;
 
-    public static double Forward_IntakePivot_Position = -16.5;
+    public static double Forward_IntakePivot_Position = -16.25;
     
     public static double Reverse_IntakePivot_Position = 0.0;
 
@@ -120,6 +120,7 @@ public final class Constants {
 
     public static int ID_MOTOR_TILTER = 51;
     public static int ID_MOTOR_SHOOTER_LEADER = 52;
+
     public static int ID_MOTOR_SHOOTER_FOLLOWER = 53;
     public static int ID_MOTOR_FEEDER = 54;
 
@@ -144,6 +145,11 @@ public final class Constants {
     public static int ID_SENSOR_LINEBREAK = 0;
   }
 
+  public static class ClimberSubsystemConstants {
+    public static int ID_LEFT_WINCH  = 61; //TODO: Remember to switch these back after drive practice.
+    public static int ID_RIGHT_WINCH = 62;
+  }
+
   public static final class OIConstants {
     public static final int ID_CONTROLLER_DRIVER = 0;
     public static final double CONTROLLER_DRIVER_DEADBAND = 0.05;
@@ -166,7 +172,7 @@ public final class Constants {
   public static class FieldGeometry {
     public class Speaker{
       public class ShootingPosition {
-        public static double shootingPosHeight = 78.254 + 2.542; //82
+        public static double shootingPosHeight = 78.254 - 5;//+ 2.542 - 10; //82
         public static double shootingPosDistanceOffset = 18.943/2;
       }
     }

@@ -18,7 +18,7 @@ public class autoLoadShooter extends Command {
     
     @Override
     public void initialize() {
-        m_Shooter.setFeederSpeed(0.6);
+        m_Shooter.setFeederSpeed(0.2);
         m_Conveyer.setConveyerSpeed(0.4);
     }
 

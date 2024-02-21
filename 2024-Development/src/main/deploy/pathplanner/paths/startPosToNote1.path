@@ -30,42 +30,12 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "readyIntake",
-      "waypointRelativePos": 0.9,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeDown"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "AutoConveyer"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "AutoLoadShooter"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 1.5,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 700.0
+    "maxVelocity": 0.5,
+    "maxAcceleration": 0.5,
+    "maxAngularVelocity": 100.0,
+    "maxAngularAcceleration": 150.0
   },
   "goalEndState": {
     "velocity": 0,

@@ -16,12 +16,14 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 //robot
 import frc.robot.lib.Constants;
 import frc.robot.lib.LimeLight;
@@ -31,6 +33,7 @@ import frc.robot.lib.Constants.SwerveSubsystemConstants;
 import frc.robot.lib.PID_Config.TrajectoryDriving;
 import frc.robot.lib.PID_Config.TrajectoryTurning;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+
 //java
 import java.util.concurrent.TimeUnit;
 
@@ -85,6 +88,8 @@ public class SwerveDrive extends SubsystemBase {
 
     private final AHRS navX = new AHRS();
     
+    public final Timer idle_Timer_Zero = new Timer();
+    public final Timer idle_Timer_Lock = new Timer();
 
     //private final SwerveDriveOdometry ODEMETER = new SwerveDriveOdometry(KinematicsConstants.KINEMATICS_DRIVE_CHASSIS, getRotation2d(), getModulePositions());
     public final SwerveDrivePoseEstimator ODEMETER = new SwerveDrivePoseEstimator(
@@ -132,6 +137,10 @@ public class SwerveDrive extends SubsystemBase {
                 },
                 this // Reference to this subsystem to set requirements
         );
+        idle_Timer_Lock.reset();
+        idle_Timer_Lock.start();
+        idle_Timer_Zero.reset();
+        idle_Timer_Zero.start();
 
         PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
                 field.setRobotPose(getPose());
@@ -141,7 +150,8 @@ public class SwerveDrive extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Robot Heading", getRobotHeading());
+       // Shuffleboard.getTab("Teleoperated").add("Gyro",navX.getYaw());
+       // SmartDashboard.putNumber("Robot Heading", getRobotHeading());
         SmartDashboard.putData("Field", field);field.setRobotPose(getPose());
         SmartDashboard.putString("Robot Odemeter position", ODEMETER.getEstimatedPosition().toString());
 
@@ -152,17 +162,19 @@ public class SwerveDrive extends SubsystemBase {
 
         SmartDashboard.putNumber("Gyro Heading", -navX.getYaw());
 
-        ODEMETER.update(
-            getRotation2d(),
-            getModulePositions()
-        );
-    
-        if (m_LimeLight.getLimeLightTV()) {
-            ODEMETER.addVisionMeasurement(
-                m_LimeLight.getRoboPose(),
-                Timer.getFPGATimestamp() - (m_LimeLight.getRoboPoseLatency()/1000)
-            );
+        updatePoseEstimator();
+
+
+        if (!getChassisIdle()) {
+            idle_Timer_Lock.reset();
+            idle_Timer_Zero.reset();
         }
+        if(idle_Timer_Zero.get() > 0.1 ) {
+            zeroModuleAngles();
+            idle_Timer_Zero.reset();
+        }
+
+        SmartDashboard.putNumber("Idle Timer Locking", idle_Timer_Lock.get());
 
     }
 
@@ -170,8 +182,29 @@ public class SwerveDrive extends SubsystemBase {
         return ODEMETER.getEstimatedPosition();
       }
 
+    public void updatePoseEstimator() {
+        ODEMETER.update(
+            getRotation2d(),
+            getModulePositions()
+        );
+        if (m_LimeLight.getLimeLightTV()) {
+            ODEMETER.addVisionMeasurement(
+                m_LimeLight.getRoboPose(),
+                Timer.getFPGATimestamp() - (m_LimeLight.getRoboPoseLatency()/1000)
+            );
+        }
+    }
+
     public ChassisSpeeds getChassisSpeeds() {
         return KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toChassisSpeeds(getModuleStates());
+    }
+
+    public boolean getChassisIdle() {
+        return
+        MODULE_FRONT_LEFT.checkIdle() &&
+        MODULE_BACK_LEFT.checkIdle() &&
+        MODULE_FRONT_RIGHT.checkIdle() &&
+        MODULE_BACK_RIGHT.checkIdle();
     }
 
     public double getRobotHeading() {
@@ -241,6 +274,17 @@ public class SwerveDrive extends SubsystemBase {
 
     public Command zeroModuleAngles() {
         return Commands.runOnce(()-> zeroModules());
+    }
+
+    public void lockChassis() {
+        MODULE_FRONT_LEFT.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(Units.degreesToRadians(45))),true);
+        MODULE_BACK_LEFT.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(Units.degreesToRadians(-45))),true);
+        MODULE_FRONT_RIGHT.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(Units.degreesToRadians(-45))),true);
+        MODULE_BACK_RIGHT.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(Units.degreesToRadians(45))),true);
+    }
+    
+    public Command lockDrive() {
+        return Commands.runOnce(() -> lockChassis(),this);
     }
 
     /*

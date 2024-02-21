@@ -33,13 +33,13 @@ public class autoRunShooter extends Command {
     }
     @Override
     public void end(boolean interrupted) {
-        m_Shooter.setShooterRPM(0.4);
+        m_Shooter.setShooterRPM(0.05);
         m_Shooter.setFeederSpeed(0.0);
         m_Conveyer.setConveyerSpeed(0.0);   
     }
     @Override
     public boolean isFinished() {
-       // return ! m_Shooter.getLineBreak();
-       return false;
+       return ! m_Shooter.getLineBreak();
+       //return false;
     }
 }

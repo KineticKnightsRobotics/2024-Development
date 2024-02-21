@@ -114,11 +114,17 @@ public class SwerveModule extends SubsystemBase {
         SmartDashboard.putNumber(MODULE_NAME + "Velocity", getDriveVelocity());
     }
 
+    public boolean checkIdle() {
+        return
+        getDriveVelocity()  !=0.0 &&
+        getTurningVelocity()!=0.0;
+    }
+
     /** 
      * Resets drive encoder to 0, and turn encoder to absolute encoders value
     */
     public void resetEncoders() {
-        ENCODER_DRIVE.setPosition(0);
+        //ENCODER_DRIVE.setPosition(0);
         if (ENCODER_ABSOLUTE.getLastError().value == 0) {
             ENCODER_TURN.setPosition(getAbsoluteEncoder()); // Check for good data, if its okay, then reset.
         }

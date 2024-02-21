@@ -12,13 +12,13 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "named",
                 "data": {
-                  "waitTime": 0.5
+                  "name": "AutoLoadShooter"
                 }
               },
               {
