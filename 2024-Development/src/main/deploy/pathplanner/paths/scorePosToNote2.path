@@ -49,6 +49,12 @@
               "data": {
                 "name": "AutoConveyer"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "AutoLoadShooter"
+              }
             }
           ]
         }

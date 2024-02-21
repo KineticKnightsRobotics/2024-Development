@@ -18,9 +18,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "note1ToScore"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note1ToScore"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeUp"
+                }
+              }
+            ]
           }
         },
         {

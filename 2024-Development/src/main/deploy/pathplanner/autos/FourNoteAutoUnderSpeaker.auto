@@ -18,9 +18,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "note1ToScore"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note1ToScore"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeUp"
+                }
+              }
+            ]
           }
         },
         {
@@ -49,9 +62,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "note2ToScorePos"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "note2ToScorePos"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeUp"
+                }
+              }
+            ]
           }
         },
         {
@@ -80,9 +106,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "note3ToScorePos"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "note3ToScorePos"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeUp"
+                }
+              }
+            ]
           }
         },
         {
