@@ -110,54 +110,10 @@
           "data": {
             "name": "AutoRunShooter"
           }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "scorePosToNote3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CapturePiece"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "note3ToScorePos"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoRunShooter"
-          }
         }
       ]
     }
   },
-  "folder": "UnderSpeaker",
+  "folder": "UnderSpeakerCentre",
   "choreoAuto": false
 }
