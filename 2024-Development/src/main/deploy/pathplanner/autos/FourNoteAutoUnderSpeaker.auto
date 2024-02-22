@@ -14,13 +14,32 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "AutoLoadShooter"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "startPosToNote1"
+            "name": "AutoRunShooter"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "startPosToNote1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CapturePiece"
+                }
+              }
+            ]
           }
         },
         {
@@ -36,35 +55,35 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeUp"
+                  "name": "AutoLoadShooter"
                 }
               }
             ]
           }
         },
         {
-          "type": "deadline",
+          "type": "named",
+          "data": {
+            "name": "AutoRunShooter"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 0.5
+                  "pathName": "scorePosToNote2"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "AutoRunShooter"
+                  "name": "CapturePiece"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "scorePosToNote2"
           }
         },
         {
@@ -80,35 +99,35 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeUp"
+                  "name": "AutoLoadShooter"
                 }
               }
             ]
           }
         },
         {
-          "type": "deadline",
+          "type": "named",
+          "data": {
+            "name": "AutoRunShooter"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 0.5
+                  "pathName": "scorePosToNote3"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "AutoRunShooter"
+                  "name": "CapturePiece"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "scorePosToNote3"
           }
         },
         {
@@ -124,34 +143,21 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeUp"
+                  "name": "AutoLoadShooter"
                 }
               }
             ]
           }
         },
         {
-          "type": "deadline",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.5
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoRunShooter"
-                }
-              }
-            ]
+            "name": "AutoRunShooter"
           }
         }
       ]
     }
   },
-  "folder": "UnderSpeaker",
+  "folder": "UnderSpeakerCentre",
   "choreoAuto": false
 }
