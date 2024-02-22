@@ -10,6 +10,7 @@ import frc.robot.lib.LimeLight;
 import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.Constants.OIConstants;
 import frc.robot.lib.PID_Config.IntakeSubsystem;
+import frc.robot.lib.PID_Config.ShooterSubsystem;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -24,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
 
 
 /**
@@ -87,7 +90,28 @@ public class RobotContainer {
   Trigger OP_20 = new Trigger(JOYSTICK_OPERATOR.button(20));
 
 
+private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
 
+  Trigger SYSID_1 = new Trigger(JOYSTICK_SYSID.button(1 ));
+  Trigger SYSID_2 = new Trigger(JOYSTICK_SYSID.button(2 ));
+  Trigger SYSID_3 = new Trigger(JOYSTICK_SYSID.button(3 ));
+  Trigger SYSID_4 = new Trigger(JOYSTICK_SYSID.button(4 ));
+  Trigger SYSID_5 = new Trigger(JOYSTICK_SYSID.button(5 ));
+  Trigger SYSID_6 = new Trigger(JOYSTICK_SYSID.button(6 ));
+  Trigger SYSID_7 = new Trigger(JOYSTICK_SYSID.button(7 ));
+  Trigger SYSID_8 = new Trigger(JOYSTICK_SYSID.button(8 ));
+  Trigger SYSID_9 = new Trigger(JOYSTICK_SYSID.button(9 ));
+  Trigger SYSID_10= new Trigger(JOYSTICK_SYSID.button(10));
+  Trigger SYSID_11= new Trigger(JOYSTICK_SYSID.button(11));
+  Trigger SYSID_12= new Trigger(JOYSTICK_SYSID.button(12));
+  Trigger SYSID_13= new Trigger(JOYSTICK_SYSID.button(13));
+  Trigger SYSID_14= new Trigger(JOYSTICK_SYSID.button(14));
+  Trigger SYSID_15= new Trigger(JOYSTICK_SYSID.button(15));
+  Trigger SYSID_16= new Trigger(JOYSTICK_SYSID.button(16));
+  Trigger SYSID_17 = new Trigger(JOYSTICK_SYSID.button(17));
+  Trigger SYSID_18 = new Trigger(JOYSTICK_SYSID.button(18));
+  Trigger SYSID_19 = new Trigger(JOYSTICK_SYSID.button(19));
+  Trigger SYSID_20 = new Trigger(JOYSTICK_SYSID.button(20));
 
   
 
@@ -218,6 +242,13 @@ public class RobotContainer {
     //OP_19.onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
     //OP_20.onTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.8));
     //OP_20.onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
+
+    SYSID_1.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    SYSID_2.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+SYSID_3.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamic(SysIdRoutine.Direction.kForward));
+SYSID_4.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+
 
   }
 

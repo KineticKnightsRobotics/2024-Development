@@ -135,6 +135,12 @@ public final class Constants {
     public static double SHOOTER_HEIGHT = 23.5;
 
     public static double SHOOTER_HOME_ANGLE = 60.0;
+        public static final double SHOOTER_WHEEL_DIAMETER = Units.inchesToMeters(4.0);
+    public static final double SHOOTER_LAUNCH_GEAR_RATIO = 1.0 / 1.0; 
+
+        public static final double SHOOTER_ROTATIONS_TO_METERS = ((SHOOTER_WHEEL_DIAMETER * Math.PI) / SHOOTER_LAUNCH_GEAR_RATIO);
+    public static final double SHOOTER_RPM_TO_MPS = SHOOTER_ROTATIONS_TO_METERS / 60.0;
+
 
     public static class ShooterBlockPneumatics {
       public static int CHANNEL_FORWARD = 1;
