@@ -9,9 +9,9 @@
   "autoFolders": [
     "UnderSpeaker"
   ],
-  "defaultMaxVel": 0.5,
-  "defaultMaxAccel": 0.5,
-  "defaultMaxAngVel": 100.0,
-  "defaultMaxAngAccel": 150.0,
+  "defaultMaxVel": 3.4,
+  "defaultMaxAccel": 3.0,
+  "defaultMaxAngVel": 540.0,
+  "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 3.6
 }

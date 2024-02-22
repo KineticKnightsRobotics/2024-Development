@@ -105,6 +105,11 @@ public class SwerveModule extends SubsystemBase {
 
         //Name
         MODULE_NAME = _NAME;
+
+        //MOTOR_TURN.burnFlash();
+        //MOTOR_DRIVE.burnFlash();
+
+
     }
     public void moduleData2Dashboard(){
         SmartDashboard.putNumber(MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " angle", Math.toDegrees(getTurningPosition()));
@@ -121,13 +126,16 @@ public class SwerveModule extends SubsystemBase {
     }
 
     /** 
-     * Resets drive encoder to 0, and turn encoder to absolute encoders value
+     * turn encoder to absolute encoders value
     */
-    public void resetEncoders() {
+    public void resetTurnEncoders() {
         //ENCODER_DRIVE.setPosition(0);
         if (ENCODER_ABSOLUTE.getLastError().value == 0) {
             ENCODER_TURN.setPosition(getAbsoluteEncoder()); // Check for good data, if its okay, then reset.
         }
+    }
+    public void resetDriveEncoders(){
+        ENCODER_DRIVE.setPosition(0.0);
     }
     /**
      * Turns SwerveModuleState into turning and driving speed

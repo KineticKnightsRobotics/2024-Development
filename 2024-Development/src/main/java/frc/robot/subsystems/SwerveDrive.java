@@ -102,10 +102,10 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveDrive(LimeLight _limelight) {
         try {TimeUnit.SECONDS.sleep(1);}
         catch(InterruptedException e){}
-        MODULE_FRONT_LEFT.resetEncoders();
-        MODULE_FRONT_RIGHT.resetEncoders();
-        MODULE_BACK_LEFT.resetEncoders();
-        MODULE_BACK_RIGHT.resetEncoders();
+        MODULE_FRONT_LEFT.resetTurnEncoders();
+        MODULE_FRONT_RIGHT.resetTurnEncoders();
+        MODULE_BACK_LEFT.resetTurnEncoders();
+        MODULE_BACK_RIGHT.resetTurnEncoders();
 
         m_LimeLight = _limelight;
 
@@ -118,7 +118,7 @@ public class SwerveDrive extends SubsystemBase {
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                         new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
                     new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive),
-                    1,
+                    3.4,
                     KinematicsConstants.RADIUS_DRIVE_CHASSIS, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig(
                             
@@ -187,12 +187,14 @@ public class SwerveDrive extends SubsystemBase {
             getRotation2d(),
             getModulePositions()
         );
+        /* 
         if (m_LimeLight.getLimeLightTV()) {
             ODEMETER.addVisionMeasurement(
                 m_LimeLight.getRoboPose(),
                 Timer.getFPGATimestamp() - (m_LimeLight.getRoboPoseLatency()/1000)
             );
         }
+        */
     }
 
     public ChassisSpeeds getChassisSpeeds() {
@@ -253,11 +255,18 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_BACK_RIGHT.setDesiredState(states[3],isOpenLoop);
     }
 
-    public void zeroModules(){
-        MODULE_FRONT_LEFT.resetEncoders();
-        MODULE_FRONT_RIGHT.resetEncoders();
-        MODULE_BACK_LEFT.resetEncoders();
-        MODULE_BACK_RIGHT.resetEncoders();   
+    public void zeroTurnEncoders(){
+        MODULE_FRONT_LEFT.resetTurnEncoders();
+        MODULE_FRONT_RIGHT.resetTurnEncoders();
+        MODULE_BACK_LEFT.resetTurnEncoders();
+        MODULE_BACK_RIGHT.resetTurnEncoders();   
+    }
+
+    public void zerDriveEncoders() {
+        MODULE_FRONT_LEFT.resetDriveEncoders();
+        MODULE_FRONT_RIGHT.resetDriveEncoders();
+        MODULE_BACK_LEFT.resetDriveEncoders();
+        MODULE_BACK_RIGHT.resetDriveEncoders();  
     }
   
     public void resetOdometer(Pose2d pose){
@@ -273,7 +282,20 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public Command zeroModuleAngles() {
-        return Commands.runOnce(()-> zeroModules());
+        return Commands.runOnce(()-> zeroTurnEncoders());
+    }
+
+    public Command completeModuleZero(){
+        return Commands.runOnce( ()-> {
+        MODULE_FRONT_LEFT.resetDriveEncoders();
+        MODULE_FRONT_RIGHT.resetDriveEncoders();
+        MODULE_BACK_LEFT.resetDriveEncoders();
+        MODULE_BACK_RIGHT.resetDriveEncoders();
+        MODULE_FRONT_LEFT.resetTurnEncoders();
+        MODULE_FRONT_RIGHT.resetTurnEncoders();
+        MODULE_BACK_LEFT.resetTurnEncoders();
+        MODULE_BACK_RIGHT.resetTurnEncoders();   
+        });
     }
 
     public void lockChassis() {
