@@ -228,7 +228,7 @@ public class RobotContainer {
         //return new PathPlannerAuto("TwoNoteAuto");
 
         //return null;
-        return new PathPlannerAuto("CopyofFourNoteAutoUnderSpeaker");
+        return new PathPlannerAuto("StraightTest");
 
 
   } 

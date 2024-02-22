@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0728443427330214,
-        "y": 5.540264085454279
+        "x": 2.0,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1728443427330215,
-        "y": 5.540264085454279
+        "x": 2.0046891004170733,
+        "y": 7.0
       },
       "isLocked": false,
-      "linkedName": "Note2Score"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.4926237530200175,
-        "y": 5.544193078907484
+        "x": 2.0,
+        "y": 5.0
       },
       "prevControl": {
-        "x": 2.3926237530200174,
-        "y": 5.544193078907484
+        "x": 1.9963101724499164,
+        "y": 5.0
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Note3Capture"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 0,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -49,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "UnderSpeakerAutos",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true
