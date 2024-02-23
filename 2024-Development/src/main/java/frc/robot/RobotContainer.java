@@ -123,7 +123,7 @@ public class RobotContainer {
           SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position),
           new intakeLineBreak(SUBSYSTEM_CONVEYER, SUBSYSTEM_INTAKE),
           SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position)
-    
+    //intake down, feed note to panel, set intake up
     ));
 
     
@@ -228,7 +228,7 @@ public class RobotContainer {
         //return new PathPlannerAuto("TwoNoteAuto");
 
         //return null;
-        return new PathPlannerAuto("StraightTest");
+        return new PathPlannerAuto("FourNoteAutoUnderSpeaker");
 
 
   } 

@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.9,
+      "y": 4.6
+    },
+    "rotation": -60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoLoadShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoRunShooter"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "LeftUnderSpeaker",
+  "choreoAuto": false
+}

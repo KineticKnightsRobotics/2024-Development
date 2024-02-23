@@ -3,15 +3,18 @@
   "robotLength": 0.57,
   "holonomicMode": true,
   "pathFolders": [
-    "UnderSpeakerAutos",
-    "test"
+    "LeftUnderSpeakerAutos",
+    "RightUnderSpeakerAutos",
+    "UnderSpeakerAutos"
   ],
   "autoFolders": [
+    "LeftUnderSpeaker",
+    "RightUnderSpeaker",
     "UnderSpeakerCentre"
   ],
   "defaultMaxVel": 0.5,
   "defaultMaxAccel": 1.0,
-  "defaultMaxAngVel": 540.0,
-  "defaultMaxAngAccel": 700.0,
+  "defaultMaxAngVel": 100.0,
+  "defaultMaxAngAccel": 200.0,
   "maxModuleSpeed": 3.6
 }
