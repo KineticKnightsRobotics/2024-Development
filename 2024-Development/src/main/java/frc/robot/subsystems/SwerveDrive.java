@@ -305,7 +305,7 @@ public class SwerveDrive extends SubsystemBase {
     }
     
    public Command lockDrive() {
-        return Commands.runOnce(() -> lockChassis(),this);
+        return Commands.run(() -> lockChassis(),this);
     }
 
     
