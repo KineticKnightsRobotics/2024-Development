@@ -24,9 +24,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
+import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.math.controller.PIDController;
 
 
 /**
@@ -115,6 +117,8 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
 
   
 
+
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
@@ -127,7 +131,8 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
         () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
         () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
         () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
-        () -> true
+        () -> true, 
+        () -> 0.02
       )
     );
 
@@ -186,6 +191,27 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
         new setShooterSpeed(-0.30, SUBSYSTEM_SHOOTER)
       )
     );
+
+    rightTrigger().whileTrue( new PIDCommand(
+      new PIDController(
+          0.05,
+          0,
+        0),
+      // Close the loop on the turn rate
+      SUBSYSTEM_SWERVEDRIVE::getRobotHeading,
+      // Setpoint is 0
+      0,
+      // Pipe the output to the turning controls
+      output ->  new DRIVE_JoystickDrive(
+        SUBSYSTEM_SWERVEDRIVE, 
+        () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
+        () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
+        () -> output, 
+        () -> false, 
+        () -> 0.02
+      ),
+      // Require the robot drive
+      SUBSYSTEM_SWERVEDRIVE));
 
     DRIVER_A.whileTrue(new runShooter_OpenLoop(3200, SUBSYSTEM_SHOOTER));
     //DRIVER_A.whileTrue(new SHOOTER_runShooter_ClosedLoop(4300, SUBSYSTEM_SHOOTER));
@@ -271,4 +297,7 @@ SYSID_4.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamic(SysIdRoutine.Direction.kReverse
   public static boolean DRIVER_RT() {
     return JOYSTICK_DRIVER.getRawAxis(3) > 0.5;
   }
+  public static Trigger rightTrigger(){
+  return new Trigger(()-> JOYSTICK_DRIVER.getRawAxis(3)>=0.3);
+}
 }
