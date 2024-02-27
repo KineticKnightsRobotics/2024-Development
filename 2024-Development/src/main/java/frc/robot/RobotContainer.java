@@ -181,7 +181,7 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
       )
     );
 
-    rightTrigger().whileTrue( new PIDCommand(
+    /*rightTrigger().whileTrue( new PIDCommand(
       new PIDController(0.05,0,0),
       // Close the loop on the turn rate
       SUBSYSTEM_SWERVEDRIVE::getRobotHeading,
@@ -197,9 +197,9 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
         () -> 0.02
       ),
       // Require the robot drive
-      SUBSYSTEM_SWERVEDRIVE));
+      SUBSYSTEM_SWERVEDRIVE));*/
 
-      DRIVER_BACK.whileTrue(lockCommand);
+      DRIVER_BACK.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
 
     DRIVER_A.whileTrue(new runShooter_OpenLoop(3200, SUBSYSTEM_SHOOTER));
     //DRIVER_A.whileTrue(new SHOOTER_runShooter_ClosedLoop(4300, SUBSYSTEM_SHOOTER));
