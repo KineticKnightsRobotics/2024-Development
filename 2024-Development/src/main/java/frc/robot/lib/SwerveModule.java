@@ -75,13 +75,11 @@ public class SwerveModule extends SubsystemBase {
         PID_VELOCITY.setI(PID_Config.SwereModule.ModuleVelocity.Integral);
         PID_VELOCITY.setD(PID_Config.SwereModule.ModuleVelocity.Derivitive);
         //PID_VELOCITY.setOutputRange(-AutonomousConstants.LIMIT_AUTOSPEED_DRIVE, AutonomousConstants.LIMIT_AUTOSPEED_DRIVE);
-        
         FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(
             PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKS,
             PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKV,
             PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKA
         );
-
         //init the turning motor and encoder
         this.MOTOR_TURN = new CANSparkMax(ID_MOTOR_TURN, MotorType.kBrushless);
         //reset to defaults

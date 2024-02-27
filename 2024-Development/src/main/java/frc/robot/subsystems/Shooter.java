@@ -21,31 +21,13 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.lib.PID_Config.ShooterSubsystem;
 import frc.robot.lib.PID_Config.ShooterSubsystem.ShooterVelocityPID;
 import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 //import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 import frc.robot.lib.Constants.ShooterSubsystemConstants;
 import frc.robot.lib.PID_Config;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -69,7 +51,7 @@ public class Shooter extends SubsystemBase {
 
    
     private final CANSparkMax shooterMotorL; //TOP roller
-    private final CANSparkMax shooterMotorF; //BOTTOM roller
+    private final CANSparkMax shooterMotorR; //BOTTOM roller
     private final SparkPIDController shooterController;
 
     private final CANSparkMax feedMotor;
@@ -79,7 +61,7 @@ public class Shooter extends SubsystemBase {
 
      private final SysIdRoutine m_sysIdRoutineShooterLeader;
 
-     RelativeEncoder shooterMotorFEncoder;
+     RelativeEncoder shooterMotorREncoder;
      RelativeEncoder shooterMotorLEncoder;
 
     //private final Compressor compressor;
@@ -117,21 +99,21 @@ public class Shooter extends SubsystemBase {
         //shooterBlock = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ShooterBlockPneumatics.CHANNEL_FORWARD  , ShooterBlockPneumatics.CHANNEL_REVERSE);
 
 
-        shooterMotorL = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_LEADER, CANSparkLowLevel.MotorType.kBrushless);
-        shooterMotorF = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_FOLLOWER, CANSparkLowLevel.MotorType.kBrushless);
+        shooterMotorL = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
+        shooterMotorR = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
 
         //shooterMotorL.restoreFactoryDefaults();
         //shooterMotorF.restoreFactoryDefaults();
 
         shooterMotorL.setSmartCurrentLimit(80);
-        shooterMotorF.setSmartCurrentLimit(80);
+        shooterMotorR.setSmartCurrentLimit(80);
 
         shooterMotorL.setInverted(true);
-        shooterMotorF.setInverted(false);
+        shooterMotorR.setInverted(false);
         //shooterMotorL.follow(shooterMotorF);
 
         shooterMotorL.setIdleMode(IdleMode.kCoast);
-        shooterMotorF.setIdleMode(IdleMode.kCoast);
+        shooterMotorR.setIdleMode(IdleMode.kCoast);
 
         shooterController = shooterMotorL.getPIDController();
 
@@ -153,11 +135,11 @@ public class Shooter extends SubsystemBase {
 
         lineBreak = new DigitalInput(0);
 
-shooterMotorFEncoder = shooterMotorF.getEncoder();
-shooterMotorLEncoder = shooterMotorL.getEncoder();
+        shooterMotorREncoder = shooterMotorR.getEncoder();
+        shooterMotorLEncoder = shooterMotorL.getEncoder();
 
-shooterMotorFEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_ROTATIONS_TO_METERS);
-shooterMotorFEncoder.setVelocityConversionFactor(ShooterSubsystemConstants.SHOOTER_RPM_TO_MPS);
+        shooterMotorREncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_ROTATIONS_TO_METERS);
+        shooterMotorREncoder.setVelocityConversionFactor(ShooterSubsystemConstants.SHOOTER_RPM_TO_MPS);
 
 
  // Create a new SysId routine for characterizing the shooter.
@@ -198,7 +180,7 @@ shooterMotorFEncoder.setVelocityConversionFactor(ShooterSubsystemConstants.SHOOT
         SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
 
         SmartDashboard.putNumber("Tiler Position", getTilterPosition());
-        SmartDashboard.putNumber("ShooterCurrentF",shooterMotorF.getOutputCurrent());
+        SmartDashboard.putNumber("ShooterCurrentF",shooterMotorR.getOutputCurrent());
         SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
 
         SmartDashboard.putNumber("Tilter Setpoint", tiltPosition);
@@ -211,7 +193,7 @@ shooterMotorFEncoder.setVelocityConversionFactor(ShooterSubsystemConstants.SHOOT
     }
 
     public double getShooterLRPM() { 
-        return shooterMotorF.getEncoder().getVelocity();
+        return shooterMotorR.getEncoder().getVelocity();
     }
     public double getShooterFRPM() {
         return shooterMotorL.getEncoder().getVelocity();
@@ -231,7 +213,7 @@ shooterMotorFEncoder.setVelocityConversionFactor(ShooterSubsystemConstants.SHOOT
 
     public void setShooterSpeed(double percentOutput) {
         shooterMotorL.set(percentOutput);
-        shooterMotorF.set(percentOutput);
+        shooterMotorR.set(percentOutput);
     }
 
     public void setShooterRPM(double desiredRPM) {

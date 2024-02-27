@@ -9,23 +9,17 @@ import frc.robot.subsystems.*;
 import frc.robot.lib.LimeLight;
 import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.Constants.OIConstants;
-import frc.robot.lib.PID_Config.IntakeSubsystem;
-import frc.robot.lib.PID_Config.ShooterSubsystem;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+//import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
@@ -52,10 +46,6 @@ public class RobotContainer {
   //private final Climber SUBSYSTEM_CLIMBER = new Climber();
   private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive(SUBSYSTEM_LIMELIGHT);
   private Command lockCommand = new RunCommand(() -> SUBSYSTEM_SWERVEDRIVE.lockChassis(),SUBSYSTEM_SWERVEDRIVE);
-
-
-  private final Rotation2d rotation = new Rotation2d(0);
-  private final Pose2d pose = new Pose2d(2.5,5.5,rotation);
 
 
   private final static CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
@@ -129,7 +119,7 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
     SmartDashboard.putData(SUBSYSTEM_SWERVEDRIVE);
 
     SUBSYSTEM_SWERVEDRIVE.setDefaultCommand(
-      new DRIVE_JoystickDrive(
+      new joystickDrive(
         SUBSYSTEM_SWERVEDRIVE, 
         () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
         () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
@@ -196,21 +186,18 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
     );
 
     rightTrigger().whileTrue( new PIDCommand(
-      new PIDController(
-          0.05,
-          0,
-        0),
+      new PIDController(0.05,0,0),
       // Close the loop on the turn rate
       SUBSYSTEM_SWERVEDRIVE::getRobotHeading,
       // Setpoint is 0
       0,
       // Pipe the output to the turning controls
-      output ->  new DRIVE_JoystickDrive(
+      output ->  new joystickDrive(
         SUBSYSTEM_SWERVEDRIVE, 
         () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
         () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
         () -> output, 
-        () -> false, 
+        () -> true, 
         () -> 0.02
       ),
       // Require the robot drive
@@ -276,8 +263,8 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
 
     SYSID_1.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
     SYSID_2.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-SYSID_3.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamic(SysIdRoutine.Direction.kForward));
-SYSID_4.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    SYSID_3.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    SYSID_4.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
 
 

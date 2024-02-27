@@ -8,7 +8,7 @@ import frc.robot.lib.PID_Config;
 //import frc.robot.lib.Constants.Kinematics;
 import frc.robot.subsystems.SwerveDrive;
 
-public class LIMELIGHT_Steer extends Command {
+public class limelightSteer extends Command {
 
     static SwerveDrive SUBSYSTEM_SWERVEDRIVE;
     static LimeLight SUBSYSTEM_LIMELIGHT;
@@ -20,7 +20,7 @@ public class LIMELIGHT_Steer extends Command {
     ChassisSpeeds targetState;
 
 
-    public LIMELIGHT_Steer(SwerveDrive drive, LimeLight limeLight){
+    public limelightSteer(SwerveDrive drive, LimeLight limeLight){
         addRequirements(drive,limeLight);
         SUBSYSTEM_LIMELIGHT = limeLight;
         SUBSYSTEM_SWERVEDRIVE = drive;

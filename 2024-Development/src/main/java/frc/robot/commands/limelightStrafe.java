@@ -12,7 +12,7 @@ import frc.robot.lib.Constants;
 import frc.robot.subsystems.SwerveDrive;
 
 
-public class LIMELIGHT__Strafe extends Command {
+public class limelightStrafe extends Command {
 
     LimeLight   SUBSYSTEM_LIMELIGHT;
     SwerveDrive SUBSYSTEM_SWERVEDRIVE;
@@ -31,7 +31,7 @@ public class LIMELIGHT__Strafe extends Command {
      * @param _targetX Meters to POI on X axis
      * @param zDoubleSupplier Meters to POI on Z axis
      */
-    public LIMELIGHT__Strafe(LimeLight m_subsystem1, SwerveDrive m_subsystem2, double _targetX, DoubleSupplier _zSupplier){
+    public limelightStrafe(LimeLight m_subsystem1, SwerveDrive m_subsystem2, double _targetX, DoubleSupplier _zSupplier){
         addRequirements(m_subsystem1,m_subsystem2);
         SUBSYSTEM_LIMELIGHT  = m_subsystem1;
         SUBSYSTEM_SWERVEDRIVE= m_subsystem2;
