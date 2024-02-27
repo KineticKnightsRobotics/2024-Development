@@ -51,6 +51,7 @@ public class RobotContainer {
   private final Shooter SUBSYSTEM_SHOOTER = new Shooter();
   //private final Climber SUBSYSTEM_CLIMBER = new Climber();
   private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive(SUBSYSTEM_LIMELIGHT);
+  private Command lockCommand = new RunCommand(() -> SUBSYSTEM_SWERVEDRIVE.lockChassis(),SUBSYSTEM_SWERVEDRIVE);
 
 
   private final Rotation2d rotation = new Rotation2d(0);
@@ -215,7 +216,7 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
       // Require the robot drive
       SUBSYSTEM_SWERVEDRIVE));
 
-      DRIVER_BACK.whileTrue(RunCommand(() -> SUBSYSTEM_SWERVEDRIVE.lockChassis()),SUBSYSTEM_SWERVEDRIVE);
+      DRIVER_BACK.whileTrue(lockCommand);
 
     DRIVER_A.whileTrue(new runShooter_OpenLoop(3200, SUBSYSTEM_SHOOTER));
     //DRIVER_A.whileTrue(new SHOOTER_runShooter_ClosedLoop(4300, SUBSYSTEM_SHOOTER));
