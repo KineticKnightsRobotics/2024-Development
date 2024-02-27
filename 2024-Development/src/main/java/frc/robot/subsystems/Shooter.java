@@ -142,53 +142,47 @@ public class Shooter extends SubsystemBase {
         shooterMotorREncoder.setVelocityConversionFactor(ShooterSubsystemConstants.SHOOTER_RPM_TO_MPS);
 
 
- // Create a new SysId routine for characterizing the shooter.
-  m_sysIdRoutineShooterLeader = 
- new SysIdRoutine(
-     // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
-     new SysIdRoutine.Config(),
-     new SysIdRoutine.Mechanism(
-         // Tell SysId how to plumb the driving voltage to the motor(s).
-         (Measure<Voltage> volts) -> {
-           shooterMotorL.setVoltage(volts.in(Volts));
-         },
-         // Tell SysId how to record a frame of data for each motor on the mechanism being
-         // characterized.
-         log -> {
-           // Record a frame for the shooter motor.
-           log.motor("shooter-wheel-leader")
-               .voltage(
-                   m_appliedVoltage.mut_replace(
-                       shooterMotorL.getAppliedOutput() * shooterMotorL.getBusVoltage(), Volts))
-               .angularPosition(m_angle.mut_replace(shooterMotorLEncoder.getPosition(), Rotations))
-               .angularVelocity(
-                   m_velocity.mut_replace(shooterMotorLEncoder.getVelocity(), RotationsPerSecond));
-         },
-         // Tell SysId to make generated commands require this subsystem, suffix test state in
-         // WPILog with this subsystem's name ("shooter")
-         this));
+        // Create a new SysId routine for characterizing the shooter.
+        m_sysIdRoutineShooterLeader = 
+        new SysIdRoutine(
+        // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+        new SysIdRoutine.Config(),
+        new SysIdRoutine.Mechanism(
+        // Tell SysId how to plumb the driving voltage to the motor(s).
+        (Measure<Voltage> volts) -> {
+        shooterMotorL.setVoltage(volts.in(Volts));
+        },
+        // Tell SysId how to record a frame of data for each motor on the mechanism being
+        // characterized.
+        log -> {
+            // Record a frame for the shooter motor.
+            log.motor("shooter-wheel-leader")
+                .voltage(
+                    m_appliedVoltage.mut_replace(
+                    shooterMotorL.getAppliedOutput() * shooterMotorL.getBusVoltage(), Volts))
+                .angularPosition(m_angle.mut_replace(shooterMotorLEncoder.getPosition(), Rotations))
+                .angularVelocity(
+                    m_velocity.mut_replace(shooterMotorLEncoder.getVelocity(), RotationsPerSecond));
+        },
+        // Tell SysId to make generated commands require this subsystem, suffix test state in
+        // WPILog with this subsystem's name ("shooter")
+        this));
         
     }
     
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
-
         SmartDashboard.putNumber("Shooter RPM Top", getShooterLRPM());
         SmartDashboard.putNumber("Shooter RPM Bottom", getShooterFRPM());
-
         SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
-
         SmartDashboard.putNumber("Tiler Position", getTilterPosition());
         SmartDashboard.putNumber("ShooterCurrentF",shooterMotorR.getOutputCurrent());
         SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
-
         SmartDashboard.putNumber("Tilter Setpoint", tiltPosition);
-
         SmartDashboard.putBoolean("Shooter Linebreak", getLineBreak());
 
         //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
-
         //SmartDashboard.putString("Shooter Block State", shooterBlock.get().toString());
     }
 
@@ -198,64 +192,56 @@ public class Shooter extends SubsystemBase {
     public double getShooterFRPM() {
         return shooterMotorL.getEncoder().getVelocity();
     }
-
     public double getFeedPostition() {
         return feedEncoder.getPosition();
     }
-  
     public boolean getLineBreak() {
         return !lineBreak.get();
     }
-    
     public void toggleShooterBlock(DoubleSolenoid.Value value) {
          //shooterBlock.set(value);
     }
-
     public void setShooterSpeed(double percentOutput) {
         shooterMotorL.set(percentOutput);
         shooterMotorR.set(percentOutput);
     }
-
     public void setShooterRPM(double desiredRPM) {
         shooterController.setReference(desiredRPM, CANSparkBase.ControlType.kVelocity,0,SHOOTER_FEEDFORWARD_VELOCITY.calculate(desiredRPM));
     }
-
     public void setFeederSpeed(double percentOutput) {
         feedMotor.set(percentOutput);
     }
-
     public double getTilterPosition () {
         return tiltEncoder.getPosition();
     }
-
     public void setTilterPosition(double position) {
         tiltPosition = position;
         tiltController.setReference(position, ControlType.kPosition);
     }
-
     public void zeroTilterPosition(double newPosition) {
         tiltEncoder.setPosition(newPosition);
     }
-
     public Command setTilter(double angle) {
         return Commands.runOnce(() -> setTilterPosition(angle), this);
     }
-
     public Command zeroTilter(double angle) {
         return Commands.runOnce(() -> zeroTilterPosition(angle), this);
     }
 
+
+
+
+    
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineShooterLeader.quasistatic(direction);
-      }
-    
+    }
       /**
        * Returns a command that will execute a dynamic test in the given direction.
        *
        * @param direction The direction (forward or reverse) to run the test in
        */
-      public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineShooterLeader.dynamic(direction);
-      }
+    }
     
 }

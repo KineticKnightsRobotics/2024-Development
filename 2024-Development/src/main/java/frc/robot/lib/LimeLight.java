@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+/*
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -46,27 +47,21 @@ public class LimeLight extends SubsystemBase {
     public double getLimeLightTX() {
         return LIMELIGHT_TX.getDouble(0.0);
     }
-
     public double getLimeLightTY() {
         return LIMELIGHT_TY.getDouble(0.0);
     }
-
     public double getLimeLightTA() {
         return LIMELIGHT_TA.getDouble(0.0);
     }
-
     public boolean getLimeLightTV() {
         return LIMELIGHT_TV.getDouble(0.0) == 1;
     }
-
     public double[] targetpose_cameraspace(){
         return targetpose_cameraspace.getDoubleArray(new double[0]);
     }
-
     public double[] robotPose_FieldSpace() {
         return robotPose_wpiBlue.getDoubleArray(new double[7]);
     }
-
     public Pose2d getRoboPose() {
         double[] limelightData = robotPose_FieldSpace();
         Pose2d coordinates = new Pose2d(limelightData[0],limelightData[1],new Rotation2d(Units.degreesToRadians(limelightData[5])));
@@ -86,3 +81,4 @@ public class LimeLight extends SubsystemBase {
     }
 
 }
+*/
