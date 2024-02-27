@@ -3,7 +3,7 @@ package frc.robot.commands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.geometry.Translation2d;
+//import edu.wpi.first.math.geometry.Translation2d;
 
 //import edu.wpi.first.math.filter.SlewRateLimiter;
 
@@ -13,7 +13,7 @@ import frc.robot.RobotContainer;
 import frc.robot.lib.Constants.SwerveSubsystemConstants;
 import frc.robot.subsystems.SwerveDrive;
 
-public class DRIVE_JoystickDrive extends Command {
+public class joystickDrive extends Command {
 
     private final SwerveDrive subsystem;
     private final DoubleSupplier SUPPLIER_xSpeed;
@@ -24,7 +24,7 @@ public class DRIVE_JoystickDrive extends Command {
 
     //private final SlewRateLimiter xLimiter, yLimiter, zLimiter;
 
-    public DRIVE_JoystickDrive(
+    public joystickDrive(
         SwerveDrive m_subsystem,
         DoubleSupplier xSpeed, 
         DoubleSupplier ySpeed, 
@@ -32,14 +32,13 @@ public class DRIVE_JoystickDrive extends Command {
         BooleanSupplier fieldOriented,
         DoubleSupplier timePeriod
         ){
-        this.subsystem = m_subsystem;
-        this.SUPPLIER_xSpeed = xSpeed;
-        this.SUPPLIER_ySpeed = ySpeed;
-        this.SUPPLIER_zSpeed = zSpeed;
-        this.SUPPLIER_Field_Oriented = fieldOriented;
-        this.SUPPLIER_Period = timePeriod;
+        subsystem = m_subsystem;
+        SUPPLIER_xSpeed = xSpeed;
+        SUPPLIER_ySpeed = ySpeed;
+        SUPPLIER_zSpeed = zSpeed;
+        SUPPLIER_Field_Oriented = fieldOriented;
+        SUPPLIER_Period = timePeriod;
         addRequirements(subsystem);
-
         //this.xLimiter = new SlewRateLimiter(Constants.SwerveSubsystemConstants.LIMIT_SOFT_ACCELERATION_SPEED);
         //this.yLimiter = new SlewRateLimiter(Constants.SwerveSubsystemConstants.LIMIT_SOFT_ACCELERATION_SPEED);
         //this.zLimiter = new SlewRateLimiter(Constants.SwerveSubsystemConstants.LIMIT_SOFT_ACCELERATION_TURN);
@@ -47,32 +46,25 @@ public class DRIVE_JoystickDrive extends Command {
 
     @Override
     public void execute() {
-        /*
-        //Get joystick input from double suppliers
-        double xSpeed = SUPPLIER_xSpeed.getAsDouble() * Constants.SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * 0.2 * (Math.abs(SUPPLIER_xSpeed.getAsDouble()) > 0.1 ? 1.0 : 0.0);
-        double ySpeed = SUPPLIER_ySpeed.getAsDouble() * Constants.SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * 0.2 * (Math.abs(SUPPLIER_ySpeed.getAsDouble()) > 0.1 ? 1.0 : 0.0);
-        double rotSpeed = SUPPLIER_zSpeed.getAsDouble()* Constants.SwerveSubsystemConstants.LIMIT_SOFT_SPEED_TURN * 0.2;
-        */
-
         double joystickX = SUPPLIER_xSpeed.getAsDouble() * (Math.abs(SUPPLIER_xSpeed.getAsDouble()) > 0.05 ? 1.0 : 0.0);
         double joystickY = SUPPLIER_ySpeed.getAsDouble() * (Math.abs(SUPPLIER_ySpeed.getAsDouble()) > 0.05 ? 1.0 : 0.0); //grab speeds and apply deadband
         double joystickZ = SUPPLIER_zSpeed.getAsDouble() * (Math.abs(SUPPLIER_zSpeed.getAsDouble()) > 0.05 ? 1.0 : 0.0);
 
-
         double xSpeed   = (Math.pow(joystickX, 2) * (joystickX<0 ? -1 : 1) /1.0) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * (RobotContainer.DRIVER_LT() ? 0.3 : 1);      // * 0.2;
         double ySpeed   = (Math.pow(joystickY, 2) * (joystickY<0 ? -1 : 1) /1.0) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * (RobotContainer.DRIVER_LT() ? 0.3 : 1);      // * 0.2; //Determine new velocity
-        double rotSpeed = (Math.pow(joystickZ, 2) * (joystickZ<0 ? -1 : 1) /1.0)*0.8*SwerveSubsystemConstants.LIMIT_SOFT_SPEED_TURN  * (RobotContainer.DRIVER_LT() ? 0.3 : 1); //* 0.2 to make SLOW */
+        double rotSpeed = (Math.pow(joystickZ, 2) * (joystickZ<0 ? -1 : 1) /1.0)*0.8*SwerveSubsystemConstants.LIMIT_SOFT_SPEED_TURN  * (RobotContainer.DRIVER_LT() ? 0.3 : 1); //* 0.8 to make SLOW */
         boolean fieldRelative = SUPPLIER_Field_Oriented.getAsBoolean();
         double timePeriod = SUPPLIER_Period.getAsDouble();
+
         //ChassisSpeeds chassisSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, subsystem.getRotation2d());
       
         ChassisSpeeds chassisSpeed = ChassisSpeeds.discretize(
-            fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed, ySpeed, rotSpeed, subsystem.getRotation2d())
-                : new ChassisSpeeds(xSpeed, ySpeed, rotSpeed),
-            
-                timePeriod);
+            fieldRelative 
+                ? 
+                    ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, subsystem.getRotation2d())
+                : 
+                    new ChassisSpeeds(xSpeed, ySpeed, rotSpeed),
+            timePeriod);
      
         
         subsystem.setChassisSpeed(chassisSpeed,true);
@@ -86,10 +78,9 @@ public class DRIVE_JoystickDrive extends Command {
     }
     @Override
     public void end(boolean interrupted) {
-//this.swerve.drive(new Translation2d(0, 0), 0, true, false);
-
-      // PLEASE SET THIS FOR SAFETY!!!
-     // this.swerve.stopMotors();
+        //this.swerve.drive(new Translation2d(0, 0), 0, true, false);
+        //PLEASE SET THIS FOR SAFETY!!!
+        //this.swerve.stopMotors();
     }
     @Override
     public boolean isFinished() {

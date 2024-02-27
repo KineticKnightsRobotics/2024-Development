@@ -95,7 +95,7 @@ public final class Constants {
   }
 
   public static class IntakeSubsystemConstants {
-    public static int ID_MOTOR_ROLLER = 9;
+    public static int ID_MOTOR_ROLLER = 32;
     public static int ID_MOTOR_INTAKE_PIVOT = 31;
 
 
@@ -118,11 +118,10 @@ public final class Constants {
 
   public static class ShooterSubsystemConstants {
 
-    public static int ID_MOTOR_TILTER = 51;
-    public static int ID_MOTOR_SHOOTER_LEADER = 52;
-
-    public static int ID_MOTOR_SHOOTER_FOLLOWER = 53;
-    public static int ID_MOTOR_FEEDER = 54;
+    public static int ID_MOTOR_TILTER = 54;
+    public static int ID_MOTOR_SHOOTER_LEFT = 52;
+    public static int ID_MOTOR_SHOOTER_RIGHT = 53;
+    public static int ID_MOTOR_FEEDER = 51;
 
     public static int ID_SHOOTER_BEAMBREAK;
     
