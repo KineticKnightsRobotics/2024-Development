@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -29,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.math.controller.PIDController;
+
 
 
 /**
@@ -213,6 +215,8 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
       // Require the robot drive
       SUBSYSTEM_SWERVEDRIVE));
 
+      DRIVER_BACK.whileTrue(RunCommand(() -> SUBSYSTEM_SWERVEDRIVE.lockChassis()),SUBSYSTEM_SWERVEDRIVE);
+
     DRIVER_A.whileTrue(new runShooter_OpenLoop(3200, SUBSYSTEM_SHOOTER));
     //DRIVER_A.whileTrue(new SHOOTER_runShooter_ClosedLoop(4300, SUBSYSTEM_SHOOTER));
 
@@ -232,7 +236,7 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
 
-    DRIVER_BACK.onTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
+    //DRIVER_BACK.onTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
 
 
     //OP_1.onTrue(new SHOOTER_moveFeederDistance(SUBSYSTEM_SHOOTER, -20));

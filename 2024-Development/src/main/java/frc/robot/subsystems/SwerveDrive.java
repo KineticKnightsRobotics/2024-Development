@@ -43,7 +43,6 @@ public class SwerveDrive extends SubsystemBase {
     LimeLight m_LimeLight;
 
     private Field2d field = new Field2d();
-
     
     private final SwerveModule MODULE_FRONT_LEFT = new SwerveModule(
         "Front Left",
@@ -180,6 +179,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public Pose2d getPose() {
         return ODEMETER.getEstimatedPosition();
+
       }
 
     public void updatePoseEstimator() {
@@ -305,9 +305,11 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_BACK_RIGHT.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(Units.degreesToRadians(45))),true);
     }
     
-    public Command lockDrive() {
+  /*  public Command lockDrive() {
         return Commands.runOnce(() -> lockChassis(),this);
-    }
+    }*/
+
+    
 
     /*
     public Command followPath(String pathName,Boolean isChoreo) {
