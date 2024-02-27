@@ -305,9 +305,9 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_BACK_RIGHT.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(Units.degreesToRadians(45))),true);
     }
     
-  /*  public Command lockDrive() {
+   public Command lockDrive() {
         return Commands.runOnce(() -> lockChassis(),this);
-    }*/
+    }
 
     
 
