@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 //robot
 import frc.robot.lib.Constants;
-import frc.robot.lib.LimeLight;
+import frc.robot.LimelightHelpers;
 import frc.robot.lib.SwerveModule;
 import frc.robot.lib.Constants.KinematicsConstants;
 import frc.robot.lib.Constants.SwerveSubsystemConstants;
@@ -38,8 +38,6 @@ import java.util.concurrent.TimeUnit;
 
 
 public class SwerveDrive extends SubsystemBase {
-
-    LimeLight m_LimeLight;
 
     private Field2d field = new Field2d();
     
@@ -97,15 +95,13 @@ public class SwerveDrive extends SubsystemBase {
         new Pose2d(0,0,new Rotation2d(0))
     );
 
-    public SwerveDrive(LimeLight _limelight) {
+    public SwerveDrive() {
         try {TimeUnit.SECONDS.sleep(1);}
         catch(InterruptedException e){}
         MODULE_FRONT_LEFT.resetTurnEncoders();
         MODULE_FRONT_RIGHT.resetTurnEncoders();
         MODULE_BACK_LEFT.resetTurnEncoders();
         MODULE_BACK_RIGHT.resetTurnEncoders();
-
-        m_LimeLight = _limelight;
 
         // Configure AutoBuilder last
         AutoBuilder.configureHolonomic(

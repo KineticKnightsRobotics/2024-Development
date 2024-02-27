@@ -6,7 +6,6 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import frc.robot.lib.LimeLight;
 import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.Constants.OIConstants;
 
@@ -39,12 +38,11 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final LimeLight SUBSYSTEM_LIMELIGHT = new LimeLight();
   private final Intake SUBSYSTEM_INTAKE = new Intake();
   private final Conveyer SUBSYSTEM_CONVEYER = new Conveyer();
   private final Shooter SUBSYSTEM_SHOOTER = new Shooter();
   //private final Climber SUBSYSTEM_CLIMBER = new Climber();
-  private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive(SUBSYSTEM_LIMELIGHT);
+  private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive();
   private Command lockCommand = new RunCommand(() -> SUBSYSTEM_SWERVEDRIVE.lockChassis(),SUBSYSTEM_SWERVEDRIVE);
 
 
@@ -115,8 +113,6 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    SmartDashboard.putData(SUBSYSTEM_LIMELIGHT);
-    SmartDashboard.putData(SUBSYSTEM_SWERVEDRIVE);
 
     SUBSYSTEM_SWERVEDRIVE.setDefaultCommand(
       new joystickDrive(
@@ -133,7 +129,7 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
     NamedCommands.registerCommand("IntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
     NamedCommands.registerCommand("IntakeUp" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position));
     NamedCommands.registerCommand("AutoConveyer", new intakeLineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
-    NamedCommands.registerCommand("AutoAimSpeaker", new autoAimSpeaker(SUBSYSTEM_SHOOTER,SUBSYSTEM_LIMELIGHT));
+    NamedCommands.registerCommand("AutoAimSpeaker", new autoAimSpeaker(SUBSYSTEM_SHOOTER));
     NamedCommands.registerCommand("AutoRunShooter", new autoRunShooter(SUBSYSTEM_SHOOTER,SUBSYSTEM_CONVEYER));
     NamedCommands.registerCommand("AutoSetShooterIdle", new autoSetShooterIdle(SUBSYSTEM_SHOOTER));
     NamedCommands.registerCommand("AutoLoadShooter", new autoLoadShooter(SUBSYSTEM_CONVEYER,SUBSYSTEM_SHOOTER));
@@ -247,7 +243,7 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
 
     OP_12.onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0));
 
-    OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER, SUBSYSTEM_LIMELIGHT));
+    OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER));
 
     OP_14.onTrue(SUBSYSTEM_SHOOTER.setTilter(30.0));
 
