@@ -6,7 +6,15 @@ package frc.robot.lib;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+
+import com.pathplanner.lib.path.PathConstraints;
+
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Translation2d;
+
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.numbers.N3;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -155,6 +163,12 @@ public final class Constants {
     public static int ID_RIGHT_WINCH = 62;
   }
 
+  public static class VisionConstants {
+    public static class defaultSTD {
+        public static Vector<N3> singleTagStD = VecBuilder.fill(2, 2, 4);
+    }
+  }
+
   public static final class OIConstants {
     public static final int ID_CONTROLLER_DRIVER = 0;
     public static final double CONTROLLER_DRIVER_DEADBAND = 0.05;
@@ -168,7 +182,9 @@ public final class Constants {
   }
 
   public static class AutonomousConstants{
-
+    public static class PathFindingConstraints{
+      public static PathConstraints kConstraints = new PathConstraints(3.4,3.5,Math.toRadians(540),Math.toRadians(720));
+    }
     // Shop zone 332cm x 173cm
     public static double LIMIT_AUTOSPEED_DRIVE = 3.5;
     public static double LIMIT_AUTOSPEED_ROTATE = 360;

@@ -29,10 +29,12 @@ import frc.robot.LimelightHelpers;
 import frc.robot.lib.SwerveModule;
 import frc.robot.lib.Constants.KinematicsConstants;
 import frc.robot.lib.Constants.SwerveSubsystemConstants;
+import frc.robot.lib.Constants.AutonomousConstants;
 import frc.robot.lib.PID_Config.TrajectoryDriving;
 import frc.robot.lib.PID_Config.TrajectoryTurning;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
+import java.sql.Driver;
 //java
 import java.util.concurrent.TimeUnit;
 
@@ -102,7 +104,6 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_FRONT_RIGHT.resetTurnEncoders();
         MODULE_BACK_LEFT.resetTurnEncoders();
         MODULE_BACK_RIGHT.resetTurnEncoders();
-
         // Configure AutoBuilder last
         AutoBuilder.configureHolonomic(
                 () -> ODEMETER.getEstimatedPosition(), // Robot pose supplier
@@ -110,13 +111,13 @@ public class SwerveDrive extends SubsystemBase {
                 this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::setAutoChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
+                    new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
                     new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive),
                     3.4,
                     KinematicsConstants.RADIUS_DRIVE_CHASSIS, // Drive base radius in meters. Distance from robot center to furthest module.
-                        new ReplanningConfig(
+                    new ReplanningConfig(
                             
-                        ) // Default path replanning config. See the API for the options here
+                    ) // Default path replanning config. See the API for the options here
                 ),
                 () -> {
                     // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -301,10 +302,28 @@ public class SwerveDrive extends SubsystemBase {
     }
     
    public Command lockDrive() {
-        return Commands.run(() -> lockChassis(),this);
+        return Commands.runOnce(() -> lockChassis(),this);
     }
 
-    
+    /**
+     * 
+     * @param position Using WPI Blue Alliance coordinates
+     * @return Pathfinding Command
+     */
+    public Command pathFind(Pose2d position) {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()){
+            if (alliance.get() == DriverStation.Alliance.Red) {
+                return AutoBuilder.pathfindToPoseFlipped(position, AutonomousConstants.PathFindingConstraints.kConstraints);
+            }
+            else {
+                return AutoBuilder.pathfindToPose(position,AutonomousConstants.PathFindingConstraints.kConstraints,0.0);
+            }
+        }
+        else {
+            return AutoBuilder.pathfindToPose(position,AutonomousConstants.PathFindingConstraints.kConstraints,0.0);
+        }
+    }
 
     /*
     public Command followPath(String pathName,Boolean isChoreo) {
