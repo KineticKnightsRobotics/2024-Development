@@ -243,5 +243,8 @@ public class Shooter extends SubsystemBase {
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineShooterLeader.dynamic(direction);
     }
+    public Command IdleShooter(){
+        return Commands.run(()->setShooterSpeed(0.264),this).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
+    }
     
 }

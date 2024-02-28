@@ -11,6 +11,8 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 //wpi
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -33,6 +35,10 @@ import frc.robot.lib.Constants.AutonomousConstants;
 import frc.robot.lib.PID_Config.TrajectoryDriving;
 import frc.robot.lib.PID_Config.TrajectoryTurning;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import java.util.Optional;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+
 
 import java.sql.Driver;
 //java
@@ -89,6 +95,9 @@ public class SwerveDrive extends SubsystemBase {
     public final Timer idle_Timer_Zero = new Timer();
     public final Timer idle_Timer_Lock = new Timer();
 
+    public AprilTagFieldLayout kTagLayout;
+
+
     //private final SwerveDriveOdometry ODEMETER = new SwerveDriveOdometry(KinematicsConstants.KINEMATICS_DRIVE_CHASSIS, getRotation2d(), getModulePositions());
     public final SwerveDrivePoseEstimator ODEMETER = new SwerveDrivePoseEstimator(
         KinematicsConstants.KINEMATICS_DRIVE_CHASSIS,
@@ -104,6 +113,9 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_FRONT_RIGHT.resetTurnEncoders();
         MODULE_BACK_LEFT.resetTurnEncoders();
         MODULE_BACK_RIGHT.resetTurnEncoders();
+
+        kTagLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+
         // Configure AutoBuilder last
         AutoBuilder.configureHolonomic(
                 () -> ODEMETER.getEstimatedPosition(), // Robot pose supplier
@@ -243,7 +255,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public void setAutoChassisSpeed(ChassisSpeeds speed) {
         //ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(speed, 0.02); is this needed?
-        SwerveModuleState states[] = Constants.KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toSwerveModuleStates(targetSpeeds);
+        SwerveModuleState states[] = Constants.KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toSwerveModuleStates(speed);
         setModuleStates(states,false);
     }
 
@@ -360,4 +372,27 @@ public class SwerveDrive extends SubsystemBase {
         );
     }
     */
+
+    private Optional<Pose3d> getSpeakerPose() {
+        var alliance = DriverStation.getAlliance();
+        Optional<Pose3d> speakerPose = null;
+    
+        if (alliance.isPresent()) {
+          if (alliance.get() == DriverStation.Alliance.Blue) {
+            speakerPose = kTagLayout.getTagPose(7);
+          } else {
+            speakerPose = kTagLayout.getTagPose(4);
+          }
+        } else {
+          speakerPose = kTagLayout.getTagPose(7);
+        }
+    
+        return speakerPose;
+      }
+
+      public Rotation2d getRotationRelativeToSpeaker() {
+        return getPose().getTranslation().minus(getSpeakerPose().get().getTranslation().toTranslation2d())
+            .unaryMinus()
+            .getAngle();
+      }
 }

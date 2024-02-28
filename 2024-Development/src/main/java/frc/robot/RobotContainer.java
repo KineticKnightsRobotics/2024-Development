@@ -105,6 +105,12 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
   Trigger SYSID_18 = new Trigger(JOYSTICK_SYSID.button(18));
   Trigger SYSID_19 = new Trigger(JOYSTICK_SYSID.button(19));
   Trigger SYSID_20 = new Trigger(JOYSTICK_SYSID.button(20));
+  Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
+  //Trigger NoteInFeederTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getLineBreak());
+  Trigger NoteInFeederTrigger = new Trigger(SUBSYSTEM_SHOOTER::getLineBreak);
+
+  Trigger rightTrigger = new Trigger(()-> JOYSTICK_DRIVER.getRawAxis(3)>=0.3);
+
 
   
 
@@ -180,6 +186,15 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
         new setShooterSpeed(-0.30, SUBSYSTEM_SHOOTER)
       )
     );
+
+    rightTrigger.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
+    () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
+    () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
+    () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
+    () -> true, 
+    () -> 0.02));
+
+    NoteInConveyerTrigger.or(NoteInFeederTrigger).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
 
     /*rightTrigger().whileTrue( new PIDCommand(
       new PIDController(0.05,0,0),
@@ -285,7 +300,7 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
   public static boolean DRIVER_RT() {
     return JOYSTICK_DRIVER.getRawAxis(3) > 0.5;
   }
-  public static Trigger rightTrigger(){
+ /* public static Trigger rightTrigger(){
   return new Trigger(()-> JOYSTICK_DRIVER.getRawAxis(3)>=0.3);
-}
+}*/
 }
