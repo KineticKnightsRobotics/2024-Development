@@ -9,10 +9,13 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
 import frc.robot.lib.Constants.SwerveSubsystemConstants;
+import frc.robot.lib.PID_Config.RotationTargetLock;
 import frc.robot.subsystems.SwerveDrive;
 import edu.wpi.first.math.controller.PIDController;
+
 
 public class rotationTargetLockDrive extends Command {
 
@@ -22,7 +25,7 @@ public class rotationTargetLockDrive extends Command {
     private final DoubleSupplier SUPPLIER_zSpeed;
     private final BooleanSupplier SUPPLIER_Field_Oriented;
     private final DoubleSupplier SUPPLIER_Period;
-private PIDController rotationPID = new PIDController(0.5,0,0);
+private PIDController rotationPID = new PIDController(RotationTargetLock.Proportional,RotationTargetLock.Integral,RotationTargetLock.Derivitive);
     //private final SlewRateLimiter xLimiter, yLimiter, zLimiter;
 
     public rotationTargetLockDrive(
@@ -43,16 +46,20 @@ private PIDController rotationPID = new PIDController(0.5,0,0);
         //this.xLimiter = new SlewRateLimiter(Constants.SwerveSubsystemConstants.LIMIT_SOFT_ACCELERATION_SPEED);
         //this.yLimiter = new SlewRateLimiter(Constants.SwerveSubsystemConstants.LIMIT_SOFT_ACCELERATION_SPEED);
         //this.zLimiter = new SlewRateLimiter(Constants.SwerveSubsystemConstants.LIMIT_SOFT_ACCELERATION_TURN);
+        rotationPID.setTolerance(2, 5);
+        rotationPID.enableContinuousInput(-180, 180);
     }
 
     @Override
     public void execute() {
+                double[] positionData = LimelightHelpers.getTargetPose_RobotSpace("limelight");
+                double desiredAngle = positionData[5];
         double joystickX = SUPPLIER_xSpeed.getAsDouble() * (Math.abs(SUPPLIER_xSpeed.getAsDouble()) > 0.05 ? 1.0 : 0.0);
         double joystickY = SUPPLIER_ySpeed.getAsDouble() * (Math.abs(SUPPLIER_ySpeed.getAsDouble()) > 0.05 ? 1.0 : 0.0); //grab speeds and apply deadband
 
         double xSpeed   = (Math.pow(joystickX, 2) * (joystickX<0 ? -1 : 1) /1.0) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * (RobotContainer.DRIVER_LT() ? 0.3 : 1);      // * 0.2;
         double ySpeed   = (Math.pow(joystickY, 2) * (joystickY<0 ? -1 : 1) /1.0) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * (RobotContainer.DRIVER_LT() ? 0.3 : 1);      // * 0.2; //Determine new velocity
-        double rotSpeed = rotationPID.calculate(subsystem.getRobotHeading(), 0);
+        double rotSpeed = rotationPID.calculate(subsystem.getRobotHeading(), desiredAngle);
         boolean fieldRelative = SUPPLIER_Field_Oriented.getAsBoolean();
         double timePeriod = SUPPLIER_Period.getAsDouble();
 

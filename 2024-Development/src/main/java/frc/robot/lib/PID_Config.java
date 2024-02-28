@@ -77,5 +77,10 @@ public class PID_Config {
         public static final double Integral = 0.0;
         public static final double Derivitive = 0.00;
     }
+    public class RotationTargetLock{
+        public static final double Proportional = 0.5;
+        public static final double Integral = 0.0;
+        public static final double Derivitive = 0.00;
+    }
 }
 

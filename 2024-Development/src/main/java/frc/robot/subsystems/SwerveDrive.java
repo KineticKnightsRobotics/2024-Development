@@ -176,6 +176,9 @@ public class SwerveDrive extends SubsystemBase {
         return ODEMETER.getEstimatedPosition();
 
       }
+      public double getPoseAngle(){
+        return ODEMETER.getEstimatedPosition().getRotation().getDegrees();
+      }
 
     public void updatePoseEstimator() {
         ODEMETER.update(
@@ -238,7 +241,8 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void setAutoChassisSpeed(ChassisSpeeds speed) {
-        SwerveModuleState states[] = Constants.KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toSwerveModuleStates(speed);
+        //ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(speed, 0.02); is this needed?
+        SwerveModuleState states[] = Constants.KinematicsConstants.KINEMATICS_DRIVE_CHASSIS.toSwerveModuleStates(targetSpeeds);
         setModuleStates(states,false);
     }
 
