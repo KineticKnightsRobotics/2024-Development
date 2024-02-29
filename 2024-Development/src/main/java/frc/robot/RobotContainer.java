@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.lib.Constants;
 import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.Constants.OIConstants;
 
@@ -105,12 +106,19 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
   Trigger SYSID_18 = new Trigger(JOYSTICK_SYSID.button(18));
   Trigger SYSID_19 = new Trigger(JOYSTICK_SYSID.button(19));
   Trigger SYSID_20 = new Trigger(JOYSTICK_SYSID.button(20));
+<<<<<<< Updated upstream
   Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
   //Trigger NoteInFeederTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getLineBreak());
   Trigger NoteInFeederTrigger = new Trigger(SUBSYSTEM_SHOOTER::getLineBreak);
 
   Trigger rightTrigger = new Trigger(()-> JOYSTICK_DRIVER.getRawAxis(3)>=0.3);
 
+=======
+  Trigger SYSID_21 = new Trigger(JOYSTICK_SYSID.button(21));
+  Trigger SYSID_22 = new Trigger(JOYSTICK_SYSID.button(22));
+  Trigger SYSID_23 = new Trigger(JOYSTICK_SYSID.button(23));
+  Trigger SYSID_24 = new Trigger(JOYSTICK_SYSID.button(24));
+>>>>>>> Stashed changes
 
   
 
@@ -272,12 +280,35 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
     //OP_20.onTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.8));
     //OP_20.onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
 
-    SYSID_1.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    SYSID_2.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    SYSID_3.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    SYSID_4.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    SYSID_1.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistaticLeft(SysIdRoutine.Direction.kForward));
+    SYSID_2.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistaticLeft(SysIdRoutine.Direction.kReverse));
+    SYSID_3.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamicLeft(SysIdRoutine.Direction.kForward));
+    SYSID_4.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamicLeft(SysIdRoutine.Direction.kReverse));
 
+    SYSID_5.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistaticRight(SysIdRoutine.Direction.kForward));
+    SYSID_6.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistaticRight(SysIdRoutine.Direction.kReverse));
+    SYSID_7.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamicRight(SysIdRoutine.Direction.kForward));
+    SYSID_8.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamicRight(SysIdRoutine.Direction.kReverse));
 
+    SYSID_9.whileTrue(SUBSYSTEM_SWERVEDRIVE.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    SYSID_10.whileTrue(SUBSYSTEM_SWERVEDRIVE.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    SYSID_11.whileTrue(SUBSYSTEM_SWERVEDRIVE.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    SYSID_12.whileTrue(SUBSYSTEM_SWERVEDRIVE.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+    SYSID_13.whileTrue(SUBSYSTEM_SWERVEDRIVE.sysIdQuasistaticModuleTurning(SysIdRoutine.Direction.kForward));
+    SYSID_14.whileTrue(SUBSYSTEM_SWERVEDRIVE.sysIdQuasistaticModuleTurning(SysIdRoutine.Direction.kForward));
+    SYSID_15.whileTrue(SUBSYSTEM_SWERVEDRIVE.sysIdDynamicModuleTurning(SysIdRoutine.Direction.kForward));
+    SYSID_16.whileTrue(SUBSYSTEM_SWERVEDRIVE.sysIdDynamicModuleTurning(SysIdRoutine.Direction.kReverse));
+
+    SYSID_17.whileTrue(SUBSYSTEM_INTAKE.sysIdQuasistatic(SysIdRoutine.Direction.kForward).until(() -> SUBSYSTEM_INTAKE.getIntakePosition() >= Constants.IntakeSubsystemConstants.Forward_IntakePivot_Position));
+    SYSID_18.whileTrue(SUBSYSTEM_INTAKE.sysIdQuasistatic(SysIdRoutine.Direction.kReverse).until(() -> SUBSYSTEM_INTAKE.getIntakePosition() <= Constants.IntakeSubsystemConstants.Reverse_IntakePivot_Position));
+    SYSID_19.whileTrue(SUBSYSTEM_INTAKE.sysIdDynamic(SysIdRoutine.Direction.kForward).until(() -> SUBSYSTEM_INTAKE.getIntakePosition() >= Constants.IntakeSubsystemConstants.Forward_IntakePivot_Position));
+    SYSID_20.whileTrue(SUBSYSTEM_INTAKE.sysIdDynamic(SysIdRoutine.Direction.kReverse).until(() -> SUBSYSTEM_INTAKE.getIntakePosition() <= Constants.IntakeSubsystemConstants.Reverse_IntakePivot_Position));
+
+    SYSID_21.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistaticTilter(SysIdRoutine.Direction.kForward).until(() -> SUBSYSTEM_SHOOTER.getTilterPosition() >= 60));
+    SYSID_22.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistaticTilter(SysIdRoutine.Direction.kReverse).until(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 0 ));
+    SYSID_23.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamicTiler(SysIdRoutine.Direction.kForward).until(() -> SUBSYSTEM_SHOOTER.getTilterPosition() >= 60));
+    SYSID_24.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamicTiler(SysIdRoutine.Direction.kReverse).until(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 0 ));
 
   }
 

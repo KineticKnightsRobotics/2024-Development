@@ -20,11 +20,22 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
+//static wpi
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.MutableMeasure.mutable;
 //robot
 import frc.robot.lib.Constants;
 import frc.robot.LimelightHelpers;
@@ -95,7 +106,15 @@ public class SwerveDrive extends SubsystemBase {
     public final Timer idle_Timer_Zero = new Timer();
     public final Timer idle_Timer_Lock = new Timer();
 
+<<<<<<< Updated upstream
     public AprilTagFieldLayout kTagLayout;
+=======
+    public SysIdRoutine m_SysIdRoutine;
+
+    private MutableMeasure<Voltage> m_SysID_Voltage = mutable(Volts.of(0));
+    private MutableMeasure<Distance> m_SysID_Position = mutable(Meters.of(0));
+    private MutableMeasure<Velocity<Distance>> m_SysID_Velocity = mutable(MetersPerSecond.of(0));
+>>>>>>> Stashed changes
 
 
     //private final SwerveDriveOdometry ODEMETER = new SwerveDriveOdometry(KinematicsConstants.KINEMATICS_DRIVE_CHASSIS, getRotation2d(), getModulePositions());
@@ -150,7 +169,40 @@ public class SwerveDrive extends SubsystemBase {
         idle_Timer_Zero.start();
 
         PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
-                field.setRobotPose(getPose());
+        field.setRobotPose(getPose());
+
+
+        m_SysIdRoutine = 
+            new SysIdRoutine(
+                new SysIdRoutine.Config(),
+                new SysIdRoutine.Mechanism(
+                    (Measure<Voltage> volts) -> {
+                        MODULE_FRONT_LEFT.MOTOR_DRIVE.set(volts.in(Volts));
+                        MODULE_BACK_LEFT.MOTOR_DRIVE.set(volts.in(Volts));
+                        MODULE_FRONT_RIGHT.MOTOR_DRIVE.set(volts.in(Volts));
+                        MODULE_BACK_RIGHT.MOTOR_DRIVE.set(volts.in(Volts));/*set(volts.in(Volts));*/
+                    },
+                    log -> {
+                        log.motor("Front Left Module")
+                        .voltage        (m_SysID_Voltage.mut_replace(MODULE_FRONT_LEFT.MOTOR_DRIVE.getAppliedOutput() * MODULE_FRONT_LEFT.MOTOR_DRIVE.getBusVoltage(),Volts))
+                        .linearPosition(m_SysID_Position.mut_replace(MODULE_FRONT_LEFT.ENCODER_DRIVE.getPosition(),Meters))
+                        .linearVelocity((m_SysID_Velocity.mut_replace(MODULE_FRONT_LEFT.ENCODER_DRIVE.getVelocity(),MetersPerSecond)));
+                        log.motor("Back Left Module")
+                        .voltage        (m_SysID_Voltage.mut_replace(MODULE_BACK_LEFT.MOTOR_DRIVE.getAppliedOutput() * MODULE_BACK_LEFT.MOTOR_DRIVE.getBusVoltage(),Volts))
+                        .linearPosition(m_SysID_Position.mut_replace(MODULE_BACK_LEFT.ENCODER_DRIVE.getPosition(),Meters))
+                        .linearVelocity((m_SysID_Velocity.mut_replace(MODULE_BACK_LEFT.ENCODER_DRIVE.getVelocity(),MetersPerSecond)));
+                        log.motor("Front Right Module")
+                        .voltage        (m_SysID_Voltage.mut_replace(MODULE_FRONT_RIGHT.MOTOR_DRIVE.getAppliedOutput() * MODULE_FRONT_RIGHT.MOTOR_DRIVE.getBusVoltage(),Volts))
+                        .linearPosition(m_SysID_Position.mut_replace(MODULE_FRONT_RIGHT.ENCODER_DRIVE.getPosition(),Meters))
+                        .linearVelocity((m_SysID_Velocity.mut_replace(MODULE_FRONT_RIGHT.ENCODER_DRIVE.getVelocity(),MetersPerSecond)));
+                        log.motor("Back Right Module")
+                        .voltage        (m_SysID_Voltage.mut_replace(MODULE_BACK_RIGHT.MOTOR_DRIVE.getAppliedOutput() * MODULE_BACK_RIGHT.MOTOR_DRIVE.getBusVoltage(),Volts))
+                        .linearPosition(m_SysID_Position.mut_replace(MODULE_BACK_RIGHT.ENCODER_DRIVE.getPosition(),Meters))
+                        .linearVelocity((m_SysID_Velocity.mut_replace(MODULE_BACK_RIGHT.ENCODER_DRIVE.getVelocity(),MetersPerSecond)));
+                    },
+                    this
+                )
+            );
 
 
     }
@@ -327,6 +379,8 @@ public class SwerveDrive extends SubsystemBase {
      * @return Pathfinding Command
      */
     public Command pathFind(Pose2d position) {
+        return AutoBuilder.pathfindToPose(position, AutonomousConstants.PathFindingConstraints.kConstraints);
+        /*
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent()){
             if (alliance.get() == DriverStation.Alliance.Red) {
@@ -339,7 +393,9 @@ public class SwerveDrive extends SubsystemBase {
         else {
             return AutoBuilder.pathfindToPose(position,AutonomousConstants.PathFindingConstraints.kConstraints,0.0);
         }
+        */
     }
+<<<<<<< Updated upstream
 
     /*
     public Command followPath(String pathName,Boolean isChoreo) {
@@ -395,4 +451,6 @@ public class SwerveDrive extends SubsystemBase {
             .unaryMinus()
             .getAngle();
       }
+=======
+>>>>>>> Stashed changes
 }

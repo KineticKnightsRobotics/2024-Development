@@ -29,6 +29,9 @@ import frc.robot.lib.PID_Config;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.Degree;
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
@@ -37,11 +40,14 @@ import static edu.wpi.first.units.Units.Volts;
 public class Shooter extends SubsystemBase {
 
     // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
-  private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
-  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
-  private final MutableMeasure<Angle> m_angle = mutable(Rotations.of(0));
-  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
-  private final MutableMeasure<Velocity<Angle>> m_velocity = mutable(RotationsPerSecond.of(0));
+    private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+    // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+    private final MutableMeasure<Angle> m_angle = mutable(Rotations.of(0));
+    // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+    private final MutableMeasure<Velocity<Angle>> m_velocity = mutable(RotationsPerSecond.of(0));
+    //
+    private final MutableMeasure<Angle> m_degrees = mutable(Degrees.of(0));
+    private final MutableMeasure<Velocity<Angle>> m_velocity_degrees = mutable(DegreesPerSecond.of(0));
 
     private final SimpleMotorFeedforward SHOOTER_FEEDFORWARD_VELOCITY;
 
@@ -59,13 +65,12 @@ public class Shooter extends SubsystemBase {
 
     private final DigitalInput lineBreak;
 
-     private final SysIdRoutine m_sysIdRoutineShooterLeader;
+    private final SysIdRoutine m_sysIdRoutineTilter;
+    private final SysIdRoutine m_sysIdRoutineShooterLeft;
+    private final SysIdRoutine m_sysIdRoutineShooterRight;
 
-     RelativeEncoder shooterMotorREncoder;
-     RelativeEncoder shooterMotorLEncoder;
-
-    //private final Compressor compressor;
-    //private final DoubleSolenoid shooterBlock;
+    private final RelativeEncoder shooterMotorREncoder;
+    private final RelativeEncoder shooterMotorLEncoder;
 
     private double tiltPosition = 0.0;
 
@@ -81,7 +86,7 @@ public class Shooter extends SubsystemBase {
         tiltMotor.setSmartCurrentLimit(45);
 
         tiltEncoder = tiltMotor.getEncoder();
-        tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES); //TODO: Find this!
+        tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
 
         tiltEncoder.setPosition(0.0);
 
@@ -92,25 +97,14 @@ public class Shooter extends SubsystemBase {
 
         tiltController.setOutputRange(-0.5,0.5);
 
-
-        //Pneumatics stuff is not on the robot yet...
-        //compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-        //compressor.enableDigital();
-        //shooterBlock = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ShooterBlockPneumatics.CHANNEL_FORWARD  , ShooterBlockPneumatics.CHANNEL_REVERSE);
-
-
         shooterMotorL = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotorR = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
-
-        //shooterMotorL.restoreFactoryDefaults();
-        //shooterMotorF.restoreFactoryDefaults();
 
         shooterMotorL.setSmartCurrentLimit(80);
         shooterMotorR.setSmartCurrentLimit(80);
 
         shooterMotorL.setInverted(true);
         shooterMotorR.setInverted(false);
-        //shooterMotorL.follow(shooterMotorF);
 
         shooterMotorL.setIdleMode(IdleMode.kCoast);
         shooterMotorR.setIdleMode(IdleMode.kCoast);
@@ -141,33 +135,89 @@ public class Shooter extends SubsystemBase {
         shooterMotorREncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_ROTATIONS_TO_METERS);
         shooterMotorREncoder.setVelocityConversionFactor(ShooterSubsystemConstants.SHOOTER_RPM_TO_MPS);
 
+        shooterMotorLEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_ROTATIONS_TO_METERS);
+        shooterMotorLEncoder.setVelocityConversionFactor(ShooterSubsystemConstants.SHOOTER_RPM_TO_MPS);
+
 
         // Create a new SysId routine for characterizing the shooter.
-        m_sysIdRoutineShooterLeader = 
-        new SysIdRoutine(
-        // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
-        new SysIdRoutine.Config(),
-        new SysIdRoutine.Mechanism(
-        // Tell SysId how to plumb the driving voltage to the motor(s).
-        (Measure<Voltage> volts) -> {
-        shooterMotorL.setVoltage(volts.in(Volts));
-        },
-        // Tell SysId how to record a frame of data for each motor on the mechanism being
-        // characterized.
-        log -> {
-            // Record a frame for the shooter motor.
-            log.motor("shooter-wheel-leader")
-                .voltage(
-                    m_appliedVoltage.mut_replace(
-                    shooterMotorL.getAppliedOutput() * shooterMotorL.getBusVoltage(), Volts))
-                .angularPosition(m_angle.mut_replace(shooterMotorLEncoder.getPosition(), Rotations))
-                .angularVelocity(
-                    m_velocity.mut_replace(shooterMotorLEncoder.getVelocity(), RotationsPerSecond));
-        },
-        // Tell SysId to make generated commands require this subsystem, suffix test state in
-        // WPILog with this subsystem's name ("shooter")
-        this));
-        
+        m_sysIdRoutineTilter =
+            new SysIdRoutine(
+                // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+                new SysIdRoutine.Config(),
+                new SysIdRoutine.Mechanism(
+                    // Tell SysId how to plumb the driving voltage to the motor(s).
+                    (Measure<Voltage> volts) -> {
+                    shooterMotorL.setVoltage(volts.in(Volts));
+                    },
+                    // Tell SysId how to record a frame of data for each motor on the mechanism being
+                    // characterized.
+                    log -> {
+                        // Record a frame for the shooter motor.
+                        log.motor("Shooter Tilter")
+                            .voltage(
+                                m_appliedVoltage.mut_replace(
+                                tiltMotor.getAppliedOutput() * tiltMotor.getBusVoltage(), Volts))
+                            .angularPosition(m_angle.mut_replace(tiltEncoder.getPosition(), Degrees))
+                            .angularVelocity(
+                                m_velocity.mut_replace(tiltEncoder.getVelocity(), DegreesPerSecond));
+                    },
+                    // Tell SysId to make generated commands require this subsystem, suffix test state in
+                    // WPILog with this subsystem's name ("shooter")
+                    this
+                )
+            );
+        m_sysIdRoutineShooterLeft = 
+            new SysIdRoutine(
+                // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+                new SysIdRoutine.Config(),
+                new SysIdRoutine.Mechanism(
+                    // Tell SysId how to plumb the driving voltage to the motor(s).
+                    (Measure<Voltage> volts) -> {
+                    shooterMotorL.setVoltage(volts.in(Volts));
+                    },
+                    // Tell SysId how to record a frame of data for each motor on the mechanism being
+                    // characterized.
+                    log -> {
+                        // Record a frame for the shooter motor.
+                        log.motor("shooter-wheel-left")
+                            .voltage(
+                                m_appliedVoltage.mut_replace(
+                                shooterMotorL.getAppliedOutput() * shooterMotorL.getBusVoltage(), Volts))
+                            .angularPosition(m_angle.mut_replace(shooterMotorLEncoder.getPosition(), Rotations))
+                            .angularVelocity(
+                                m_velocity.mut_replace(shooterMotorLEncoder.getVelocity(), RotationsPerSecond));
+                    },
+                    // Tell SysId to make generated commands require this subsystem, suffix test state in
+                    // WPILog with this subsystem's name ("shooter")
+                    this
+                )
+            );
+        m_sysIdRoutineShooterRight = 
+            new SysIdRoutine(
+                // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+                new SysIdRoutine.Config(),
+                new SysIdRoutine.Mechanism(
+                    // Tell SysId how to plumb the driving voltage to the motor(s).
+                    (Measure<Voltage> volts) -> {
+                    shooterMotorR.setVoltage(volts.in(Volts));
+                    },
+                    // Tell SysId how to record a frame of data for each motor on the mechanism being
+                    // characterized.
+                    log -> {
+                        // Record a frame for the shooter motor.
+                        log.motor("shooter-wheel-right")
+                            .voltage(
+                                m_appliedVoltage.mut_replace(
+                                shooterMotorR.getAppliedOutput() * shooterMotorR.getBusVoltage(), Volts))
+                            .angularPosition(m_angle.mut_replace(shooterMotorREncoder.getPosition(), Rotations))
+                            .angularVelocity(
+                                m_velocity.mut_replace(shooterMotorREncoder.getVelocity(), RotationsPerSecond));
+                    },
+                    // Tell SysId to make generated commands require this subsystem, suffix test state in
+                    // WPILog with this subsystem's name ("shooter")
+                    this
+                )
+            );
     }
     
     @Override
@@ -229,19 +279,25 @@ public class Shooter extends SubsystemBase {
     }
 
 
-
+    public Command sysIdQuasistaticTilter(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutineTilter.quasistatic(direction);
+    }
+    public Command sysIdDynamicTiler(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutineTilter.dynamic(direction);
+    }
 
     
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return m_sysIdRoutineShooterLeader.quasistatic(direction);
+    public Command sysIdQuasistaticLeft(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutineShooterLeft.quasistatic(direction);
     }
-      /**
-       * Returns a command that will execute a dynamic test in the given direction.
-       *
-       * @param direction The direction (forward or reverse) to run the test in
-       */
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return m_sysIdRoutineShooterLeader.dynamic(direction);
+    public Command sysIdDynamicLeft(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutineShooterLeft.dynamic(direction);
+    }
+    public Command sysIdQuasistaticRight(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutineShooterRight.quasistatic(direction);
+    }
+    public Command sysIdDynamicRight(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutineShooterRight.dynamic(direction);
     }
     public Command IdleShooter(){
         return Commands.run(()->setShooterSpeed(0.264),this).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);

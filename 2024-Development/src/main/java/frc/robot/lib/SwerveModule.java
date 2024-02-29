@@ -1,7 +1,12 @@
 package frc.robot.lib;
 
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.MutableMeasure.mutable;
+
 //pheonix
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 //rev
 import com.revrobotics.CANSparkMax;
@@ -16,18 +21,25 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.lib.Constants.ModuleConstants;
 import frc.robot.lib.Constants.SwerveSubsystemConstants;
 
 public class SwerveModule extends SubsystemBase {
     
-    private final CANSparkMax MOTOR_TURN;
-    private final CANSparkMax MOTOR_DRIVE;
+    public final CANSparkMax MOTOR_TURN;
+    public final CANSparkMax MOTOR_DRIVE;
 
-    private final RelativeEncoder ENCODER_TURN;
-    private final RelativeEncoder ENCODER_DRIVE;
+    public final RelativeEncoder ENCODER_TURN;
+    public final RelativeEncoder ENCODER_DRIVE;
 
     private final SparkPIDController PID_VELOCITY;
 
@@ -39,6 +51,12 @@ public class SwerveModule extends SubsystemBase {
     private final String MODULE_NAME;
 
     private final SimpleMotorFeedforward FEEDFORWARD_VELOCITY;
+
+    private final MutableMeasure<Voltage> m_SysID_Voltage = mutable(Volts.of(0));
+    private final MutableMeasure<Angle> m_SysID_Position = mutable(Rotations.of(0));
+    private final MutableMeasure<Velocity<Angle>> m_SysID_Velocity = mutable(RotationsPerSecond.of(0));
+
+    private final SysIdRoutine m_SysIdRoutine;
 
     /**
     *@param int ID_MOTOR_DRIVE,
@@ -60,14 +78,14 @@ public class SwerveModule extends SubsystemBase {
         double OFFSET_ENCODER_ABSOLUTE
     ) {
         //init the drive motor and encoder
-        this.MOTOR_DRIVE =new CANSparkMax(ID_MOTOR_DRIVE, MotorType.kBrushless);
+        MOTOR_DRIVE =new CANSparkMax(ID_MOTOR_DRIVE, MotorType.kBrushless);
         //reset to defaults
-        this.MOTOR_DRIVE.restoreFactoryDefaults();
+        MOTOR_DRIVE.restoreFactoryDefaults();
         //init
         MOTOR_DRIVE.setSmartCurrentLimit(60);
         MOTOR_DRIVE.setInverted(REVERSE_MOTOR_DRIVE);
         MOTOR_DRIVE.setClosedLoopRampRate(0.0001);
-        this.ENCODER_DRIVE = MOTOR_DRIVE.getEncoder();
+        ENCODER_DRIVE = MOTOR_DRIVE.getEncoder();
         ENCODER_DRIVE.setPositionConversionFactor(ModuleConstants.MODULE_DRIVE_ROTATIONS_TO_METERS);
         ENCODER_DRIVE.setVelocityConversionFactor(ModuleConstants.MODULE_DRIVE_RPM_TO_MPS);
         PID_VELOCITY = MOTOR_DRIVE.getPIDController();
@@ -81,9 +99,9 @@ public class SwerveModule extends SubsystemBase {
             PID_Config.SwereModule.ModuleVelocity.FeedForward.driveKA
         );
         //init the turning motor and encoder
-        this.MOTOR_TURN = new CANSparkMax(ID_MOTOR_TURN, MotorType.kBrushless);
+        MOTOR_TURN = new CANSparkMax(ID_MOTOR_TURN, MotorType.kBrushless);
         //reset to defaults
-        this.MOTOR_TURN.restoreFactoryDefaults();
+        MOTOR_TURN.restoreFactoryDefaults();
         //init
         MOTOR_TURN.setSmartCurrentLimit(60);
         MOTOR_TURN.setInverted(REVERSE_MOTOR_TURN);
@@ -91,10 +109,10 @@ public class SwerveModule extends SubsystemBase {
         ENCODER_TURN.setPositionConversionFactor(ModuleConstants.MODULE_TURN_ROTATIONS_TO_RADIANS);
         ENCODER_TURN.setVelocityConversionFactor(ModuleConstants.TurningEncoderRPM2RadPerSec);
         //init absolute encoder
-        this.ENCODER_ABSOLUTE = new CANCoder(ID_ENCODER_ABSOLUTE);
+        ENCODER_ABSOLUTE = new CANCoder(ID_ENCODER_ABSOLUTE);
         ENCODER_ABSOLUTE.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         ENCODER_ABSOLUTE.configMagnetOffset(OFFSET_ENCODER_ABSOLUTE);
-        this.OFFSET_ABSOLUTEENCODER = OFFSET_ENCODER_ABSOLUTE;
+        OFFSET_ABSOLUTEENCODER = OFFSET_ENCODER_ABSOLUTE;
         //init PID for turning
 
         this.PID_TURNING = new PIDController(PID_Config.SwereModule.ModuleTurning.Proportional,PID_Config.SwereModule.ModuleTurning.Integral,PID_Config.SwereModule.ModuleTurning.Derivitive);
@@ -107,6 +125,22 @@ public class SwerveModule extends SubsystemBase {
         //MOTOR_TURN.burnFlash();
         //MOTOR_DRIVE.burnFlash();
 
+        m_SysIdRoutine = 
+            new SysIdRoutine(
+                new SysIdRoutine.Config(),
+                new SysIdRoutine.Mechanism(
+                    (Measure<Voltage> volts) -> {
+                        MOTOR_TURN.set(volts.in(Volts));
+                    },
+                    log -> {log
+                        .motor("Module - Turning")
+                        .voltage(m_SysID_Voltage.mut_replace(MOTOR_TURN.getAppliedOutput() * MOTOR_TURN.getBusVoltage(),Volts))
+                        .angularPosition(m_SysID_Position.mut_replace(ENCODER_TURN.getPosition(),Rotations))
+                        .angularVelocity(m_SysID_Velocity.mut_replace(ENCODER_TURN.getVelocity(),RotationsPerSecond));
+                    },
+                    this
+                )
+            );
 
     }
     public void moduleData2Dashboard(){
@@ -210,4 +244,10 @@ public class SwerveModule extends SubsystemBase {
     }
 
 
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return m_SysIdRoutine.quasistatic(direction);
+    }
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return m_SysIdRoutine.dynamic(direction);
+    }
 }

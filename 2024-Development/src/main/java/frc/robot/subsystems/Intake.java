@@ -7,15 +7,24 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.PID_Config.IntakeSubsystem.*;
 
-
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.MutableMeasure.mutable;
 
 /*
  * TODO: Intake
@@ -45,6 +54,11 @@ public class Intake extends SubsystemBase {
 
     private double intakePivotController_Reference;
 
+    private SysIdRoutine m_SysIdRoutine;
+    private final MutableMeasure<Voltage> m_SysID_Voltage = mutable(Volts.of(0));
+    private final MutableMeasure<Angle> m_SysID_Position = mutable(Degrees.of(0));
+    private final MutableMeasure<Velocity<Angle>> m_SysID_Velocity = mutable(DegreesPerSecond.of(0));
+
     public Intake(){
         rollerMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_ROLLER, MotorType.kBrushless);
 
@@ -69,6 +83,25 @@ public class Intake extends SubsystemBase {
         intakePivotController.setOutputRange(-0.8,0.8);
 
         SmartDashboard.putBoolean("Intake is stuck!", limitSwitchActuate());
+
+
+        m_SysIdRoutine = 
+            new SysIdRoutine(
+                new SysIdRoutine.Config(),
+                new SysIdRoutine.Mechanism(
+                    (Measure<Voltage> volts) -> {
+                        intakePivotMotor.set(volts.in(Volts));
+                    },
+                    log -> {log
+                        .motor("Intake Pivot")
+                        .voltage(m_SysID_Voltage.mut_replace(intakePivotMotor.getAppliedOutput() * intakePivotMotor.getBusVoltage(),Volts))
+                        .angularPosition(m_SysID_Position.mut_replace(intakePivotEncoder.getPosition(),Degrees))
+                        .angularVelocity(m_SysID_Velocity.mut_replace(intakePivotEncoder.getVelocity(),DegreesPerSecond));
+                    },
+                    this
+                )
+            );
+
 
     }
 
@@ -110,5 +143,12 @@ public class Intake extends SubsystemBase {
     }
     public Command zeroIntakeCommand() {
         return Commands.runOnce(() -> zeroIntake(0));
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return m_SysIdRoutine.quasistatic(direction);
+    }
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return m_SysIdRoutine.dynamic(direction);
     }
 }
