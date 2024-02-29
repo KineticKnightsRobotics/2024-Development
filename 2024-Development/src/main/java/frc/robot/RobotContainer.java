@@ -106,19 +106,18 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
   Trigger SYSID_18 = new Trigger(JOYSTICK_SYSID.button(18));
   Trigger SYSID_19 = new Trigger(JOYSTICK_SYSID.button(19));
   Trigger SYSID_20 = new Trigger(JOYSTICK_SYSID.button(20));
-<<<<<<< Updated upstream
+  Trigger SYSID_21 = new Trigger(JOYSTICK_SYSID.button(21));
+  Trigger SYSID_22 = new Trigger(JOYSTICK_SYSID.button(22));
+  Trigger SYSID_23 = new Trigger(JOYSTICK_SYSID.button(23));
+  Trigger SYSID_24 = new Trigger(JOYSTICK_SYSID.button(24));
+
   Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
   //Trigger NoteInFeederTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getLineBreak());
   Trigger NoteInFeederTrigger = new Trigger(SUBSYSTEM_SHOOTER::getLineBreak);
 
   Trigger rightTrigger = new Trigger(()-> JOYSTICK_DRIVER.getRawAxis(3)>=0.3);
 
-=======
-  Trigger SYSID_21 = new Trigger(JOYSTICK_SYSID.button(21));
-  Trigger SYSID_22 = new Trigger(JOYSTICK_SYSID.button(22));
-  Trigger SYSID_23 = new Trigger(JOYSTICK_SYSID.button(23));
-  Trigger SYSID_24 = new Trigger(JOYSTICK_SYSID.button(24));
->>>>>>> Stashed changes
+
 
   
 

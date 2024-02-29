@@ -56,15 +56,15 @@ public class joystickDrive extends Command {
         boolean fieldRelative = SUPPLIER_Field_Oriented.getAsBoolean();
         double timePeriod = SUPPLIER_Period.getAsDouble();
 
-        //ChassisSpeeds chassisSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, subsystem.getRotation2d());
+        ChassisSpeeds chassisSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, subsystem.getRotation2d());
       
-        ChassisSpeeds chassisSpeed = ChassisSpeeds.discretize(
+        /*ChassisSpeeds chassisSpeed = ChassisSpeeds.discretize(
             fieldRelative 
                 ? 
                     ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, subsystem.getRotation2d())
                 : 
                     new ChassisSpeeds(xSpeed, ySpeed, rotSpeed),
-            timePeriod);
+            timePeriod);*/
      
         
         subsystem.setChassisSpeed(chassisSpeed,true);

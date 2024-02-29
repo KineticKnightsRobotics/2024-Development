@@ -1,4 +1,3 @@
-@ -1,456 +1,393 @@
 package frc.robot.subsystems;
 
 //kauai
@@ -107,15 +106,12 @@ public class SwerveDrive extends SubsystemBase {
     public final Timer idle_Timer_Zero = new Timer();
     public final Timer idle_Timer_Lock = new Timer();
 
-<<<<<<< Updated upstream
     public AprilTagFieldLayout kTagLayout;
-=======
     public SysIdRoutine m_SysIdRoutine;
 
     private MutableMeasure<Voltage> m_SysID_Voltage = mutable(Volts.of(0));
     private MutableMeasure<Distance> m_SysID_Position = mutable(Meters.of(0));
     private MutableMeasure<Velocity<Distance>> m_SysID_Velocity = mutable(MetersPerSecond.of(0));
->>>>>>> Stashed changes
 
 
     //private final SwerveDriveOdometry ODEMETER = new SwerveDriveOdometry(KinematicsConstants.KINEMATICS_DRIVE_CHASSIS, getRotation2d(), getModulePositions());
@@ -396,7 +392,6 @@ public class SwerveDrive extends SubsystemBase {
         }
         */
     }
-<<<<<<< Updated upstream
 
     /*
     public Command followPath(String pathName,Boolean isChoreo) {
@@ -427,6 +422,7 @@ public class SwerveDrive extends SubsystemBase {
             ),
             new InstantCommand( () -> setChassisSpeed(new ChassisSpeeds(0,0,0),true))
         );
+    */
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
         return m_SysIdRoutine.quasistatic(direction);
     }
@@ -439,7 +435,6 @@ public class SwerveDrive extends SubsystemBase {
     public Command sysIdDynamicModuleTurning(SysIdRoutine.Direction direction) {
         return MODULE_FRONT_LEFT.sysIdDynamic(direction);
     }
-    */
 
     private Optional<Pose3d> getSpeakerPose() {
         var alliance = DriverStation.getAlliance();
@@ -463,6 +458,4 @@ public class SwerveDrive extends SubsystemBase {
             .unaryMinus()
             .getAngle();
       }
-=======
->>>>>>> Stashed changes
 }

@@ -222,15 +222,17 @@ public class Shooter extends SubsystemBase {
     
     @Override
     public void periodic() {
+
+
         SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
-        SmartDashboard.putNumber("Shooter RPM Top", getShooterLRPM());
-        SmartDashboard.putNumber("Shooter RPM Bottom", getShooterFRPM());
-        SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
-        SmartDashboard.putNumber("Tiler Position", getTilterPosition());
-        SmartDashboard.putNumber("ShooterCurrentF",shooterMotorR.getOutputCurrent());
-        SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
-        SmartDashboard.putNumber("Tilter Setpoint", tiltPosition);
-        SmartDashboard.putBoolean("Shooter Linebreak", getLineBreak());
+       // SmartDashboard.putNumber("Shooter RPM Top", getShooterLRPM());
+     //  SmartDashboard.putNumber("Shooter RPM Bottom", getShooterFRPM());
+   //     SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
+       // SmartDashboard.putNumber("Tiler Position", getTilterPosition());
+        //SmartDashboard.putNumber("ShooterCurrentF",shooterMotorR.getOutputCurrent());
+        //SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
+        //SmartDashboard.putNumber("Tilter Setpoint", tiltPosition);
+        //SmartDashboard.putBoolean("Shooter Linebreak", getLineBreak());
 
         //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
         //SmartDashboard.putString("Shooter Block State", shooterBlock.get().toString());
