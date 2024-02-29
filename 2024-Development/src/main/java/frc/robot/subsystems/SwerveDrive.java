@@ -1,3 +1,4 @@
+@ -1,456 +1,393 @@
 package frc.robot.subsystems;
 
 //kauai
@@ -426,6 +427,17 @@ public class SwerveDrive extends SubsystemBase {
             ),
             new InstantCommand( () -> setChassisSpeed(new ChassisSpeeds(0,0,0),true))
         );
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return m_SysIdRoutine.quasistatic(direction);
+    }
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return m_SysIdRoutine.dynamic(direction);
+    }
+    public Command sysIdQuasistaticModuleTurning(SysIdRoutine.Direction direction) {
+        return MODULE_FRONT_LEFT.sysIdQuasistatic(direction);
+    }
+    public Command sysIdDynamicModuleTurning(SysIdRoutine.Direction direction) {
+        return MODULE_FRONT_LEFT.sysIdDynamic(direction);
     }
     */
 
