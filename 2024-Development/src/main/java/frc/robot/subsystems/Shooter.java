@@ -138,6 +138,7 @@ public class Shooter extends SubsystemBase {
         shooterMotorLEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_ROTATIONS_TO_METERS);
         shooterMotorLEncoder.setVelocityConversionFactor(ShooterSubsystemConstants.SHOOTER_RPM_TO_MPS);
 
+        SmartDashboard.putNumber("Set Shooter Position", tiltPosition);
 
         // Create a new SysId routine for characterizing the shooter.
         m_sysIdRoutineTilter =
@@ -222,20 +223,20 @@ public class Shooter extends SubsystemBase {
     
     @Override
     public void periodic() {
-
-
         SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
-       // SmartDashboard.putNumber("Shooter RPM Top", getShooterLRPM());
-     //  SmartDashboard.putNumber("Shooter RPM Bottom", getShooterFRPM());
-   //     SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
-       // SmartDashboard.putNumber("Tiler Position", getTilterPosition());
+        //SmartDashboard.putNumber("Shooter RPM Top", getShooterLRPM());
+        //SmartDashboard.putNumber("Shooter RPM Bottom", getShooterFRPM());
+        //SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
+        //SmartDashboard.putNumber("Tiler Position", getTilterPosition());
         //SmartDashboard.putNumber("ShooterCurrentF",shooterMotorR.getOutputCurrent());
         //SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
         //SmartDashboard.putNumber("Tilter Setpoint", tiltPosition);
         //SmartDashboard.putBoolean("Shooter Linebreak", getLineBreak());
-
         //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
         //SmartDashboard.putString("Shooter Block State", shooterBlock.get().toString());
+        if (SmartDashboard.getNumber("Manual Shooter Angle",0.0) != tiltPosition) {
+            tiltPosition = SmartDashboard.getNumber("Manual Shooter Angle", 0.0);
+        }
     }
 
     public double getShooterLRPM() { 
@@ -276,6 +277,11 @@ public class Shooter extends SubsystemBase {
     public Command setTilter(double angle) {
         return Commands.runOnce(() -> setTilterPosition(angle), this);
     }
+    public Command setTiltertoManual() {
+        return Commands.runOnce(() -> setTilter(tiltPosition), this);
+    }
+
+
     public Command zeroTilter(double angle) {
         return Commands.runOnce(() -> zeroTilterPosition(angle), this);
     }
