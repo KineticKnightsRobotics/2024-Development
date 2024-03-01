@@ -134,8 +134,8 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
   Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 0.0);
   Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
   Trigger NoteInFeederTrigger = new Trigger(SUBSYSTEM_SHOOTER::getLineBreak);
-
-
+Trigger DriveCurrentLimitTrigger = new Trigger(()->SUBSYSTEM_SWERVEDRIVE.getCurrentDrive()>150);
+Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer() >=0.55);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -248,7 +248,9 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
 
     NoteInConveyerTrigger.and(ShooterAtHomeTrigger.negate()).whileTrue(SUBSYSTEM_SHOOTER.setTilter(0.0));
     NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(new loadShooter(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER));
+//
 
+    NoteInFeederTrigger.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
     DRIVER_R1.whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position),
@@ -260,15 +262,17 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
     DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
 
 
-    DRIVER_R2.and(NoteInFeederTrigger).whileTrue(
+  /*   DRIVER_R2.and(NoteInFeederTrigger).whileTrue(
       new SequentialCommandGroup(
         new autoSetShooterIdle(SUBSYSTEM_SHOOTER)//,
         //new autoAimSpeaker(SUBSYSTEM_SHOOTER)
       )
-    );
+    );*/
+    DRIVER_R2.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
     DRIVER_R1.whileTrue(
       new autoRunShooter(SUBSYSTEM_SHOOTER, ShooterRPM)
     );
+
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
 

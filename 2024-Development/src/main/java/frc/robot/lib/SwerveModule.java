@@ -250,4 +250,8 @@ public class SwerveModule extends SubsystemBase {
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_SysIdRoutine.dynamic(direction);
     }
+
+    public double getModuleCurrent(){
+        return MOTOR_DRIVE.getOutputCurrent() + MOTOR_TURN.getOutputCurrent();
+    }
 }

@@ -469,4 +469,12 @@ public class SwerveDrive extends SubsystemBase {
             .unaryMinus()
             .getAngle();
       }
+
+      public double getCurrentDrive(){
+        return MODULE_FRONT_LEFT.getModuleCurrent()+MODULE_FRONT_RIGHT.getModuleCurrent()+MODULE_BACK_LEFT.getModuleCurrent()+MODULE_BACK_RIGHT.getModuleCurrent();
+      }
+
+      public double getLockTimer(){
+        return idle_Timer_Lock.get();
+      }
 }
