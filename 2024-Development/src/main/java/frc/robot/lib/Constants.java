@@ -129,7 +129,9 @@ public final class Constants {
     public static int ID_MOTOR_TILTER = 54;
     public static int ID_MOTOR_SHOOTER_LEFT = 52;
     public static int ID_MOTOR_SHOOTER_RIGHT = 53;
-    public static int ID_MOTOR_FEEDER = 51;
+    public static int ID_MOTOR_FEEDER_LEADER = 51;
+    public static int ID_MOTOR_FEEDER_FOLLOW = 55;
+
 
     public static int ID_SHOOTER_BEAMBREAK;
     

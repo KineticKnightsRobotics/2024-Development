@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -47,6 +48,8 @@ import frc.robot.lib.PID_Config.TrajectoryDriving;
 import frc.robot.lib.PID_Config.TrajectoryTurning;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import java.util.Optional;
+
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 
@@ -448,9 +451,18 @@ public class SwerveDrive extends SubsystemBase {
           }
         } else {
           speakerPose = kTagLayout.getTagPose(7);
-        }
-    
+        }    
         return speakerPose;
+      }
+
+    public Command pathfindTag(int tagNum) {
+        Optional<Pose3d> tagPos = kTagLayout.getTagPose(tagNum);
+        if (tagPos.isPresent()) {
+            Pose2d tagCoordinate = tagPos.get().toPose2d();
+            return pathFind(tagCoordinate);
+        }
+
+        return null;
       }
 
       public Rotation2d getRotationRelativeToSpeaker() {

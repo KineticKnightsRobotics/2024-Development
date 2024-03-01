@@ -52,6 +52,7 @@ public class Shooter extends SubsystemBase {
     private final SimpleMotorFeedforward SHOOTER_FEEDFORWARD_VELOCITY;
 
     private final CANSparkMax tiltMotor;
+    private final CANSparkMax tiltMotor_Follower;
     private final SparkPIDController tiltController;
     private final RelativeEncoder tiltEncoder;
 
@@ -84,6 +85,12 @@ public class Shooter extends SubsystemBase {
         tiltMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER, CANSparkLowLevel.MotorType.kBrushless);
         tiltMotor.setIdleMode(IdleMode.kBrake);
         tiltMotor.setSmartCurrentLimit(45);
+        tiltMotor_Follower = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER_FOLLOWER, CANSparkLowLevel.MotorType.kBrushless);
+        tiltMotor_Follower.setIdleMode(IdleMode.kBrake);
+        tiltMotor_Follower.setSmartCurrentLimit(45);
+        tiltMotor_Follower.follow(tiltMotor);
+
+
 
         tiltEncoder = tiltMotor.getEncoder();
         tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
@@ -118,7 +125,6 @@ public class Shooter extends SubsystemBase {
 
         //feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
         feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
-
         feedMotor.setSmartCurrentLimit(80);
 
 
@@ -223,7 +229,7 @@ public class Shooter extends SubsystemBase {
     
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
+        //SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
         //SmartDashboard.putNumber("Shooter RPM Top", getShooterLRPM());
         //SmartDashboard.putNumber("Shooter RPM Bottom", getShooterFRPM());
         //SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
