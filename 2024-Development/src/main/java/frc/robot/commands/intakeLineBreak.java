@@ -7,22 +7,16 @@ import frc.robot.subsystems.Intake;
 
 public class intakeLineBreak extends Command{
     Conveyer m_Conveyer;Intake m_Intake;
-
-
-
-
     public intakeLineBreak(Conveyer m_subsystem, Intake m_subsystem2) {
         addRequirements(m_subsystem);
         m_Conveyer = m_subsystem;
         m_Intake = m_subsystem2;
     }
-
     @Override
     public void initialize() {
         m_Conveyer.setConveyerSpeed(0.7);
         m_Intake.setRollerSpeed(0.8);
     }
-
     @Override
     public void end(boolean interrupted) {
         m_Conveyer.setConveyerSpeed(0.0);

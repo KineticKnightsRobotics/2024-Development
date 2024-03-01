@@ -461,7 +461,6 @@ public class SwerveDrive extends SubsystemBase {
             Pose2d tagCoordinate = tagPos.get().toPose2d();
             return pathFind(tagCoordinate);
         }
-
         return null;
       }
 

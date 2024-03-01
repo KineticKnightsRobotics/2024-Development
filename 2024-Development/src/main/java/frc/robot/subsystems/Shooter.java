@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
@@ -26,6 +27,7 @@ import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 //import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 import frc.robot.lib.Constants.ShooterSubsystemConstants;
 import frc.robot.lib.PID_Config;
+import frc.robot.lib.ShooterInterpolator;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import static edu.wpi.first.units.MutableMeasure.mutable;
@@ -74,6 +76,8 @@ public class Shooter extends SubsystemBase {
     private final RelativeEncoder shooterMotorLEncoder;
 
     private double tiltPosition = 0.0;
+
+    public final ShooterInterpolator shooterInterpolator = new ShooterInterpolator();
 
     public Shooter() {
         SHOOTER_FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(

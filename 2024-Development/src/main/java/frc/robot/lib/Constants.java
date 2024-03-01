@@ -119,44 +119,28 @@ public final class Constants {
   public static class ConveyerSubsystemConstants {
     public static int ID_MOTOR_CONVEYER_LEFT = 11;
     public static int ID_MOTOR_CONVEYER_RIGHT = 12;
-
-
     public static int ID_SENSOR_LINEBREAK = 1;
   }
 
   public static class ShooterSubsystemConstants {
 
     public static int ID_MOTOR_TILTER = 54;
+    public static int ID_MOTOR_TILTER_FOLLOWER = 55;
+
     public static int ID_MOTOR_SHOOTER_LEFT = 52;
     public static int ID_MOTOR_SHOOTER_RIGHT = 53;
-    public static int ID_MOTOR_FEEDER_LEADER = 51;
-    public static int ID_MOTOR_FEEDER_FOLLOW = 55;
-
+    public static int ID_MOTOR_FEEDER = 51;
 
     public static int ID_SHOOTER_BEAMBREAK;
-    
     public static double MOTOR_FEEDER_GEARRATIO = 1 / 3;
-
     public static double SHOOTER_GEAR_RATIO = 36/1; // 36 : 1
-
     public static double SHOOTER_TICKS_TO_DEGREES = 360 / SHOOTER_GEAR_RATIO;
-
     public static double SHOOTER_HEIGHT = 23.5;
-
     public static double SHOOTER_HOME_ANGLE = 60.0;
-        public static final double SHOOTER_WHEEL_DIAMETER = Units.inchesToMeters(4.0);
+    public static final double SHOOTER_WHEEL_DIAMETER = Units.inchesToMeters(4.0);
     public static final double SHOOTER_LAUNCH_GEAR_RATIO = 1.0 / 1.0; 
-
-        public static final double SHOOTER_ROTATIONS_TO_METERS = ((SHOOTER_WHEEL_DIAMETER * Math.PI) / SHOOTER_LAUNCH_GEAR_RATIO);
+    public static final double SHOOTER_ROTATIONS_TO_METERS = ((SHOOTER_WHEEL_DIAMETER * Math.PI) / SHOOTER_LAUNCH_GEAR_RATIO);
     public static final double SHOOTER_RPM_TO_MPS = SHOOTER_ROTATIONS_TO_METERS / 60.0;
-
-
-    public static class ShooterBlockPneumatics {
-      public static int CHANNEL_FORWARD = 1;
-      public static int CHANNEL_REVERSE = 2;
-    }
-
-    public static int ID_MOTOR_CONVEYER = 50;
     public static int ID_SENSOR_LINEBREAK = 0;
   }
 

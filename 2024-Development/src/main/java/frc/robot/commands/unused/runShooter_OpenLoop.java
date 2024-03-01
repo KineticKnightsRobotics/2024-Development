@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.unused;
 
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -7,34 +7,36 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 
-public class runShooter_ClosedLoop extends Command {
+public class runShooter_OpenLoop extends Command {
 
     Shooter subsystem;
     double speed;
 
-    public runShooter_ClosedLoop(double desiredRPM, Shooter _subsystem) {
+    public 
+    runShooter_OpenLoop(double _speed, Shooter _subsystem) {
         addRequirements(_subsystem);
         subsystem = _subsystem;
-        speed = desiredRPM;
+        speed = _speed;
     }
 
     @Override
     public void initialize() {
-        subsystem.setShooterRPM(speed);
+        subsystem.setShooterSpeed(0.8);
     }
     @Override
     public void execute() {
-        if (subsystem.getShooterFRPM() > speed && subsystem.getShooterLRPM() > speed && (Math.abs(subsystem.getShooterFRPM() - subsystem.getShooterLRPM()) <= 100 ) ) {
+        if (subsystem.getShooterFRPM() > speed && subsystem.getShooterLRPM() > speed){// && (Math.abs(subsystem.getShooterFRPM() - subsystem.getShooterLRPM()) <= 100 ) ) {
             subsystem.toggleShooterBlock(DoubleSolenoid.Value.kReverse);
             subsystem.setFeederSpeed(0.8);
         }
         else {
             subsystem.toggleShooterBlock(DoubleSolenoid.Value.kForward);
+            //asubsystem.setFeederSpeed(0.0);
         }
     }
     @Override
     public void end(boolean interrupted) {
-        subsystem.setShooterRPM(0.0);
+        subsystem.setShooterSpeed(0.0);
         subsystem.toggleShooterBlock(DoubleSolenoid.Value.kForward);
         subsystem.setFeederSpeed(0.0);
     }
