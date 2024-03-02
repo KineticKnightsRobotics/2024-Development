@@ -86,7 +86,7 @@ public final class Constants {
 
     // Turning encoder offsets
     public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE = Math.toRadians(-96.0 +  7.6+90);
-    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians( 40 + 2.78+90);
+    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians(-118.7986 + 180);
     public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE= Math.toRadians(-77.0 +  6+90);
     public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE = Math.toRadians( 62.0 + -3.6+90);
 
@@ -110,7 +110,7 @@ public final class Constants {
     public static double INTAKE_PIVOT_GEAR_RATIO = (1/50);
     public static double INTAKE_PIVOT_ROTATIONS_TO_DEGRESS = INTAKE_PIVOT_GEAR_RATIO * 2*Math.PI;
 
-    public static double Forward_IntakePivot_Position = -16.25;
+    public static double Forward_IntakePivot_Position = -18.0;
     
     public static double Reverse_IntakePivot_Position = 0.0;
 
@@ -119,19 +119,17 @@ public final class Constants {
   public static class ConveyerSubsystemConstants {
     public static int ID_MOTOR_CONVEYER_LEFT = 11;
     public static int ID_MOTOR_CONVEYER_RIGHT = 12;
-    public static int ID_SENSOR_LINEBREAK = 1;
+    public static int ID_SENSOR_LINEBREAK = 2;
   }
 
   public static class ShooterSubsystemConstants {
 
     public static int ID_MOTOR_TILTER = 54;
     public static int ID_MOTOR_TILTER_FOLLOWER = 55;
-
     public static int ID_MOTOR_SHOOTER_LEFT = 52;
     public static int ID_MOTOR_SHOOTER_RIGHT = 53;
     public static int ID_MOTOR_FEEDER = 51;
-
-    public static int ID_SHOOTER_BEAMBREAK;
+    public static int ID_SHOOTER_BEAMBREAK = 0;
     public static double MOTOR_FEEDER_GEARRATIO = 1 / 3;
     public static double SHOOTER_GEAR_RATIO = 36/1; // 36 : 1
     public static double SHOOTER_TICKS_TO_DEGREES = 360 / SHOOTER_GEAR_RATIO;
@@ -141,7 +139,6 @@ public final class Constants {
     public static final double SHOOTER_LAUNCH_GEAR_RATIO = 1.0 / 1.0; 
     public static final double SHOOTER_ROTATIONS_TO_METERS = ((SHOOTER_WHEEL_DIAMETER * Math.PI) / SHOOTER_LAUNCH_GEAR_RATIO);
     public static final double SHOOTER_RPM_TO_MPS = SHOOTER_ROTATIONS_TO_METERS / 60.0;
-    public static int ID_SENSOR_LINEBREAK = 0;
   }
 
   public static class ClimberSubsystemConstants {

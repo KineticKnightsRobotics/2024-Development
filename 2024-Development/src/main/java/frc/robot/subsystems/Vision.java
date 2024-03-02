@@ -6,6 +6,8 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.LimelightHelpers;
 import frc.robot.lib.Constants.VisionConstants.defaultSTD;
 
@@ -32,6 +34,12 @@ public class Vision {
         else {
             return defaultSTD.singleTagStD.times(1 + (Math.pow(avgDist, 2) / 30)); //Borrowed equation from 3161 :]
         }
+    }
+
+    //Timer.getFPGATimestamp() - (m_LimeLight.getRoboPoseLatency()/1000)
+
+    public double getTimestamp() {
+        return Timer.getFPGATimestamp() - LimelightHelpers.getLatency_Capture("limelight");
     }
 
 

@@ -9,7 +9,7 @@ public class ShooterInterpolator {
         {0,60.0}
     };
 
-    InterpolatingDoubleTreeMap m_InterpolatingDoubleTreeMap;
+    InterpolatingDoubleTreeMap m_InterpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
 
     public ShooterInterpolator() {
         for (int x = 0; x < data.length; x++) {

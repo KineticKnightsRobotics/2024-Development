@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 //import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
@@ -20,7 +21,7 @@ import frc.robot.lib.Constants.ConveyerSubsystemConstants;
 public class Conveyer extends SubsystemBase {
 
     //DigitalInput lineBreakSensor;
-    AnalogInput lineBreakSensor;
+    DigitalInput lineBreakSensor;
     CANSparkMax conveyerMotorLeft;
     CANSparkMax conveyerMotorRight;
 
@@ -49,37 +50,27 @@ public class Conveyer extends SubsystemBase {
 
         //lineBreakSensor = new DigitalInput(0);
 
-        lineBreakSensor = new AnalogInput(ConveyerSubsystemConstants.ID_SENSOR_LINEBREAK);
-
-        ledController = new Spark(0);
+        lineBreakSensor = new DigitalInput(2);//new AnalogInput(ConveyerSubsystemConstants.ID_SENSOR_LINEBREAK);
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Note in Conveyer", getLineBreak());
 
-        SmartDashboard.putNumber("Linebreak Voltage", lineBreakSensor.getVoltage());
-
-
-        SmartDashboard.putNumber("LED Controller", ledController.get());
+        //SmartDashboard.putNumber("LED Controller", ledController.get());
+        /*
         if (DriverStation.isDisabled()) {
             setLED(0.53);
-        }
+        }*/
+
         SmartDashboard.putNumber("convey_Left", conveyerMotorLeft.getOutputCurrent());
         SmartDashboard.putNumber("convey_Right", conveyerMotorRight.getOutputCurrent());
 
     }
 
     public boolean getLineBreak() {
-        //return ! lineBreakSensor.get();
-        if (lineBreakSensor.getVoltage() > 2.0) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return ! lineBreakSensor.get();
 
-        
     }
 
     public void setConveyerSpeed(double percentOutput) {
