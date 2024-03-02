@@ -21,8 +21,8 @@ public class Climber extends SubsystemBase {
         leftWinch.setSmartCurrentLimit(60);
         rightWinch.setSmartCurrentLimit(60);
 
-        leftWinch.setIdleMode(IdleMode.kCoast);
-        rightWinch.setIdleMode(IdleMode.kCoast);
+        leftWinch.setIdleMode(IdleMode.kBrake);
+        rightWinch.setIdleMode(IdleMode.kBrake);
 
         leftWinch.setInverted(false);
         rightWinch.setInverted(false);

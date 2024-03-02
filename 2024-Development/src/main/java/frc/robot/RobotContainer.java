@@ -51,7 +51,7 @@ public class RobotContainer {
   private final Intake SUBSYSTEM_INTAKE = new Intake();
   private final Conveyer SUBSYSTEM_CONVEYER = new Conveyer();
   private final Shooter SUBSYSTEM_SHOOTER = new Shooter();
-  //private final Climber SUBSYSTEM_CLIMBER = new Climber();
+  private final Climber SUBSYSTEM_CLIMBER = new Climber();
   private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive();
 
   private final AprilTagFieldLayout fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
@@ -134,8 +134,8 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
   Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 0.0);
   Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
   Trigger NoteInFeederTrigger = new Trigger(SUBSYSTEM_SHOOTER::getLineBreak);
-Trigger DriveCurrentLimitTrigger = new Trigger(()->SUBSYSTEM_SWERVEDRIVE.getCurrentDrive()>150);
-Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer() >=0.55);
+  Trigger DriveCurrentLimitTrigger = new Trigger(()->SUBSYSTEM_SWERVEDRIVE.getCurrentDrive()>150);
+  Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer() >=0.55);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -251,13 +251,14 @@ Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer()
 //
 
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
-    DRIVER_R1.whileTrue(
+    DRIVER_L1.whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position),
         new intakeLineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE),
         SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position)
       )
     );
+    DRIVER_L1.onFalse(SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position));
 
     DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
 
@@ -275,6 +276,12 @@ Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer()
 
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
+
+
+    OP_1.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(0.7));
+    OP_1.onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
+    OP_1.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.7));
+    OP_1.onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
 
     OP_11.onTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
     OP_12.onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0));
