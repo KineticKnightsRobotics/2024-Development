@@ -52,9 +52,9 @@ public class Conveyer extends SubsystemBase {
                 conveyerMotorLeft.set(0.4);
                 conveyerMotorRight.set(0.4);
             }
-        ,this).until(
-            () -> getLineBreak()
-        ).andThen(
+        ,this)
+        .until(() -> getLineBreak())
+        .andThen(
             () ->{
                 conveyerMotorLeft.set(0.0);
                 conveyerMotorRight.set(0.0);

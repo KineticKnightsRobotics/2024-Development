@@ -8,17 +8,13 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 //import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
-
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,16 +28,12 @@ import frc.robot.lib.ShooterInterpolator;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import static edu.wpi.first.units.MutableMeasure.mutable;
-import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
-
-
 public class Shooter extends SubsystemBase {
-
     // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
     private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
     // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
@@ -49,81 +41,60 @@ public class Shooter extends SubsystemBase {
     // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
     private final MutableMeasure<Velocity<Angle>> m_velocity = mutable(RotationsPerSecond.of(0));
     //
-    private final MutableMeasure<Angle> m_degrees = mutable(Degrees.of(0));
-    private final MutableMeasure<Velocity<Angle>> m_velocity_degrees = mutable(DegreesPerSecond.of(0));
-
+    //private final MutableMeasure<Angle> m_degrees = mutable(Degrees.of(0));
+    //private final MutableMeasure<Velocity<Angle>> m_velocity_degrees = mutable(DegreesPerSecond.of(0));
     private final SimpleMotorFeedforward SHOOTER_FEEDFORWARD_VELOCITY;
-
     private final CANSparkMax tiltMotor;
     private final CANSparkMax tiltMotor_Follower;
     private final SparkPIDController tiltController;
     private final RelativeEncoder tiltEncoder;
-
-   
     private final CANSparkMax shooterMotorL; //TOP roller
     private final CANSparkMax shooterMotorR; //BOTTOM roller
     private final SparkPIDController shooterController;
-
     private final CANSparkMax feedMotor;
     private final RelativeEncoder feedEncoder;
-
     private final DigitalInput lineBreak;
-
     private final SysIdRoutine m_sysIdRoutineTilter;
     private final SysIdRoutine m_sysIdRoutineShooterLeft;
     private final SysIdRoutine m_sysIdRoutineShooterRight;
-
     private final RelativeEncoder shooterMotorREncoder;
     private final RelativeEncoder shooterMotorLEncoder;
-
     private double tiltPosition = 0.0;
-
     public final ShooterInterpolator shooterInterpolator = new ShooterInterpolator();
-
     public Shooter() {
         SHOOTER_FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(
             0,
             PID_Config.ShooterSubsystem.ShooterVelocityPID.ShooterFeedForward.shooterKV,
             PID_Config.ShooterSubsystem.ShooterVelocityPID.ShooterFeedForward.shooterKA
         );
-
         tiltMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER, CANSparkLowLevel.MotorType.kBrushless);
         tiltMotor.setIdleMode(IdleMode.kBrake);
         tiltMotor.setSmartCurrentLimit(45);
         tiltMotor_Follower = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER_FOLLOWER, CANSparkLowLevel.MotorType.kBrushless);
         tiltMotor_Follower.setIdleMode(IdleMode.kBrake);
         tiltMotor_Follower.setSmartCurrentLimit(45);
-                tiltMotor.setInverted(true);
-
+        tiltMotor.setInverted(true);
         tiltMotor_Follower.setInverted(false);
         tiltMotor_Follower.follow(tiltMotor);
 
-
-
         tiltEncoder = tiltMotor.getEncoder();
         tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
-
         tiltEncoder.setPosition(0.0);
 
         tiltController = tiltMotor.getPIDController();
         tiltController.setP(TilterPIDConfig.Proportional);
         tiltController.setI(TilterPIDConfig.Integral);
         tiltController.setD(TilterPIDConfig.Derivitive);
-
         tiltController.setOutputRange(-0.5,0.5);
 
         shooterMotorL = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotorR = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
-
         shooterMotorL.setSmartCurrentLimit(80);
         shooterMotorR.setSmartCurrentLimit(80);
-
         shooterMotorL.setInverted(true);
         shooterMotorR.setInverted(false);
-
         shooterMotorL.setIdleMode(IdleMode.kCoast);
         shooterMotorR.setIdleMode(IdleMode.kCoast);
-
         shooterController = shooterMotorL.getPIDController();
 
 
@@ -238,8 +209,8 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         //SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
-        SmartDashboard.putNumber("Shooter RPM Top", getShooterLRPM());
-        SmartDashboard.putNumber("Shooter RPM Bottom", getShooterFRPM());
+        SmartDashboard.putNumber("Shooter RPM Top", shooterMotorR.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Shooter RPM Bottom", shooterMotorL.getEncoder().getVelocity());
         //SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
         SmartDashboard.putNumber("Tiler Position", getTilterPosition());
         //SmartDashboard.putNumber("ShooterCurrentF",shooterMotorR.getOutputCurrent());
@@ -252,22 +223,10 @@ public class Shooter extends SubsystemBase {
             tiltPosition = SmartDashboard.getNumber("Manual Shooter Angle", 0.0);
         }
     }
-
-    public double getShooterLRPM() { 
-        return shooterMotorR.getEncoder().getVelocity();
-    }
-    public double getShooterFRPM() {
-        return shooterMotorL.getEncoder().getVelocity();
-    }
-    public double getFeedPostition() {
-        return feedEncoder.getPosition();
-    }
     public boolean getLineBreak() {
         return !lineBreak.get();
     }
-    public void toggleShooterBlock(DoubleSolenoid.Value value) {
-         //shooterBlock.set(value);
-    }
+
     public void setShooterSpeed(double percentOutput) {
         shooterMotorL.set(percentOutput);
         shooterMotorR.set(percentOutput);
@@ -276,13 +235,6 @@ public class Shooter extends SubsystemBase {
         shooterController.setReference(desiredRPM, CANSparkBase.ControlType.kVelocity,0,SHOOTER_FEEDFORWARD_VELOCITY.calculate(desiredRPM));
     }
 
-
-
-    /*
-    public void setFeederSpeed(double percentOutput) {
-        feedMotor.set(percentOutput);
-    }
-    */
 
 
     public double getTilterPosition () {
@@ -302,15 +254,12 @@ public class Shooter extends SubsystemBase {
         return Commands.runOnce(() -> setTilter(tiltPosition), this);
     }
 
-
-    
     public Command zeroTilter(double angle) {
         return Commands.runOnce(() -> {tiltEncoder.setPosition(angle);});
     }
     public Command IdleShooter(){
         return Commands.run(()->setShooterSpeed(0.264),this).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
     }
-
 
 
 

@@ -11,8 +11,6 @@ import frc.robot.lib.Constants;
 import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.Constants.OIConstants;
 
-import java.sql.Driver;
-
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -132,7 +130,7 @@ boolean toggle =false;
   int ShooterRPM = 3800;
 
   //Trigger config
-  Trigger ShooterReady = new Trigger(()->(SUBSYSTEM_SHOOTER.getTilterPosition() == SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getPose().getTranslation().getDistance(fieldLayout.getTagPose(DriverStation.getAlliance().isEmpty() || DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 3).get().getTranslation().toTranslation2d()))&&SUBSYSTEM_SHOOTER.getLineBreak() == true&&SUBSYSTEM_SHOOTER.getShooterLRPM() >= ShooterRPM));
+  //Trigger ShooterReady = new Trigger(()->(SUBSYSTEM_SHOOTER.getTilterPosition() == SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getPose().getTranslation().getDistance(fieldLayout.getTagPose(DriverStation.getAlliance().isEmpty() || DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 3).get().getTranslation().toTranslation2d()))&&SUBSYSTEM_SHOOTER.getLineBreak() == true&&SUBSYSTEM_SHOOTER.getShooterLRPM() >= ShooterRPM));
 
  Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 4.0);
   Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
@@ -162,7 +160,7 @@ boolean toggle =false;
     NamedCommands.registerCommand("IntakeUp" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position));
     NamedCommands.registerCommand("AutoConveyer", new intakeLineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
     NamedCommands.registerCommand("AutoAimSpeaker", new autoAimSpeaker(SUBSYSTEM_SHOOTER));
-    NamedCommands.registerCommand("AutoRunShooter", new autoRunShooter(SUBSYSTEM_SHOOTER/*,SUBSYSTEM_CONVEYER*/,2500.0));
+    NamedCommands.registerCommand("AutoRunShooter", new autoRunShooter(SUBSYSTEM_SHOOTER/*,SUBSYSTEM_CONVEYER,2500.0));
     NamedCommands.registerCommand("AutoSetShooterIdle", new autoSetShooterIdle(SUBSYSTEM_SHOOTER));
     NamedCommands.registerCommand("AutoLoadShooter", new loadShooterAuto(SUBSYSTEM_CONVEYER,SUBSYSTEM_SHOOTER));
     NamedCommands.registerCommand("ShooterDown", SUBSYSTEM_SHOOTER.setTilter(0.0));
@@ -258,9 +256,9 @@ boolean toggle =false;
 
     //TELEOP CONTROLS _________________________________________________________________________________________________________________________________________________________________
 
-    NoteInConveyerTrigger.and(ShooterAtHomeTrigger.negate()).whileTrue(SUBSYSTEM_SHOOTER.setTilter(0.0));
-    NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(new loadShooter(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER));
-    toggleTrigger.whileTrue(new loadFeederToggle(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER));
+    //NoteInConveyerTrigger.and(ShooterAtHomeTrigger.negate()).whileTrue(SUBSYSTEM_SHOOTER.setTilter(0.0));
+    //NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(new loadShooter(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER));
+    //toggleTrigger.whileTrue(new loadFeederToggle(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER));
   
 
 
@@ -278,35 +276,23 @@ boolean toggle =false;
         SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position)
       )
     );
-
-
-    DRIVER_L1.whileTrue(
-      SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position)
-      .andThen
-              (Commands.runOnce(() ->SUBSYSTEM_INTAKE.setRollerSpeed(0.4))
-              .alongWith(Commands.run(()->SUBSYSTEM_CONVEYER.runConveyer(0.4), SUBSYSTEM_CONVEYER)))
-      .until(() -> SUBSYSTEM_CONVEYER.getLineBreak())
-      .andThen(
-              Commands.runOnce(() -> SUBSYSTEM_CONVEYER.runConveyer(0.0))
-              .alongWith(Commands.runOnce(() ->SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0))))
-    );
-
-
-    DRIVER_L1.whileTrue(
-      new SequentialCommandGroup(
-        Commands.runOnce(() -> SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position)),
-        Commands.run(() -> {SUBSYSTEM_INTAKE.setRollerSpeed(0.4); SUBSYSTEM_CONVEYER.setConveyerSpeed(0.4);})
-        .until(() -> SUBSYSTEM_CONVEYER.getLineBreak()),
-        Commands.runOnce(() -> {SUBSYSTEM_INTAKE.setRollerSpeed(0.0); SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0);})
-      )
-    );  
     */
-
     DRIVER_L1.whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.intakeDown(),
         SUBSYSTEM_CONVEYER.intakeGamePiece(),
         SUBSYSTEM_INTAKE.intakeUp()  
+      )
+    );
+    DRIVER_L1.onTrue(SUBSYSTEM_INTAKE.intakeUp());
+  
+    NoteInConveyerTrigger.and(ShooterAtHomeTrigger).onTrue(
+      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.4)
+      .alongWith(
+        SUBSYSTEM_SHOOTER.loadGamePiece()
+      ).until(() -> SUBSYSTEM_SHOOTER.getLineBreak())
+      .andThen(
+        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
       )
     );
 
