@@ -73,7 +73,7 @@ public class Conveyer extends SubsystemBase {
             conveyerMotorLeft.set(percentOutput);
             conveyerMotorRight.set(percentOutput);
             }
-        ).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+        ).withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
 

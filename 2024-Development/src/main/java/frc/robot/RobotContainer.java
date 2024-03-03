@@ -135,7 +135,7 @@ boolean toggle =false;
 
  Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 4.0);
   Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
-  Trigger NoteInFeederTrigger = new Trigger(SUBSYSTEM_SHOOTER::getLineBreak);
+  Trigger NoteInFeederTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getLineBreak());//SUBSYSTEM_SHOOTER::getLineBreak);
   Trigger DriveCurrentLimitTrigger = new Trigger(()->SUBSYSTEM_SWERVEDRIVE.getCurrentDrive()>150);
   Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer() >=0.55);
   Trigger toggleTrigger = new Trigger(()-> SUBSYSTEM_CONVEYER.getToggle());
@@ -278,17 +278,17 @@ boolean toggle =false;
       )
     );
     */
-    DRIVER_L1.whileTrue(
+    DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.intakeDown(),
         SUBSYSTEM_CONVEYER.intakeGamePiece(),
         SUBSYSTEM_INTAKE.intakeUp()  
-      )
+      ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     );
 
     //DRIVER_L1.onFalse(SUBSYSTEM_INTAKE.intakeUp());
   
-    DRIVER_L1.and(NoteInConveyerTrigger.negate()).onFalse(SUBSYSTEM_INTAKE.intakeUp());
+    DRIVER_L1.onFalse(SUBSYSTEM_INTAKE.intakeUp());
 
     /*
     NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(
@@ -304,13 +304,19 @@ boolean toggle =false;
     */
     
     NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(
-      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.4)
+      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.5)//.withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
       .andThen(
         SUBSYSTEM_SHOOTER.loadGamePiece()
       ).andThen(
         SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
       )
     );
+
+
+    NoteInFeederTrigger.whileTrue(
+      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
+    );
+
 
 
     DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));

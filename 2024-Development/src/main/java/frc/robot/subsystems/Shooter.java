@@ -267,19 +267,19 @@ public class Shooter extends SubsystemBase {
         return Commands
         .run(
             () -> {
-                feedMotor.set(0.5);
+                feedMotor.set(0.7);
             }
-        )
+        ,this)
         .until(() -> getLineBreak())
         .finallyDo(
             () -> {
                 feedMotor.set(0.0);
             }
-        );
-        //.withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+        )
+        .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
     public Command setFeederSpeed(double percentOutput) {
-        return Commands.runOnce(() -> {feedMotor.set(percentOutput);});
+        return Commands.runOnce(() -> {feedMotor.set(percentOutput);},this);
     }
 
 
