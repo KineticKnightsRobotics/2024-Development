@@ -161,13 +161,13 @@ public class Intake extends SubsystemBase {
 
     public Command intakeDown() {
         return Commands
-        .run(
+        .runOnce(
             () -> {
                 intakePivotController.setReference(IntakeSubsystemConstants.Forward_IntakePivot_Position, ControlType.kPosition);
                 intakePivotController_Reference = IntakeSubsystemConstants.Forward_IntakePivot_Position;
             }
         )
-        .until(() -> intakePivotEncoder.getPosition() == intakePivotController_Reference)
+        //.until(() -> intakePivotEncoder.getPosition() == intakePivotController_Reference)
         .andThen(
             () ->{
                 rollerMotor.set(0.8);

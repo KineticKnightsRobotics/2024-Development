@@ -1,4 +1,5 @@
-package frc.robot.commands.unused;
+
+/*package frc.robot.commands.unused;
 
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -33,8 +34,7 @@ public class setShooterSpeed extends Command {
         else {
             subsystem.toggleShooterBlock(DoubleSolenoid.Value.kForward);
             //asubsystem.setFeederSpeed(0.0);
-        }
-        */
+        )
     }
     @Override
     public void end(boolean interrupted) {
@@ -48,3 +48,4 @@ public class setShooterSpeed extends Command {
     }
     
 }
+*/

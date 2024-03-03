@@ -107,7 +107,7 @@ public class Shooter extends SubsystemBase {
         feedMotor.setSmartCurrentLimit(80);
 
 
-        feedMotor.setInverted(true);
+        feedMotor.setInverted(false);
         feedEncoder = feedMotor.getEncoder();
         feedEncoder.setPositionConversionFactor(ShooterSubsystemConstants.MOTOR_FEEDER_GEARRATIO);
         feedMotor.setIdleMode(IdleMode.kBrake);
@@ -271,11 +271,12 @@ public class Shooter extends SubsystemBase {
             }
         )
         .until(() -> getLineBreak())
-        .andThen(
+        .finallyDo(
             () -> {
                 feedMotor.set(0.0);
             }
-        ).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+        );
+        //.withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
     public Command setFeederSpeed(double percentOutput) {
         return Commands.runOnce(() -> {feedMotor.set(percentOutput);});

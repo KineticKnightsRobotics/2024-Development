@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 //wpi
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -31,6 +32,8 @@ public class Conveyer extends SubsystemBase {
         conveyerMotorRight = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
         conveyerMotorLeft.setIdleMode(IdleMode.kBrake);
         conveyerMotorRight.setIdleMode(IdleMode.kBrake);
+        conveyerMotorLeft.setInverted(true);
+        conveyerMotorRight.setInverted(false);
         conveyerMotorLeft.setSmartCurrentLimit(25);
         conveyerMotorRight.setSmartCurrentLimit(25);
         lineBreakSensor = new DigitalInput(2);//new AnalogInput(ConveyerSubsystemConstants.ID_SENSOR_LINEBREAK);
@@ -59,7 +62,8 @@ public class Conveyer extends SubsystemBase {
                 conveyerMotorLeft.set(0.0);
                 conveyerMotorRight.set(0.0);
             }
-        ,this);
+        ,this)
+        .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
     /**
      * Used to manually set the conveyer motor speeds.
@@ -69,7 +73,7 @@ public class Conveyer extends SubsystemBase {
             conveyerMotorLeft.set(percentOutput);
             conveyerMotorRight.set(percentOutput);
             }
-        );
+        ).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
 

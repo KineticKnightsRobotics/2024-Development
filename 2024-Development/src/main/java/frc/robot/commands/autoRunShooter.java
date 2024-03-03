@@ -1,3 +1,4 @@
+/*
 package frc.robot.commands;
 
 
@@ -12,8 +13,8 @@ public class autoRunShooter extends Command {
 
     double desiredRPM = 2500; // magic number :(
 
-    public autoRunShooter(Shooter _shooter, double _desiredRPM/*, Conveyer _conveyer*/) {
-        addRequirements(_shooter/*, _conveyer*/);
+    public autoRunShooter(Shooter _shooter, double _desiredRPM/*, Conveyer _conveyer) {
+        addRequirements(_shooter/*, _conveyer);
         m_Shooter = _shooter;
         desiredRPM = _desiredRPM;
         //m_Conveyer= _conveyer;
@@ -43,3 +44,4 @@ public class autoRunShooter extends Command {
        //return false;
     }
 }
+*/

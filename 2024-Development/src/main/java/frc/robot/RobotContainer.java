@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -284,9 +285,13 @@ boolean toggle =false;
         SUBSYSTEM_INTAKE.intakeUp()  
       )
     );
-    DRIVER_L1.onTrue(SUBSYSTEM_INTAKE.intakeUp());
+
+    //DRIVER_L1.onFalse(SUBSYSTEM_INTAKE.intakeUp());
   
-    NoteInConveyerTrigger.and(ShooterAtHomeTrigger).onTrue(
+    DRIVER_L1.and(NoteInConveyerTrigger.negate()).onFalse(SUBSYSTEM_INTAKE.intakeUp());
+
+    /*
+    NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(
       SUBSYSTEM_CONVEYER.setConveyerSpeed(0.4)
       .alongWith(
         SUBSYSTEM_SHOOTER.loadGamePiece()
@@ -294,10 +299,18 @@ boolean toggle =false;
       .andThen(
         SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
       )
+      .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
     );
-
-
-
+    */
+    
+    NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(
+      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.4)
+      .andThen(
+        SUBSYSTEM_SHOOTER.loadGamePiece()
+      ).andThen(
+        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
+      )
+    );
 
 
     DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
@@ -310,9 +323,9 @@ boolean toggle =false;
         //new autoAimSpeaker(SUBSYSTEM_SHOOTER)
       )
     );*/
-    DRIVER_R2.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
-    DRIVER_R1.whileTrue(
-      new autoRunShooter(SUBSYSTEM_SHOOTER, ShooterRPM));
+    //DRIVER_R2.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
+    //DRIVER_R1.whileTrue(
+    //  new autoRunShooter(SUBSYSTEM_SHOOTER, ShooterRPM));
 
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
