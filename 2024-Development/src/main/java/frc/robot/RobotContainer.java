@@ -221,63 +221,11 @@ boolean toggle =false;
       ),
       // Require the robot drive
       SUBSYSTEM_SWERVEDRIVE));
-
-    DRIVER_BACK.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
-    DRIVER_A.whileTrue(new runShooter_OpenLoop(3200, SUBSYSTEM_SHOOTER));
-    //DRIVER_A.whileTrue(new SHOOTER_runShooter_ClosedLoop(4300, SUBSYSTEM_SHOOTER));
-    DRIVER_X.onTrue(
-        new SequentialCommandGroup(
-          //new CONVEYERSHOOTER_loadFeeder(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER,SUBSYSTEM_INTAKE)
-          new runConveyerlLineBreak(SUBSYSTEM_CONVEYER)
-        
-        //new SHOOTER_moveFeederDistance(SUBSYSTEM_SHOOTER, -20),
-        //new SHOOTER_runShooter(0, SUBSYSTEM_SHOOTER)
-        )
-    );
-    DRIVER_Y.whileTrue(
-      new runFeeder(0.8, SUBSYSTEM_SHOOTER)
-    );
-    DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
-    //DRIVER_BACK.onTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
-    //OP_1.onTrue(new SHOOTER_moveFeederDistance(SUBSYSTEM_SHOOTER, -20));
-    OP_2.whileTrue(
-      new SequentialCommandGroup(
-        new loadFeeder(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER,SUBSYSTEM_INTAKE),
-        new moveFeederDistance(SUBSYSTEM_SHOOTER, -20),
-        new runShooter_OpenLoop(0, SUBSYSTEM_SHOOTER)
-        )
-    );
-    OP_1.whileTrue(new autoLoadShooter(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER));
-    OP_11.onTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
-    OP_12.onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0));
-    OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER));
-    OP_14.onTrue(SUBSYSTEM_SHOOTER.setTilter(30.0));
-    OP_16.onTrue(SUBSYSTEM_SHOOTER.setTilter(50.0));
     */
+
 
     //TELEOP CONTROLS _________________________________________________________________________________________________________________________________________________________________
 
-    //NoteInConveyerTrigger.and(ShooterAtHomeTrigger.negate()).whileTrue(SUBSYSTEM_SHOOTER.setTilter(0.0));
-    //NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(new loadShooter(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER));
-    //toggleTrigger.whileTrue(new loadFeederToggle(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER));
-  
-
-
-//NoteInConveyerTrigger.whileTrue( new autoRunShooter(SUBSYSTEM_SHOOTER, ShooterRPM));
-  //sensorTrigger.whileTrue(new autoRunShooter(SUBSYSTEM_SHOOTER, ShooterRPM));
- // sensorTrigger.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
-
-//ShooterAtHomeTrigger.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
-  //  NoteInFeederTrigger.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
-    /*
-    DRIVER_L1.whileTrue(
-      new SequentialCommandGroup(
-        SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position),
-        new intakeLineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE),
-        SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position)
-      )
-    );
-    */
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.intakeDown(),
@@ -285,33 +233,16 @@ boolean toggle =false;
         SUBSYSTEM_INTAKE.intakeUp()  
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     );
-
-    //DRIVER_L1.onFalse(SUBSYSTEM_INTAKE.intakeUp());
-  
     DRIVER_L1.onFalse(SUBSYSTEM_INTAKE.intakeUp());
 
-    /*
-    NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(
-      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.4)
-      .alongWith(
-        SUBSYSTEM_SHOOTER.loadGamePiece()
-      ).until(() -> SUBSYSTEM_SHOOTER.getLineBreak())
-      .andThen(
-        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
-      )
-      .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
-    );
-    */
-    
     NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(
       SUBSYSTEM_CONVEYER.setConveyerSpeed(0.5)//.withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
       .andThen(
         SUBSYSTEM_SHOOTER.loadGamePiece()
-      ).andThen(
-        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
-      )
+      )//.andThen(
+      //  SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0) TODO: Does this break the code?
+      //)
     );
-
 
     NoteInFeederTrigger.whileTrue(
       SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
@@ -319,20 +250,7 @@ boolean toggle =false;
 
 
 
-    DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
-
-  
-
-  /*   DRIVER_R2.and(NoteInFeederTrigger).whileTrue(
-      new SequentialCommandGroup(
-        new autoSetShooterIdle(SUBSYSTEM_SHOOTER)//,
-        //new autoAimSpeaker(SUBSYSTEM_SHOOTER)
-      )
-    );*/
-    //DRIVER_R2.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
-    //DRIVER_R1.whileTrue(
-    //  new autoRunShooter(SUBSYSTEM_SHOOTER, ShooterRPM));
-
+    //DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
 

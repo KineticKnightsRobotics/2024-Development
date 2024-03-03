@@ -226,42 +226,65 @@ public class Shooter extends SubsystemBase {
     public boolean getLineBreak() {
         return !lineBreak.get();
     }
-
-    public void setShooterSpeed(double percentOutput) {
-        shooterMotorL.set(percentOutput);
-        shooterMotorR.set(percentOutput);
-    }
-    public void setShooterRPM(double desiredRPM) {
-        shooterController.setReference(desiredRPM, CANSparkBase.ControlType.kVelocity,0,SHOOTER_FEEDFORWARD_VELOCITY.calculate(desiredRPM));
-    }
-
-
-
     public double getTilterPosition () {
         return tiltEncoder.getPosition();
     }
-    public void setTilterPosition(double position) {
-        tiltPosition = position;
-        tiltController.setReference(position, ControlType.kPosition);
-    }
-    public void zeroTilterPosition(double newPosition) {
-        
-    }
+
     public Command setTilter(double angle) {
-        return Commands.runOnce(() -> setTilterPosition(angle), this);
+        return Commands.runOnce(
+            () -> {
+                tiltController.setReference(angle, ControlType.kPosition);
+            }
+        );
     }
     public Command setTiltertoManual() {
-        return Commands.runOnce(() -> setTilter(tiltPosition), this);
+        return Commands.runOnce(
+            () -> {
+                tiltController.setReference(tiltPosition, ControlType.kPosition);
+            }
+        );
     }
 
     public Command zeroTilter(double angle) {
         return Commands.runOnce(() -> {tiltEncoder.setPosition(angle);});
     }
     public Command IdleShooter(){
-        return Commands.run(()->setShooterSpeed(0.264),this).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
+        return Commands
+        .run(
+            ()->{
+                shooterMotorL.set(0.264);
+                shooterMotorR.set(0.264);
+            }
+        )
+        .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
     }
 
+    public Command shoot(double desiredRPM, boolean openLoop) {
+        return Commands
+        .run(
+            () -> {
 
+                if (openLoop) {
+                    shooterMotorL.set(0.8);
+                    shooterMotorR.set(0.8);
+                }
+                else {
+                shooterController.setReference(desiredRPM, ControlType.kVelocity);
+                }
+                if (shooterMotorREncoder.getVelocity() >= desiredRPM && shooterMotorLEncoder.getVelocity() >= desiredRPM){
+                    feedMotor.set(0.8);
+                }
+            },
+        this)
+        .until(() -> ! getLineBreak())
+        .finallyDo(
+            () -> {
+                shooterMotorL.set(0.0);
+                shooterMotorR.set(0.0);
+                feedMotor.set(0.0);
+            }
+        );
+    }
 
     public Command loadGamePiece() {
         return Commands
@@ -281,10 +304,6 @@ public class Shooter extends SubsystemBase {
     public Command setFeederSpeed(double percentOutput) {
         return Commands.runOnce(() -> {feedMotor.set(percentOutput);},this);
     }
-
-
-
-
 
 
     public Command sysIdQuasistaticTilter(SysIdRoutine.Direction direction) {
