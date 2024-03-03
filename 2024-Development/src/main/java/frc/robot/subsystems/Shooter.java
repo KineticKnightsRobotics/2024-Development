@@ -92,6 +92,9 @@ public class Shooter extends SubsystemBase {
         tiltMotor_Follower = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER_FOLLOWER, CANSparkLowLevel.MotorType.kBrushless);
         tiltMotor_Follower.setIdleMode(IdleMode.kBrake);
         tiltMotor_Follower.setSmartCurrentLimit(45);
+                tiltMotor.setInverted(true);
+
+        tiltMotor_Follower.setInverted(false);
         tiltMotor_Follower.follow(tiltMotor);
 
 
@@ -142,11 +145,11 @@ public class Shooter extends SubsystemBase {
         shooterMotorREncoder = shooterMotorR.getEncoder();
         shooterMotorLEncoder = shooterMotorL.getEncoder();
 
-        shooterMotorREncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_ROTATIONS_TO_METERS);
-        shooterMotorREncoder.setVelocityConversionFactor(ShooterSubsystemConstants.SHOOTER_RPM_TO_MPS);
+        shooterMotorREncoder.setPositionConversionFactor(1);
+        shooterMotorREncoder.setVelocityConversionFactor(1);
 
-        shooterMotorLEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_ROTATIONS_TO_METERS);
-        shooterMotorLEncoder.setVelocityConversionFactor(ShooterSubsystemConstants.SHOOTER_RPM_TO_MPS);
+        shooterMotorLEncoder.setPositionConversionFactor(1);
+        shooterMotorLEncoder.setVelocityConversionFactor(1);
 
         SmartDashboard.putNumber("Set Shooter Position", tiltPosition);
 
@@ -234,14 +237,14 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         //SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
-        //SmartDashboard.putNumber("Shooter RPM Top", getShooterLRPM());
-        //SmartDashboard.putNumber("Shooter RPM Bottom", getShooterFRPM());
+        SmartDashboard.putNumber("Shooter RPM Top", getShooterLRPM());
+        SmartDashboard.putNumber("Shooter RPM Bottom", getShooterFRPM());
         //SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
-        //SmartDashboard.putNumber("Tiler Position", getTilterPosition());
+        SmartDashboard.putNumber("Tiler Position", getTilterPosition());
         //SmartDashboard.putNumber("ShooterCurrentF",shooterMotorR.getOutputCurrent());
         //SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
         //SmartDashboard.putNumber("Tilter Setpoint", tiltPosition);
-        //SmartDashboard.putBoolean("Shooter Linebreak", getLineBreak());
+        SmartDashboard.putBoolean("Shooter Linebreak", getLineBreak());
         //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
         //SmartDashboard.putString("Shooter Block State", shooterBlock.get().toString());
         if (SmartDashboard.getNumber("Manual Shooter Angle",0.0) != tiltPosition) {

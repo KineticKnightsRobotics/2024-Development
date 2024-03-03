@@ -21,19 +21,19 @@ public class autoRunShooter extends Command {
 
     @Override
     public void initialize() {
-        m_Shooter.setShooterSpeed(0.8);
+        m_Shooter.setShooterSpeed(1);
         m_Shooter.setFeederSpeed(0.0);
         //m_Conveyer.setConveyerSpeed(0.0);        
     }
     @Override
     public void execute() {
         if (m_Shooter.getShooterFRPM() > desiredRPM && m_Shooter.getShooterLRPM() > desiredRPM) {
-            m_Shooter.setFeederSpeed(0.8);
+            m_Shooter.setFeederSpeed(-0.8);
         }
     }
     @Override
     public void end(boolean interrupted) {
-        m_Shooter.setShooterRPM(0.0);
+        m_Shooter.setShooterSpeed(0.0);
         m_Shooter.setFeederSpeed(0.0);
         //m_Conveyer.setConveyerSpeed(0.0);   
     }

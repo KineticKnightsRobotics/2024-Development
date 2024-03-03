@@ -24,7 +24,7 @@ public class Conveyer extends SubsystemBase {
     DigitalInput lineBreakSensor;
     CANSparkMax conveyerMotorLeft;
     CANSparkMax conveyerMotorRight;
-
+boolean toggle =false;
     Spark ledController;
 
     //AnalogInput test;
@@ -88,5 +88,18 @@ public class Conveyer extends SubsystemBase {
 
     public Command setLED(double percentOutput) {
         return Commands.runOnce(() -> setBlinkinVoltage(percentOutput));
+    }
+
+    public Command runConveyerContinous(){
+        return Commands.run((() -> setConveyerSpeed(0.4)));
+    }
+
+    public boolean toggle(boolean myToggle){
+        toggle = myToggle;
+       return toggle;
+    }
+
+    public boolean getToggle(){
+        return toggle;
     }
 }

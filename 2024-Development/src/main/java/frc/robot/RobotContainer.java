@@ -121,21 +121,23 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
   Trigger SYSID_22 = new Trigger(JOYSTICK_SYSID.button(22));
   Trigger SYSID_23 = new Trigger(JOYSTICK_SYSID.button(23));
   Trigger SYSID_24 = new Trigger(JOYSTICK_SYSID.button(24));
-
+boolean toggle =false;
 
 
   //Translation2d tag = fieldLayout.getTagPose(DriverStation.getAlliance().isEmpty() || DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 3).get().getTranslation().toTranslation2d();
 
-  int ShooterRPM = 2500;
+  int ShooterRPM = 3800;
 
   //Trigger config
   Trigger ShooterReady = new Trigger(()->(SUBSYSTEM_SHOOTER.getTilterPosition() == SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getPose().getTranslation().getDistance(fieldLayout.getTagPose(DriverStation.getAlliance().isEmpty() || DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 3).get().getTranslation().toTranslation2d()))&&SUBSYSTEM_SHOOTER.getLineBreak() == true&&SUBSYSTEM_SHOOTER.getShooterLRPM() >= ShooterRPM));
 
-  Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 0.0);
+ Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 4.0);
   Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
   Trigger NoteInFeederTrigger = new Trigger(SUBSYSTEM_SHOOTER::getLineBreak);
   Trigger DriveCurrentLimitTrigger = new Trigger(()->SUBSYSTEM_SWERVEDRIVE.getCurrentDrive()>150);
   Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer() >=0.55);
+  Trigger toggleTrigger = new Trigger(()-> SUBSYSTEM_CONVEYER.getToggle());
+ // Trigger sensorTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -156,7 +158,7 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
     NamedCommands.registerCommand("AutoAimSpeaker", new autoAimSpeaker(SUBSYSTEM_SHOOTER));
     NamedCommands.registerCommand("AutoRunShooter", new autoRunShooter(SUBSYSTEM_SHOOTER/*,SUBSYSTEM_CONVEYER*/,2500.0));
     NamedCommands.registerCommand("AutoSetShooterIdle", new autoSetShooterIdle(SUBSYSTEM_SHOOTER));
-    NamedCommands.registerCommand("AutoLoadShooter", new loadShooter(SUBSYSTEM_CONVEYER,SUBSYSTEM_SHOOTER));
+    NamedCommands.registerCommand("AutoLoadShooter", new loadShooterAuto(SUBSYSTEM_CONVEYER,SUBSYSTEM_SHOOTER));
     NamedCommands.registerCommand("ShooterDown", SUBSYSTEM_SHOOTER.setTilter(0.0));
     NamedCommands.registerCommand("CapturePiece", new SequentialCommandGroup(SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position),new intakeLineBreak(SUBSYSTEM_CONVEYER, SUBSYSTEM_INTAKE),SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position)));
     //intake down, feed note to panel, set intake up)
@@ -248,9 +250,16 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
 
     NoteInConveyerTrigger.and(ShooterAtHomeTrigger.negate()).whileTrue(SUBSYSTEM_SHOOTER.setTilter(0.0));
     NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(new loadShooter(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER));
-//
+    toggleTrigger.whileTrue(new loadFeederToggle(SUBSYSTEM_CONVEYER, SUBSYSTEM_SHOOTER));
+  
 
-    NoteInFeederTrigger.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
+
+//NoteInConveyerTrigger.whileTrue( new autoRunShooter(SUBSYSTEM_SHOOTER, ShooterRPM));
+  //sensorTrigger.whileTrue(new autoRunShooter(SUBSYSTEM_SHOOTER, ShooterRPM));
+ // sensorTrigger.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
+
+//ShooterAtHomeTrigger.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
+  //  NoteInFeederTrigger.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
     DRIVER_L1.whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position),
@@ -258,10 +267,12 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
         SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position)
       )
     );
+  //  DRIVER_L1.onFalse(new loadShooter(SUBSYSTEM_CONVEYER,SUBSYSTEM_SHOOTER));
     DRIVER_L1.onFalse(SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position));
 
     DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
 
+  
 
   /*   DRIVER_R2.and(NoteInFeederTrigger).whileTrue(
       new SequentialCommandGroup(
@@ -271,26 +282,26 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
     );*/
     DRIVER_R2.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
     DRIVER_R1.whileTrue(
-      new autoRunShooter(SUBSYSTEM_SHOOTER, ShooterRPM)
-    );
+      new autoRunShooter(SUBSYSTEM_SHOOTER, ShooterRPM));
 
 
-    DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
+    DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
 
 
-    OP_1.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(0.7));
-    OP_1.onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
-    OP_1.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.7));
-    OP_1.onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
+    OP_1.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(0.7)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
+    //OP_1.onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
+    OP_2.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.7)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0));
+    //OP_2.onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
 
     OP_11.onTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
     OP_12.onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0));
 
-    OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER));
-    OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
-
-    //OP_14.onTrue(SUBSYSTEM_SHOOTER.setTilter(30.0));
-    //OP_16.onTrue(SUBSYSTEM_SHOOTER.setTilter(50.0));
+  //  OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER));
+    //OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
+    OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(20.0));
+    OP_14.onTrue(SUBSYSTEM_SHOOTER.setTilter(40.0));
+    OP_15.onTrue(SUBSYSTEM_SHOOTER.setTilter(60.0));
+    OP_16.onTrue(SUBSYSTEM_SHOOTER.setTilter(80.0));
 
     //SYS ID CONTROLS _________________________________________________________________________________________________________________________________________________________________
 
@@ -342,4 +353,8 @@ private final static CommandJoystick JOYSTICK_SYSID = new CommandJoystick(2);
  /*public static Trigger rightTrigger(){
   return new Trigger(()-> JOYSTICK_DRIVER.getRawAxis(3)>=0.3);
 }*/
+ public static double DRIVER_RT() {
+    return JOYSTICK_DRIVER.getRawAxis(2);
+  }
+
 }

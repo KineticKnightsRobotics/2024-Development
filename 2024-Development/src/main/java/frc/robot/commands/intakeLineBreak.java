@@ -19,12 +19,19 @@ public class intakeLineBreak extends Command{
     }
     @Override
     public void end(boolean interrupted) {
-        m_Conveyer.setConveyerSpeed(0.0);
+        //m_Conveyer.setConveyerSpeed(0.0);
         m_Intake.setRollerSpeed(0.0);
     }
     @Override
     public boolean isFinished() {
         return m_Conveyer.getLineBreak();
     }
+
+    @Override 
+    public void execute(){
+         m_Conveyer.setConveyerSpeed(0.7);
+        m_Intake.setRollerSpeed(0.8);
+    }
+    
 
 }

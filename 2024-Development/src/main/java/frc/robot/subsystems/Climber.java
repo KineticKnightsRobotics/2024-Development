@@ -27,15 +27,16 @@ public class Climber extends SubsystemBase {
         leftWinch.setInverted(false);
         rightWinch.setInverted(false);
 
-        rightWinch.follow(leftWinch);
+   //  leftWinch.follow(rightWinch);
 
     }
 
     public void setWinchOutput(double percentOutput) {
-        rightWinch.set(percentOutput);
+       leftWinch.set(percentOutput);
+       rightWinch.set(percentOutput);
     }
 
     public Command setWinchSpeed(double percentOutput) {
-        return Commands.runOnce(() -> setWinchOutput(percentOutput));
+        return Commands.run(() -> setWinchOutput(percentOutput));
     }
 }

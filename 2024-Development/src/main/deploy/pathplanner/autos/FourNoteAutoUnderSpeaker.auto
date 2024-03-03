@@ -14,12 +14,6 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoLoadShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "AutoRunShooter"
           }
         },
