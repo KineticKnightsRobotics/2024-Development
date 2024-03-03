@@ -105,10 +105,14 @@ public class Intake extends SubsystemBase {
 
     }
 
+
+
+    /*
     public void actuateIntake(double position) {
         //intakePivotController_Reference = position;
         intakePivotController.setReference(position, ControlType.kPosition);
     }
+    */
 
     public boolean limitSwitchActuate() {
         return (Math.abs(intakePivotEncoder.getPosition() - intakePivotController_Reference) > 0.1) && (Math.abs(intakePivotEncoder.getVelocity()) <= 0.01);
@@ -127,9 +131,11 @@ public class Intake extends SubsystemBase {
         intakePivotMotor.set(0.0);
     }
 
+    /*
     public Command setIntakePosition(double position) {
         return Commands.runOnce(() -> actuateIntake(position));
     }
+    */
 
     @Override
     public void periodic() {
@@ -151,4 +157,41 @@ public class Intake extends SubsystemBase {
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_SysIdRoutine.dynamic(direction);
     }
+
+
+    public Command intakeDown() {
+        return Commands
+        .run(
+            () -> {
+                intakePivotController.setReference(IntakeSubsystemConstants.Forward_IntakePivot_Position, ControlType.kPosition);
+                intakePivotController_Reference = IntakeSubsystemConstants.Forward_IntakePivot_Position;
+            }
+        )
+        .until(() -> intakePivotEncoder.getPosition() == intakePivotController_Reference)
+        .andThen(
+            () ->{
+                rollerMotor.set(0.8);
+            }
+        );
+    }
+    public Command intakeUp() {
+        return Commands
+        .runOnce(
+            () ->{
+                rollerMotor.set(0.0);
+            }
+        ).andThen(
+            ()-> {
+                intakePivotController.setReference(IntakeSubsystemConstants.Reverse_IntakePivot_Position, ControlType.kPosition);
+                intakePivotController_Reference = IntakeSubsystemConstants.Reverse_IntakePivot_Position;
+            }
+        )
+        .until(
+            () -> intakePivotEncoder.getPosition() == intakePivotController_Reference
+        )
+        ;
+    }
+
+
+
 }

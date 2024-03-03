@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.lib.PID_Config.ShooterSubsystem.ShooterVelocityPID;
 import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 //import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
@@ -274,9 +275,16 @@ public class Shooter extends SubsystemBase {
     public void setShooterRPM(double desiredRPM) {
         shooterController.setReference(desiredRPM, CANSparkBase.ControlType.kVelocity,0,SHOOTER_FEEDFORWARD_VELOCITY.calculate(desiredRPM));
     }
+
+
+
+    /*
     public void setFeederSpeed(double percentOutput) {
         feedMotor.set(percentOutput);
     }
+    */
+
+
     public double getTilterPosition () {
         return tiltEncoder.getPosition();
     }
@@ -285,7 +293,7 @@ public class Shooter extends SubsystemBase {
         tiltController.setReference(position, ControlType.kPosition);
     }
     public void zeroTilterPosition(double newPosition) {
-        tiltEncoder.setPosition(newPosition);
+        
     }
     public Command setTilter(double angle) {
         return Commands.runOnce(() -> setTilterPosition(angle), this);
@@ -295,9 +303,38 @@ public class Shooter extends SubsystemBase {
     }
 
 
+    
     public Command zeroTilter(double angle) {
-        return Commands.runOnce(() -> zeroTilterPosition(angle), this);
+        return Commands.runOnce(() -> {tiltEncoder.setPosition(angle);});
     }
+    public Command IdleShooter(){
+        return Commands.run(()->setShooterSpeed(0.264),this).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
+    }
+
+
+
+
+    public Command loadGamePiece() {
+        return Commands
+        .run(
+            () -> {
+                feedMotor.set(0.5);
+            }
+        )
+        .until(() -> getLineBreak())
+        .andThen(
+            () -> {
+                feedMotor.set(0.0);
+            }
+        ).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
+    public Command setFeederSpeed(double percentOutput) {
+        return Commands.runOnce(() -> {feedMotor.set(percentOutput);});
+    }
+
+
+
+
 
 
     public Command sysIdQuasistaticTilter(SysIdRoutine.Direction direction) {
@@ -306,8 +343,6 @@ public class Shooter extends SubsystemBase {
     public Command sysIdDynamicTiler(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineTilter.dynamic(direction);
     }
-
-    
     public Command sysIdQuasistaticLeft(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineShooterLeft.quasistatic(direction);
     }
@@ -319,9 +354,6 @@ public class Shooter extends SubsystemBase {
     }
     public Command sysIdDynamicRight(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineShooterRight.dynamic(direction);
-    }
-    public Command IdleShooter(){
-        return Commands.run(()->setShooterSpeed(0.264),this).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
     }
     
 }

@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 //import edu.wpi.first.wpilibj.DigitalInput;
@@ -19,72 +20,74 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.lib.Constants.ConveyerSubsystemConstants;
 
 public class Conveyer extends SubsystemBase {
-
-    //DigitalInput lineBreakSensor;
     DigitalInput lineBreakSensor;
     CANSparkMax conveyerMotorLeft;
     CANSparkMax conveyerMotorRight;
-boolean toggle =false;
+    boolean toggle =false;
     Spark ledController;
-
-    //AnalogInput test;
-
-    /* Rev Robotics Blinkin takes a PWM signal from 1000-2000us
-    * This is identical to a SparkMax motor. 
-    *  -1  corresponds to 1000us
-    *  0   corresponds to 1500us
-    *  +1  corresponds to 2000us
-    */
-
     public Conveyer() {
         //lineBreakSensor = new DigitalInput(ConveyerSubsystemConstants.ID_SENSOR_LINEBREAK);
         conveyerMotorLeft = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
         conveyerMotorRight = new CANSparkMax(ConveyerSubsystemConstants.ID_MOTOR_CONVEYER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
-
         conveyerMotorLeft.setIdleMode(IdleMode.kBrake);
         conveyerMotorRight.setIdleMode(IdleMode.kBrake);
         conveyerMotorLeft.setSmartCurrentLimit(25);
         conveyerMotorRight.setSmartCurrentLimit(25);
-        //conveyerMotorLeft.setOpenLoopRampRate(2);
-        //conveyerMotorRight.setOpenLoopRampRate(2);
-
-        //lineBreakSensor = new DigitalInput(0);
-
         lineBreakSensor = new DigitalInput(2);//new AnalogInput(ConveyerSubsystemConstants.ID_SENSOR_LINEBREAK);
     }
-
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Note in Conveyer", getLineBreak());
-
-        //SmartDashboard.putNumber("LED Controller", ledController.get());
-        /*
-        if (DriverStation.isDisabled()) {
-            setLED(0.53);
-        }*/
-
         SmartDashboard.putNumber("convey_Left", conveyerMotorLeft.getOutputCurrent());
         SmartDashboard.putNumber("convey_Right", conveyerMotorRight.getOutputCurrent());
-
+    }
+    public boolean getLineBreak() {return !lineBreakSensor.get();}
+    /**
+     * Runs Conveyer wheels until the note hits the linebreak, then stop the motors.  
+     */
+    public Command intakeGamePiece() {
+        return 
+        Commands.run(
+            ()-> {
+                conveyerMotorLeft.set(0.4);
+                conveyerMotorRight.set(0.4);
+            }
+        ,this).until(
+            () -> getLineBreak()
+        ).andThen(
+            () ->{
+                conveyerMotorLeft.set(0.0);
+                conveyerMotorRight.set(0.0);
+            }
+        ,this);
+    }
+    /**
+     * Used to manually set the conveyer motor speeds.
+     */
+    public Command setConveyerSpeed(double percentOutput) {
+        return Commands.runOnce( () -> {
+            conveyerMotorLeft.set(percentOutput);
+            conveyerMotorRight.set(percentOutput);
+            }
+        );
     }
 
-    public boolean getLineBreak() {
-        return ! lineBreakSensor.get();
-
-    }
-
-    public void setConveyerSpeed(double percentOutput) {
-        conveyerMotorRight.set(percentOutput);
-        conveyerMotorLeft.set(-percentOutput);
-    }
 
     public void setBlinkinVoltage(double percentOutput) {
         ledController.set(percentOutput);
     }
 
+    /*
+    public void setConveyerSpeed(double percentOutput) {
+        conveyerMotorRight.set(percentOutput);
+        conveyerMotorLeft.set(-percentOutput);
+    }
+
     public Command runConveyer(double percentOutput) {
         return Commands.runOnce(() -> setConveyerSpeed(percentOutput), this);
     }
+    
+    */
 
     public Command setLED(double percentOutput) {
         return Commands.runOnce(() -> setBlinkinVoltage(percentOutput));
