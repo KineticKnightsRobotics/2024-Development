@@ -305,8 +305,6 @@ public class Shooter extends SubsystemBase {
         return Commands.runOnce(() -> {feedMotor.set(percentOutput);},this);
     }
 
- 
-
 
     public Command sysIdQuasistaticTilter(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineTilter.quasistatic(direction);
