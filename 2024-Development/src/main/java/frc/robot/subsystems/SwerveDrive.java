@@ -21,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -370,7 +371,7 @@ public class SwerveDrive extends SubsystemBase {
     }
     
    public Command lockDrive() {
-        return Commands.run(() -> lockChassis(),this);
+        return Commands.run(() -> lockChassis(),this).withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
     /**
@@ -379,7 +380,7 @@ public class SwerveDrive extends SubsystemBase {
      * @return Pathfinding Command
      */
     public Command pathFind(Pose2d position) {
-        return AutoBuilder.pathfindToPose(position, AutonomousConstants.PathFindingConstraints.kConstraints);
+        return AutoBuilder.pathfindToPose(position, AutonomousConstants.PathFindingConstraints.kConstraints,0.0,0.0);
         /*
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent()){
@@ -455,6 +456,8 @@ public class SwerveDrive extends SubsystemBase {
         return speakerPose;
       }
 
+      
+
     public Command pathfindTag(int tagNum) {
         Optional<Pose3d> tagPos = kTagLayout.getTagPose(tagNum);
         if (tagPos.isPresent()) {
@@ -470,11 +473,39 @@ public class SwerveDrive extends SubsystemBase {
             .getAngle();
       }
 
+      public double getTranslationRelativeToSpeaker(){
+        return Math.abs(getPose().getTranslation().getDistance(getSpeakerPose().get().getTranslation().toTranslation2d()));
+      }
+
+      public boolean isRobotInAmpZone(){ //This should probably be rewritten to be like the speaker April Tag one.
+        var alliance = DriverStation.getAlliance();
+
+        if(alliance.isPresent()){
+            if(alliance.get() == DriverStation.Alliance.Blue);
+                    return getPose().getY()>=7.5 && getPose().getX()<=4;
+        } else {
+                                return getPose().getY()>=7.5 && getPose().getX()>=12.5;
+
+        }
+      }
+
+
+
+      public boolean isRobotInSpeakerZone(){
+        return getTranslationRelativeToSpeaker()<=4.5 && !isRobotInAmpZone();
+      }
+
       public double getCurrentDrive(){
         return MODULE_FRONT_LEFT.getModuleCurrent()+MODULE_FRONT_RIGHT.getModuleCurrent()+MODULE_BACK_LEFT.getModuleCurrent()+MODULE_BACK_RIGHT.getModuleCurrent();
       }
 
       public double getLockTimer(){
         return idle_Timer_Lock.get();
+      }
+      public void stopMotors(){
+        MODULE_FRONT_LEFT.stopModuleMotors();
+        MODULE_FRONT_RIGHT.stopModuleMotors();
+        MODULE_BACK_LEFT.stopModuleMotors();
+        MODULE_BACK_RIGHT.stopModuleMotors();
       }
 }
