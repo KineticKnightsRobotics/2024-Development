@@ -151,10 +151,10 @@ public class SwerveModule extends SubsystemBase {
         SmartDashboard.putNumber(MODULE_NAME + "Velocity", getDriveVelocity());
     }
 
-    public boolean checkIdle() {
+    public boolean isIdle() {
         return
-        getDriveVelocity()  !=0.0 &&
-        getTurningVelocity()!=0.0;
+        getDriveVelocity()  ==0.0 &&
+        getTurningVelocity()==0.0;
     }
 
     /** 

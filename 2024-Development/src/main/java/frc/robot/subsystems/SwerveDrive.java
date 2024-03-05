@@ -266,10 +266,10 @@ public class SwerveDrive extends SubsystemBase {
 
     public boolean getChassisIdle() {
         return
-        MODULE_FRONT_LEFT.checkIdle() &&
-        MODULE_BACK_LEFT.checkIdle() &&
-        MODULE_FRONT_RIGHT.checkIdle() &&
-        MODULE_BACK_RIGHT.checkIdle();
+        MODULE_FRONT_LEFT.isIdle() &&
+        MODULE_BACK_LEFT.isIdle() &&
+        MODULE_FRONT_RIGHT.isIdle() &&
+        MODULE_BACK_RIGHT.isIdle();
     }
 
     public double getRobotHeading() {
