@@ -254,9 +254,4 @@ public class SwerveModule extends SubsystemBase {
     public double getModuleCurrent(){
         return MOTOR_DRIVE.getOutputCurrent() + MOTOR_TURN.getOutputCurrent();
     }
-
-    public void stopModuleMotors(){
-        MOTOR_DRIVE.stopMotor();
-        MOTOR_TURN.stopMotor();
-    }
 }

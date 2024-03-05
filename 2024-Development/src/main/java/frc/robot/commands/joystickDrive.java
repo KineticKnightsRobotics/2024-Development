@@ -82,8 +82,6 @@ SmartDashboard.putNumber("RT", RobotContainer.DRIVER_RT());
         //this.swerve.drive(new Translation2d(0, 0), 0, true, false);
         //PLEASE SET THIS FOR SAFETY!!!
         //this.swerve.stopMotors();
-        subsystem.setChassisSpeed(new ChassisSpeeds(0,0,0),true);
-        subsystem.stopMotors();
     }
     @Override
     public boolean isFinished() {
