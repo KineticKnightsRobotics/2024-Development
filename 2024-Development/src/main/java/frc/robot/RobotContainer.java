@@ -71,8 +71,8 @@ public class RobotContainer {
   Trigger DRIVER_R1= new Trigger(JOYSTICK_DRIVER.button(6));
   //Driver L2 right now is hardcoded to be percision mode!
   Trigger DRIVER_R2 = new Trigger(()-> JOYSTICK_DRIVER.getRawAxis(3)>=0.3);
-  Trigger DRIVER_START= new Trigger(JOYSTICK_DRIVER.button(7));
-  Trigger DRIVER_BACK = new Trigger(JOYSTICK_DRIVER.button(8));
+  Trigger DRIVER_START= new Trigger(JOYSTICK_DRIVER.button(8));
+  Trigger DRIVER_BACK = new Trigger(JOYSTICK_DRIVER.button(7));
   Trigger DRIVER_L3 = new Trigger(JOYSTICK_DRIVER.button(9));
   Trigger DRIVER_R3 = new Trigger(JOYSTICK_DRIVER.button(10));
 
@@ -137,7 +137,7 @@ boolean toggle =false;
   Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
   Trigger NoteInFeederTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getLineBreak());//SUBSYSTEM_SHOOTER::getLineBreak);
   Trigger DriveCurrentLimitTrigger = new Trigger(()->SUBSYSTEM_SWERVEDRIVE.getCurrentDrive()>150);
-  Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer() >=0.55);
+  Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer() >=0.521);
   Trigger toggleTrigger = new Trigger(()-> SUBSYSTEM_CONVEYER.getToggle());
  // Trigger sensorTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
 
@@ -196,13 +196,7 @@ boolean toggle =false;
         new setShooterSpeed(-0.30, SUBSYSTEM_SHOOTER)
       )
     );
-    rightTrigger.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
-    () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
-    () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
-    () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
-    () -> true, 
-    () -> 0.02));
-    NoteInConveyerTrigger.or(NoteInFeederTrigger).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
+   
 
       /*rightTrigger().whileTrue( new PIDCommand(
       new PIDController(0.05,0,0),
@@ -225,6 +219,17 @@ boolean toggle =false;
 
 
     //TELEOP CONTROLS _________________________________________________________________________________________________________________________________________________________________
+DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
+    () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
+    () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
+    () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
+    () -> true, 
+    () -> 0.02));
+ //   NoteInConveyerTrigger.or(NoteInFeederTrigger).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
+
+    NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
+
+    LockDriveTrigger.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
 
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
@@ -233,6 +238,7 @@ boolean toggle =false;
         SUBSYSTEM_INTAKE.intakeUp()  
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     );
+
     DRIVER_L1.onFalse(SUBSYSTEM_INTAKE.intakeUp());
 
     NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(
