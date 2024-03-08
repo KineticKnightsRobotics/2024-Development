@@ -153,8 +153,8 @@ public class SwerveModule extends SubsystemBase {
 
     public boolean isIdle() {
         return
-        getDriveVelocity()  ==0.0 &&
-        getTurningVelocity()==0.0;
+        getDriveVelocity()  <=0.01 &&
+        getTurningVelocity()<=0.01;
     }
 
     /** 
