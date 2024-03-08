@@ -229,7 +229,7 @@ DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,
 
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
 
-    LockDriveTrigger.whileTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
+    LockDriveTrigger.onTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
 
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
