@@ -226,7 +226,7 @@ public class SwerveDrive extends SubsystemBase {
 
         updatePoseEstimator();
 
-
+SmartDashboard.putBoolean("Chassis Idle", getChassisIdle());
         if (!getChassisIdle()) {
             idle_Timer_Lock.reset();
             idle_Timer_Zero.reset();
@@ -237,7 +237,7 @@ public class SwerveDrive extends SubsystemBase {
         }
 
         SmartDashboard.putNumber("Idle Timer Locking", idle_Timer_Lock.get());
-
+SmartDashboard.putNumber("Lock Timer", getLockTimer());
     }
 
     public Pose2d getPose() {
@@ -375,7 +375,7 @@ public class SwerveDrive extends SubsystemBase {
     }
     
    public Command lockDrive() {
-        return Commands.run(() -> lockChassis(),this);
+        return Commands.runOnce(() -> lockChassis(),this);
     }
 
     /**

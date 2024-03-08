@@ -15,6 +15,7 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,7 +35,12 @@ import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.MathUtil;
 public class Shooter extends SubsystemBase {
+        boolean hasResetThroughBoreEncoder = false;
+
+    DutyCycleEncoder throughBoreEncoder;
     // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
     private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
     // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
@@ -47,7 +53,8 @@ public class Shooter extends SubsystemBase {
     private final SimpleMotorFeedforward shooterFeedFoward;
     private final CANSparkMax tiltMotor;
     private final CANSparkMax tiltMotor_Follower;
-    private final SparkPIDController tiltController;
+    //private final SparkPIDController tiltController;
+    private final PIDController tiltControllerRoboRIO;
     private final RelativeEncoder tiltEncoder;
     private final CANSparkMax shooterMotorL; //TOP roller
     private final CANSparkMax shooterMotorR; //BOTTOM roller
@@ -83,11 +90,13 @@ public class Shooter extends SubsystemBase {
         tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
         tiltEncoder.setPosition(0.0);
 
-        tiltController = tiltMotor.getPIDController();
-        tiltController.setP(TilterPIDConfig.Proportional);
-        tiltController.setI(TilterPIDConfig.Integral);
-        tiltController.setD(TilterPIDConfig.Derivitive);
-        tiltController.setOutputRange(-0.5,0.5);
+        //tiltController = tiltMotor.getPIDController();
+        tiltControllerRoboRIO = new PIDController(0.025, 0, 0);
+        
+        //tiltController.setP(TilterPIDConfig.Proportional);
+        //tiltController.setI(TilterPIDConfig.Integral);
+        //tiltController.setD(TilterPIDConfig.Derivitive);
+        //tiltController.setOutputRange(-0.5,0.5);
 
         shooterMotorL = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotorR = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
@@ -130,6 +139,12 @@ public class Shooter extends SubsystemBase {
         shooterMotorLEncoder.setVelocityConversionFactor(1);
 
         SmartDashboard.putNumber("Manual Shooter Angle", tiltPosition);
+
+        throughBoreEncoder = new DutyCycleEncoder(4);
+        throughBoreEncoder.setDistancePerRotation(-360);
+        throughBoreEncoder.reset();
+        
+     
 
         // Create a new SysId routine for characterizing the shooter.
         m_sysIdRoutineTilter =
@@ -214,6 +229,12 @@ public class Shooter extends SubsystemBase {
     
     @Override
     public void periodic() {
+        if(!hasResetThroughBoreEncoder){
+throughBoreEncoder.reset();
+hasResetThroughBoreEncoder=true;
+        }
+        SmartDashboard.putNumber("Through Bore Encoder", throughBoreEncoder.getDistance());
+                SmartDashboard.putNumber("Through Bore Encoder Absolute", throughBoreEncoder.getAbsolutePosition());
         //SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
         //SmartDashboard.putNumber("Shooter RPM Top", shooterMotorR.getEncoder().getVelocity());
         SmartDashboard.putNumber("Shooter RPM Bottom", shooterMotorL.getEncoder().getVelocity());
@@ -234,26 +255,42 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command setTilter(double angle) {
-        return Commands.runOnce(
+        return Commands.run(
             () -> {
-                tiltController.setReference(angle, ControlType.kPosition);
+                //tiltController.setReference(angle, ControlType.kPosition);
+                tiltMotor.set(MathUtil.clamp(tiltControllerRoboRIO.calculate(throughBoreEncoder.getDistance(), angle),-0.5,0.5));
             }
         );
     }
+    /*
     public Command setTiltertoManual() {
         if (SmartDashboard.getNumber("Manual Shooter Angle",0.0) != tiltPosition) {
             tiltPosition = SmartDashboard.getNumber("Manual Shooter Angle", 0.0);
         }
         SmartDashboard.putNumber("Current Manual Positon", tiltPosition);
+    */ // old
+
+    public Command stopTilter(){
         return Commands.runOnce(
+            ()->{
+                tiltMotor.set(0);
+            }
+            );
+    }
+    public Command setTiltertoManual() {
+        return Commands.run(
             () -> {
-                tiltController.setReference(tiltPosition, ControlType.kPosition);
+                //tiltController.setReference(tiltPosition, ControlType.kPosition);
+                tiltMotor.set(MathUtil.clamp(tiltControllerRoboRIO.calculate(throughBoreEncoder.getDistance(), tiltPosition),-0.5,0.5));
+
             }
         );
     }
 
     public Command zeroTilter(double angle) {
-        return Commands.runOnce(() -> {tiltEncoder.setPosition(angle);});
+        //return Commands.runOnce(() -> {tiltEncoder.setPosition(angle);});
+                return Commands.runOnce(() -> {throughBoreEncoder.reset();;});
+
     }
     public Command IdleShooter(){
         return Commands
