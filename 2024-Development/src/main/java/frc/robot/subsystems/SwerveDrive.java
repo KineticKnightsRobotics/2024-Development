@@ -21,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -62,7 +63,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SwerveDrive extends SubsystemBase {
 
-    private Vision vision = new Vision();
+    private Vision vision = new Vision(this);
 
     private Field2d field = new Field2d();
     
@@ -217,6 +218,10 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putData("Field", field);field.setRobotPose(getPose());
         SmartDashboard.putString("Robot Odemeter position", ODEMETER.getEstimatedPosition().toString());
 
+        SmartDashboard.putString("Vision Pose", vision.getEstimatedRoboPose().toString());
+        SmartDashboard.putString("Vision STD", vision.getStandardDeviations().toString());
+
+
         MODULE_FRONT_LEFT.moduleData2Dashboard();
         MODULE_FRONT_RIGHT.moduleData2Dashboard();
         MODULE_BACK_LEFT.moduleData2Dashboard();
@@ -226,7 +231,7 @@ public class SwerveDrive extends SubsystemBase {
 
         updatePoseEstimator();
 
-SmartDashboard.putBoolean("Chassis Idle", getChassisIdle());
+        SmartDashboard.putBoolean("Chassis Idle", getChassisIdle());
         if (!getChassisIdle()) {
             idle_Timer_Lock.reset();
             idle_Timer_Zero.reset();
@@ -237,13 +242,14 @@ SmartDashboard.putBoolean("Chassis Idle", getChassisIdle());
         }
 
         SmartDashboard.putNumber("Idle Timer Locking", idle_Timer_Lock.get());
-SmartDashboard.putNumber("Lock Timer", getLockTimer());
+        SmartDashboard.putNumber("Lock Timer", getLockTimer());
     }
 
     public Pose2d getPose() {
         return ODEMETER.getEstimatedPosition();
 
       }
+
       public double getPoseAngle(){
         return ODEMETER.getEstimatedPosition().getRotation().getDegrees();
       }
@@ -253,8 +259,12 @@ SmartDashboard.putNumber("Lock Timer", getLockTimer());
             getRotation2d(),
             getModulePositions()
         );
-        ODEMETER.addVisionMeasurement(limelight.getEstimatedRoboPose(), getCurrentDrive(), null);
-        
+        ODEMETER.addVisionMeasurement(
+            vision.getEstimatedRoboPose(),
+            vision.getTimestamp(),
+            vision.getStandardDeviations()
+        );
+    
         //Old Vision code
         /* 
         if (m_LimeLight.getLimeLightTV()) {
@@ -375,8 +385,15 @@ SmartDashboard.putNumber("Lock Timer", getLockTimer());
     }
     
    public Command lockDrive() {
-        return Commands.runOnce(() -> lockChassis(),this);
+        return Commands.run(() -> lockChassis(),this).withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
+
+    public void stopMotors(){
+        MODULE_FRONT_LEFT.stopModuleMotors();
+        MODULE_FRONT_RIGHT.stopModuleMotors();
+        MODULE_BACK_LEFT.stopModuleMotors();
+        MODULE_BACK_RIGHT.stopModuleMotors();
+      }
 
     /**
      * 
@@ -431,19 +448,6 @@ SmartDashboard.putNumber("Lock Timer", getLockTimer());
             new InstantCommand( () -> setChassisSpeed(new ChassisSpeeds(0,0,0),true))
         );
     */
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return m_SysIdRoutine.quasistatic(direction);
-    }
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return m_SysIdRoutine.dynamic(direction);
-    }
-    public Command sysIdQuasistaticModuleTurning(SysIdRoutine.Direction direction) {
-        return MODULE_FRONT_LEFT.sysIdQuasistatic(direction);
-    }
-    public Command sysIdDynamicModuleTurning(SysIdRoutine.Direction direction) {
-        return MODULE_FRONT_LEFT.sysIdDynamic(direction);
-    }
-
     private Optional<Pose3d> getSpeakerPose() {
         var alliance = DriverStation.getAlliance();
         Optional<Pose3d> speakerPose = null;
@@ -469,6 +473,28 @@ SmartDashboard.putNumber("Lock Timer", getLockTimer());
         return null;
       }
 
+      public double getTranslationRelativeToSpeaker(){
+        return Math.abs(getPose().getTranslation().getDistance(getSpeakerPose().get().getTranslation().toTranslation2d()));
+    }
+
+      public boolean isRobotInAmpZone(){ //This should probably be rewritten to be like the speaker April Tag one.
+        var alliance = DriverStation.getAlliance();
+
+        if(alliance.isPresent()){
+            if(alliance.get() == DriverStation.Alliance.Blue);
+                    return getPose().getY()>=7.5 && getPose().getX()<=4;
+        } else {
+                                return getPose().getY()>=7.5 && getPose().getX()>=12.5;
+
+        }
+      }
+
+
+
+      public boolean isRobotInSpeakerZone(){
+        return getTranslationRelativeToSpeaker()<=4.5 && !isRobotInAmpZone();
+      }
+
       public Rotation2d getRotationRelativeToSpeaker() {
         return getPose().getTranslation().minus(getSpeakerPose().get().getTranslation().toTranslation2d())
             .unaryMinus()
@@ -482,4 +508,17 @@ SmartDashboard.putNumber("Lock Timer", getLockTimer());
       public double getLockTimer(){
         return idle_Timer_Lock.get();
       }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return m_SysIdRoutine.quasistatic(direction);
+    }
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return m_SysIdRoutine.dynamic(direction);
+    }
+    public Command sysIdQuasistaticModuleTurning(SysIdRoutine.Direction direction) {
+        return MODULE_FRONT_LEFT.sysIdQuasistatic(direction);
+    }
+    public Command sysIdDynamicModuleTurning(SysIdRoutine.Direction direction) {
+        return MODULE_FRONT_LEFT.sysIdDynamic(direction);
+    }
 }

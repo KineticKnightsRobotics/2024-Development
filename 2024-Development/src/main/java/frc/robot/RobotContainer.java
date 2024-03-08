@@ -228,7 +228,7 @@ DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,
  //   NoteInConveyerTrigger.or(NoteInFeederTrigger).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
 
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
-
+    NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0));
     LockDriveTrigger.onTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
 
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
@@ -237,9 +237,8 @@ DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,
         SUBSYSTEM_CONVEYER.intakeGamePiece(),
         SUBSYSTEM_INTAKE.intakeUp()  
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
-    );
-
-    DRIVER_L1.onFalse(SUBSYSTEM_INTAKE.intakeUp());
+    )
+    .onFalse(SUBSYSTEM_INTAKE.intakeUp());
 
     NoteInConveyerTrigger.and(ShooterAtHomeTrigger).onTrue(
       SUBSYSTEM_CONVEYER.setConveyerSpeed(0.3)//.withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
@@ -253,16 +252,9 @@ DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,
 
     DRIVER_A.whileTrue(SUBSYSTEM_SHOOTER.shoot(4022,2681, false));
 
-    NoteInFeederTrigger.whileTrue(
-      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
-    );
-
     DRIVER_Y.onTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
 
-    DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(0.6));
-
-
-
+    DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(0.6)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
 
     //DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
 

@@ -229,12 +229,12 @@ public class Shooter extends SubsystemBase {
     
     @Override
     public void periodic() {
-        if(!hasResetThroughBoreEncoder){
-throughBoreEncoder.reset();
-hasResetThroughBoreEncoder=true;
+        if (!hasResetThroughBoreEncoder) {
+            throughBoreEncoder.reset();
+            hasResetThroughBoreEncoder=true;
         }
         SmartDashboard.putNumber("Through Bore Encoder", throughBoreEncoder.getDistance());
-                SmartDashboard.putNumber("Through Bore Encoder Absolute", throughBoreEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Through Bore Encoder Absolute", throughBoreEncoder.getAbsolutePosition());
         //SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
         //SmartDashboard.putNumber("Shooter RPM Top", shooterMotorR.getEncoder().getVelocity());
         SmartDashboard.putNumber("Shooter RPM Bottom", shooterMotorL.getEncoder().getVelocity());

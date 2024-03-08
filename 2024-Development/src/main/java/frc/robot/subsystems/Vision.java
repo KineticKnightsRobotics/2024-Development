@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.LimelightHelpers;
 import frc.robot.lib.Constants.VisionConstants.defaultSTD;
@@ -28,10 +29,17 @@ public class Vision {
         int tagCount = limelightPose.tagCount;
         double avgDist = limelightPose.avgTagDist;
 
-        if ( (tagCount == 1 && avgDist > 4) || (m_Drive.ODEMETER.getEstimatedPosition().getTranslation().getDistance(limelightPose.pose.getTranslation()) > 0.5) ) {
+        SmartDashboard.putNumber("Vision avgDist", avgDist);
+        SmartDashboard.putNumber("tagCount", tagCount);
+
+
+
+
+        if /*(*/ (tagCount == 1 && avgDist > 4) /*|| (m_Drive.ODEMETER.getEstimatedPosition().getTranslation().getDistance(limelightPose.pose.getTranslation()) > 0.5) )*/ {
             return VecBuilder.fill(Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE);
         }
         else {
+            SmartDashboard.putNumberArray("Vision STD", defaultSTD.singleTagStD.times(1 + (Math.pow(avgDist, 2) / 30)).getData());
             return defaultSTD.singleTagStD.times(1 + (Math.pow(avgDist, 2) / 30)); //Borrowed equation from 3161 :]
         }
     }

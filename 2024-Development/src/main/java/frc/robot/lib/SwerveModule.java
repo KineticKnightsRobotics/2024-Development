@@ -202,6 +202,12 @@ public class SwerveModule extends SubsystemBase {
         double percentOutput = state.speedMetersPerSecond/SwerveSubsystemConstants.LIMIT_HARD_SPEED_DRIVE;
         MOTOR_DRIVE.set(-percentOutput);
     }
+    
+    public void stopModuleMotors(){
+        MOTOR_DRIVE.stopMotor();
+        MOTOR_TURN.stopMotor();
+    }
+
 
     /**
      * @return drive position in meters
