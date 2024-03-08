@@ -59,7 +59,7 @@ public class SwerveModule extends SubsystemBase {
     private final SysIdRoutine m_SysIdRoutine;
 
     /**
-    *@param int ID_MOTOR_DRIVE,
+    *@param    int ID_MOTOR_DRIVE,
     *@param    boolean REVERSE_MOTOR_DRIVE,
     *@param    int ID_MOTOR_TURN,
     *@param    boolean REVERSE_MOTOR_TURN,
@@ -153,8 +153,8 @@ public class SwerveModule extends SubsystemBase {
 
     public boolean isIdle() {
         return
-        getDriveVelocity()  ==0.0 &&
-        getTurningVelocity()==0.0;
+        getDriveVelocity()  !=0.0 &&
+        getTurningVelocity() !=0.0;
     }
 
     /** 

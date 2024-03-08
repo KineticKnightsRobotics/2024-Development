@@ -128,12 +128,12 @@ boolean toggle =false;
 
   //Translation2d tag = fieldLayout.getTagPose(DriverStation.getAlliance().isEmpty() || DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 3).get().getTranslation().toTranslation2d();
 
-  int ShooterRPM = 3800;
+  int ShooterRPM = 4022;
 
   //Trigger config
   //Trigger ShooterReady = new Trigger(()->(SUBSYSTEM_SHOOTER.getTilterPosition() == SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getPose().getTranslation().getDistance(fieldLayout.getTagPose(DriverStation.getAlliance().isEmpty() || DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 3).get().getTranslation().toTranslation2d()))&&SUBSYSTEM_SHOOTER.getLineBreak() == true&&SUBSYSTEM_SHOOTER.getShooterLRPM() >= ShooterRPM));
 
- Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 4.0);
+ Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 10.0);
   Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
   Trigger NoteInFeederTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getLineBreak());//SUBSYSTEM_SHOOTER::getLineBreak);
   Trigger DriveCurrentLimitTrigger = new Trigger(()->SUBSYSTEM_SWERVEDRIVE.getCurrentDrive()>150);
@@ -233,20 +233,29 @@ boolean toggle =false;
         SUBSYSTEM_INTAKE.intakeUp()  
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     );
+
     DRIVER_L1.onFalse(SUBSYSTEM_INTAKE.intakeUp());
 
-    NoteInConveyerTrigger.and(ShooterAtHomeTrigger).whileTrue(
-      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.5)//.withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+    NoteInConveyerTrigger.and(ShooterAtHomeTrigger).onTrue(
+      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.3)//.withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
       .andThen(
-        SUBSYSTEM_SHOOTER.loadGamePiece()
-      )//.andThen(
-      //  SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0) TODO: Does this break the code?
-      //)
+        SUBSYSTEM_SHOOTER.loadGamePiece().withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+      )
+      .andThen(
+        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0) //TODO: Does this break the code?
+      )
     );
+
+    DRIVER_A.whileTrue(SUBSYSTEM_SHOOTER.shoot(4022,2681, false));
 
     NoteInFeederTrigger.whileTrue(
       SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
     );
+
+    DRIVER_Y.onTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
+
+    DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(0.6));
+
 
 
 
@@ -265,7 +274,7 @@ boolean toggle =false;
 
   //  OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER));
     //OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
-    OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(20.0));
+    OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(47.5));
     OP_14.onTrue(SUBSYSTEM_SHOOTER.setTilter(40.0));
     OP_15.onTrue(SUBSYSTEM_SHOOTER.setTilter(60.0));
     OP_16.onTrue(SUBSYSTEM_SHOOTER.setTilter(80.0));

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.lib.PID_Config.ShooterSubsystem.ShooterVelocityPID;
 import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
@@ -43,14 +44,15 @@ public class Shooter extends SubsystemBase {
     //
     //private final MutableMeasure<Angle> m_degrees = mutable(Degrees.of(0));
     //private final MutableMeasure<Velocity<Angle>> m_velocity_degrees = mutable(DegreesPerSecond.of(0));
-    private final SimpleMotorFeedforward SHOOTER_FEEDFORWARD_VELOCITY;
+    private final SimpleMotorFeedforward shooterFeedFoward;
     private final CANSparkMax tiltMotor;
     private final CANSparkMax tiltMotor_Follower;
     private final SparkPIDController tiltController;
     private final RelativeEncoder tiltEncoder;
     private final CANSparkMax shooterMotorL; //TOP roller
     private final CANSparkMax shooterMotorR; //BOTTOM roller
-    private final SparkPIDController shooterController;
+    private final SparkPIDController shooterControllerL;
+    private final SparkPIDController shooterControllerR;
     private final CANSparkMax feedMotor;
     private final RelativeEncoder feedEncoder;
     private final DigitalInput lineBreak;
@@ -62,8 +64,8 @@ public class Shooter extends SubsystemBase {
     private double tiltPosition = 0.0;
     public final ShooterInterpolator shooterInterpolator = new ShooterInterpolator();
     public Shooter() {
-        SHOOTER_FEEDFORWARD_VELOCITY = new SimpleMotorFeedforward(
-            0,
+        shooterFeedFoward = new SimpleMotorFeedforward(
+            PID_Config.ShooterSubsystem.ShooterVelocityPID.ShooterFeedForward.shooterKS,
             PID_Config.ShooterSubsystem.ShooterVelocityPID.ShooterFeedForward.shooterKV,
             PID_Config.ShooterSubsystem.ShooterVelocityPID.ShooterFeedForward.shooterKA
         );
@@ -95,12 +97,16 @@ public class Shooter extends SubsystemBase {
         shooterMotorR.setInverted(false);
         shooterMotorL.setIdleMode(IdleMode.kCoast);
         shooterMotorR.setIdleMode(IdleMode.kCoast);
-        shooterController = shooterMotorL.getPIDController();
 
+        shooterControllerL = shooterMotorL.getPIDController();
+        shooterControllerL.setP(ShooterVelocityPID.Proportional);
+        shooterControllerL.setI(ShooterVelocityPID.Integral);
+        shooterControllerL.setD(ShooterVelocityPID.Derivitive);
 
-        shooterController.setP(ShooterVelocityPID.Proportional);
-        shooterController.setI(ShooterVelocityPID.Integral);
-        shooterController.setD(ShooterVelocityPID.Derivitive);
+        shooterControllerR = shooterMotorR.getPIDController();
+        shooterControllerR.setP(ShooterVelocityPID.Proportional);
+        shooterControllerR.setI(ShooterVelocityPID.Integral);
+        shooterControllerR.setD(ShooterVelocityPID.Derivitive);
 
         //feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
         feedMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_FEEDER, CANSparkLowLevel.MotorType.kBrushless);
@@ -123,7 +129,7 @@ public class Shooter extends SubsystemBase {
         shooterMotorLEncoder.setPositionConversionFactor(1);
         shooterMotorLEncoder.setVelocityConversionFactor(1);
 
-        SmartDashboard.putNumber("Set Shooter Position", tiltPosition);
+        SmartDashboard.putNumber("Manual Shooter Angle", tiltPosition);
 
         // Create a new SysId routine for characterizing the shooter.
         m_sysIdRoutineTilter =
@@ -209,7 +215,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         //SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
-        SmartDashboard.putNumber("Shooter RPM Top", shooterMotorR.getEncoder().getVelocity());
+        //SmartDashboard.putNumber("Shooter RPM Top", shooterMotorR.getEncoder().getVelocity());
         SmartDashboard.putNumber("Shooter RPM Bottom", shooterMotorL.getEncoder().getVelocity());
         //SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
         SmartDashboard.putNumber("Tiler Position", getTilterPosition());
@@ -219,9 +225,6 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putBoolean("Shooter Linebreak", getLineBreak());
         //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
         //SmartDashboard.putString("Shooter Block State", shooterBlock.get().toString());
-        if (SmartDashboard.getNumber("Manual Shooter Angle",0.0) != tiltPosition) {
-            tiltPosition = SmartDashboard.getNumber("Manual Shooter Angle", 0.0);
-        }
     }
     public boolean getLineBreak() {
         return !lineBreak.get();
@@ -238,6 +241,10 @@ public class Shooter extends SubsystemBase {
         );
     }
     public Command setTiltertoManual() {
+        if (SmartDashboard.getNumber("Manual Shooter Angle",0.0) != tiltPosition) {
+            tiltPosition = SmartDashboard.getNumber("Manual Shooter Angle", 0.0);
+        }
+        SmartDashboard.putNumber("Current Manual Positon", tiltPosition);
         return Commands.runOnce(
             () -> {
                 tiltController.setReference(tiltPosition, ControlType.kPosition);
@@ -259,24 +266,34 @@ public class Shooter extends SubsystemBase {
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
     }
 
-    public Command shoot(double desiredRPM, boolean openLoop) {
+    /**
+     * Sets Flywheel speed speed. 2 Speeds don't work right in open loop mode, higher RPM will supersede the lower RPM
+     * 
+     * @param desiredRPM_1 Left Side
+     * @param desiredRPM_2 Right Side
+     * @param openLoop
+     * @return
+     */
+    public Command shoot(double desiredRPM_1, double desiredRPM_2, boolean openLoop) {
         return Commands
         .run(
             () -> {
 
                 if (openLoop) {
-                    shooterMotorL.set(0.8);
-                    shooterMotorR.set(0.8);
+                    shooterMotorL.set(1.0);
+                    shooterMotorR.set(1.0);
                 }
                 else {
-                shooterController.setReference(desiredRPM, ControlType.kVelocity);
+                shooterControllerL.setReference(desiredRPM_1, ControlType.kVelocity,0,shooterFeedFoward.calculate(desiredRPM_1));
+                shooterControllerR.setReference(desiredRPM_2, ControlType.kVelocity,0,shooterFeedFoward.calculate(desiredRPM_2));
                 }
-                if (shooterMotorREncoder.getVelocity() >= desiredRPM && shooterMotorLEncoder.getVelocity() >= desiredRPM){
-                    feedMotor.set(0.8);
+                if (shooterMotorLEncoder.getVelocity() >= desiredRPM_1-20 && shooterMotorREncoder.getVelocity() >= desiredRPM_2-20){
+                    feedMotor.set(1.0);
                 }
             },
         this)
         .until(() -> ! getLineBreak())
+        .andThen(new WaitCommand(1.0))
         .finallyDo(
             () -> {
                 shooterMotorL.set(0.0);
@@ -290,7 +307,7 @@ public class Shooter extends SubsystemBase {
         return Commands
         .run(
             () -> {
-                feedMotor.set(0.7);
+                feedMotor.set(0.4);
             }
         ,this)
         .until(() -> getLineBreak())

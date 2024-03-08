@@ -38,6 +38,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 //robot
+import frc.robot.subsystems.Vision;
 import frc.robot.lib.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.lib.SwerveModule;
@@ -60,6 +61,8 @@ import java.util.concurrent.TimeUnit;
 
 
 public class SwerveDrive extends SubsystemBase {
+
+    private Vision vision = new Vision();
 
     private Field2d field = new Field2d();
     
@@ -250,14 +253,16 @@ public class SwerveDrive extends SubsystemBase {
             getRotation2d(),
             getModulePositions()
         );
+        ODEMETER.addVisionMeasurement(limelight.getEstimatedRoboPose(), getCurrentDrive(), null);
+        
+        //Old Vision code
         /* 
         if (m_LimeLight.getLimeLightTV()) {
             ODEMETER.addVisionMeasurement(
                 m_LimeLight.getRoboPose(),
                 Timer.getFPGATimestamp() - (m_LimeLight.getRoboPoseLatency()/1000)
             );
-        }
-        */
+        }*/
     }
 
     public ChassisSpeeds getChassisSpeeds() {
