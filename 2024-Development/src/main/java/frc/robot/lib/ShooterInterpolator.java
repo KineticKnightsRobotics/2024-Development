@@ -55,7 +55,7 @@ public class ShooterInterpolator {
     public double interpolateAngle(double distance) {
         SmartDashboard.putNumber("Distance to Speaker", distance-Units.inchesToMeters(14)-Units.inchesToMeters(39));
         SmartDashboard.putNumber("Interpolated Angle", m_InterpolatingDoubleTreeMap.get(distance));
-        return m_InterpolatingDoubleTreeMap.get(distance);
+        return m_InterpolatingDoubleTreeMap.get(distance - Units.inchesToMeters(14) - Units.inchesToMeters(39));
     }
 
 

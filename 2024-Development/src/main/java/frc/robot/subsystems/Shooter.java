@@ -263,9 +263,6 @@ public class Shooter extends SubsystemBase {
             }
         );
     }
-    public Command autoTilter(double distance) {
-        
-    }
     /*
     public Command setTiltertoManual() {
         if (SmartDashboard.getNumber("Manual Shooter Angle",0.0) != tiltPosition) {

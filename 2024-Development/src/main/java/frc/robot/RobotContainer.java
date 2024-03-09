@@ -256,7 +256,7 @@ DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,
     DRIVER_Y.onTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
 
     //DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(0.6)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
-    DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setTilter(SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getTranslationRelativeToSpeaker()-Units.inchesToMeters(14)-Units.inchesToMeters(39)))).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    DRIVER_X.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER, SUBSYSTEM_SWERVEDRIVE));
 
     //DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
 
