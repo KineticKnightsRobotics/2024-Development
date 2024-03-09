@@ -14,43 +14,49 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "Shoot"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeDown"
+                }
+              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "RStartToNote1.1"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CapturePiece"
-                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeDown"
+                }
+              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "RNote1ToNote2.1"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
               }
             ]
           }
@@ -58,24 +64,24 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "Shoot"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeDown"
+                }
+              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "RNote2ToNote3"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CapturePiece"
-                }
               }
             ]
           }
@@ -83,32 +89,32 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoLoadShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoRunShooter"
+            "name": "Shoot"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeDown"
+                }
+              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "RNote3ToNote4.1"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CapturePiece"
-                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
@@ -116,15 +122,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "RNote4ToScore.1"
+                  "name": "IntakeDown"
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "AutoLoadShooter"
+                  "pathName": "RNote4ToScore.1"
                 }
               }
             ]
@@ -133,7 +139,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "Shoot"
           }
         },
         {
@@ -141,15 +147,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "RScoreToNote5.1"
+                  "name": "IntakeDown"
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "CapturePiece"
+                  "pathName": "RScoreToNote5.1"
                 }
               }
             ]
@@ -164,12 +170,6 @@
                 "data": {
                   "pathName": "RNote5ToScore.1"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
               }
             ]
           }
@@ -177,12 +177,12 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": "ChoreoRightSide",
+  "folder": null,
   "choreoAuto": true
 }
