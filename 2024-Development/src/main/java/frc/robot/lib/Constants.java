@@ -79,10 +79,10 @@ public final class Constants {
     public static final boolean REVERSED_GYRO = false;
 
     // Invert Specific Motors
-    public static final boolean REVERSED_FRONT_LEFT_MOTOR_DRIVE = false;
-    public static final boolean REVERSED_FRONT_RIGHT_MOTOR_DRIVE = true;
-    public static final boolean REVERSED_BACK_LEFT_MOTOR_DRIVE = false;
-    public static final boolean REVERSED_BACK_RIGHT_MOTOR_DRIVE = true;
+    public static final boolean REVERSED_FRONT_LEFT_MOTOR_DRIVE = true;//false;
+    public static final boolean REVERSED_FRONT_RIGHT_MOTOR_DRIVE = false;//true;
+    public static final boolean REVERSED_BACK_LEFT_MOTOR_DRIVE = true;//false;
+    public static final boolean REVERSED_BACK_RIGHT_MOTOR_DRIVE = false;//true;
 
     // Turning encoder offsets
     public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE = Math.toRadians(-96.0 +  7.6+90);

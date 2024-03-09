@@ -34,6 +34,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
@@ -146,9 +147,9 @@ boolean toggle =false;
     SUBSYSTEM_SWERVEDRIVE.setDefaultCommand(
       new joystickDrive(
         SUBSYSTEM_SWERVEDRIVE, 
-        () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
-        () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
-        () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
+        () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
+        () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
+        () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
         () -> true, 
         () -> 0.02
       )
@@ -229,7 +230,7 @@ DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,
 
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0));
-    LockDriveTrigger.onTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
+    //LockDriveTrigger.onTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
 
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
@@ -254,7 +255,8 @@ DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,
 
     DRIVER_Y.onTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
 
-    DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(0.6)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
+    //DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(0.6)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
+    DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setTilter(SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getTranslationRelativeToSpeaker()-Units.inchesToMeters(14)-Units.inchesToMeters(39)))).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
 
     //DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
 
@@ -271,7 +273,7 @@ DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,
 
   //  OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER));
     //OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
-    OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(20)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(25)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTilter(40)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     OP_15.whileTrue(SUBSYSTEM_SHOOTER.setTilter(60)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     OP_16.whileTrue(SUBSYSTEM_SHOOTER.setTilter(80)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());

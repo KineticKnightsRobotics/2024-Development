@@ -91,7 +91,7 @@ public class Shooter extends SubsystemBase {
         tiltEncoder.setPosition(0.0);
 
         //tiltController = tiltMotor.getPIDController();
-        tiltControllerRoboRIO = new PIDController(0.025, 0, 0);
+        tiltControllerRoboRIO = new PIDController(0.03, 0, 0);
         
         //tiltController.setP(TilterPIDConfig.Proportional);
         //tiltController.setI(TilterPIDConfig.Integral);
@@ -240,6 +240,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Shooter RPM Bottom", shooterMotorL.getEncoder().getVelocity());
         //SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
         SmartDashboard.putNumber("Tiler Position", getTilterPosition());
+        SmartDashboard.putNumber("Tilter Follower Position",tiltMotor_Follower.getEncoder().getPosition());
         //SmartDashboard.putNumber("ShooterCurrentF",shooterMotorR.getOutputCurrent());
         //SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
         //SmartDashboard.putNumber("Tilter Setpoint", tiltPosition);
@@ -261,6 +262,9 @@ public class Shooter extends SubsystemBase {
                 tiltMotor.set(MathUtil.clamp(tiltControllerRoboRIO.calculate(throughBoreEncoder.getDistance(), angle),-0.5,0.5));
             }
         );
+    }
+    public Command autoTilter(double distance) {
+        
     }
     /*
     public Command setTiltertoManual() {

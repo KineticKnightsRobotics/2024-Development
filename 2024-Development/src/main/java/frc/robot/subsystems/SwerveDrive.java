@@ -220,6 +220,7 @@ public class SwerveDrive extends SubsystemBase {
 
         SmartDashboard.putString("Vision Pose", vision.getEstimatedRoboPose().toString());
         SmartDashboard.putString("Vision STD", vision.getStandardDeviations().toString());
+        SmartDashboard.putNumber("Vision Latency", vision.getTimestamp());
 
 
         MODULE_FRONT_LEFT.moduleData2Dashboard();
@@ -255,16 +256,18 @@ public class SwerveDrive extends SubsystemBase {
       }
 
     public void updatePoseEstimator() {
-        ODEMETER.update(
+        ODEMETER.update( 
             getRotation2d(),
             getModulePositions()
         );
-        ODEMETER.addVisionMeasurement(
-            vision.getEstimatedRoboPose(),
-            vision.getTimestamp(),
-            vision.getStandardDeviations()
-        );
-    
+        if (vision.getTV()) {
+            ODEMETER.addVisionMeasurement(
+                vision.getEstimatedRoboPose(),
+                vision.getTimestamp(),
+                vision.getStandardDeviations()
+            );
+        }
+
         //Old Vision code
         /* 
         if (m_LimeLight.getLimeLightTV()) {
