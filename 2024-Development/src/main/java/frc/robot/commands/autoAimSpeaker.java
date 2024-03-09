@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
@@ -13,6 +15,8 @@ public class autoAimSpeaker extends Command {
 
     public Shooter m_Shooter;
     public SwerveDrive m_Drive;
+
+    public double angle, distance;
     
     public autoAimSpeaker(Shooter _shooter, SwerveDrive _drive) {
         addRequirements(_shooter);
@@ -35,7 +39,17 @@ public class autoAimSpeaker extends Command {
 
     @Override
     public void execute() {
-        m_Shooter.setTilter(m_Shooter.shooterInterpolator.interpolateAngle(m_Drive.getTranslationRelativeToSpeaker()));
+
+
+
+        distance = m_Drive.getDistanceToSpeaker() - Units.inchesToMeters(39) - Units.inchesToMeters(14); //TODO: remove the math once the shooter interpolator remeasured.
+
+        angle = m_Shooter.shooterInterpolator.interpolateAngle(distance);
+
+        m_Shooter.setShooterPosition(angle);
+
+
+        //m_Shooter.setTilter(m_Shooter.shooterInterpolator.interpolateAngle(m_Drive.getTranslationRelativeToSpeaker()));
     }
     @Override
     public void end(boolean interrupted) {
@@ -43,7 +57,7 @@ public class autoAimSpeaker extends Command {
     }
     @Override
     public boolean isFinished() {
-        return false;
+        return (m_Shooter.getTilterPosition() == angle);
     }
 
 

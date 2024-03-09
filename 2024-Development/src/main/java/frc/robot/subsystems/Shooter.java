@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -51,10 +50,10 @@ public class Shooter extends SubsystemBase {
     //private final MutableMeasure<Angle> m_degrees = mutable(Degrees.of(0));
     //private final MutableMeasure<Velocity<Angle>> m_velocity_degrees = mutable(DegreesPerSecond.of(0));
     private final SimpleMotorFeedforward shooterFeedFoward;
-    private final CANSparkMax tiltMotor;
+    public final CANSparkMax tiltMotor;
     private final CANSparkMax tiltMotor_Follower;
     //private final SparkPIDController tiltController;
-    private final PIDController tiltControllerRoboRIO;
+    private final PIDController tiltController;
     private final RelativeEncoder tiltEncoder;
     private final CANSparkMax shooterMotorL; //TOP roller
     private final CANSparkMax shooterMotorR; //BOTTOM roller
@@ -90,13 +89,7 @@ public class Shooter extends SubsystemBase {
         tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
         tiltEncoder.setPosition(0.0);
 
-        //tiltController = tiltMotor.getPIDController();
-        tiltControllerRoboRIO = new PIDController(0.03, 0, 0);
-        
-        //tiltController.setP(TilterPIDConfig.Proportional);
-        //tiltController.setI(TilterPIDConfig.Integral);
-        //tiltController.setD(TilterPIDConfig.Derivitive);
-        //tiltController.setOutputRange(-0.5,0.5);
+        tiltController = new PIDController(TilterPIDConfig.Proportional,TilterPIDConfig.Integral, TilterPIDConfig.Derivitive);
 
         shooterMotorL = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotorR = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
@@ -235,31 +228,31 @@ public class Shooter extends SubsystemBase {
         }
         SmartDashboard.putNumber("Through Bore Encoder", throughBoreEncoder.getDistance());
         SmartDashboard.putNumber("Through Bore Encoder Absolute", throughBoreEncoder.getAbsolutePosition());
-        //SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
         //SmartDashboard.putNumber("Shooter RPM Top", shooterMotorR.getEncoder().getVelocity());
         SmartDashboard.putNumber("Shooter RPM Bottom", shooterMotorL.getEncoder().getVelocity());
-        //SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
-        SmartDashboard.putNumber("Tiler Position", getTilterPosition());
-        SmartDashboard.putNumber("Tilter Follower Position",tiltMotor_Follower.getEncoder().getPosition());
         //SmartDashboard.putNumber("ShooterCurrentF",shooterMotorR.getOutputCurrent());
         //SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
         //SmartDashboard.putNumber("Tilter Setpoint", tiltPosition);
         SmartDashboard.putBoolean("Shooter Linebreak", getLineBreak());
-        //SmartDashboard.putBoolean("Tilter is stuck!", limitSwitchTilter());  
-        //SmartDashboard.putString("Shooter Block State", shooterBlock.get().toString());
     }
+
     public boolean getLineBreak() {
         return !lineBreak.get();
     }
+
     public double getTilterPosition () {
         return tiltEncoder.getPosition();
+    }
+
+    public void setShooterPosition(double angle) {
+        tiltMotor.set(MathUtil.clamp(tiltController.calculate(throughBoreEncoder.getDistance(), angle),-0.5,0.5));
     }
 
     public Command setTilter(double angle) {
         return Commands.run(
             () -> {
                 //tiltController.setReference(angle, ControlType.kPosition);
-                tiltMotor.set(MathUtil.clamp(tiltControllerRoboRIO.calculate(throughBoreEncoder.getDistance(), angle),-0.5,0.5));
+                tiltMotor.set(MathUtil.clamp(tiltController.calculate(throughBoreEncoder.getDistance(), angle),-0.5,0.5));
             }
         );
     }
@@ -278,11 +271,12 @@ public class Shooter extends SubsystemBase {
             }
             );
     }
+
     public Command setTiltertoManual() {
         return Commands.run(
             () -> {
                 //tiltController.setReference(tiltPosition, ControlType.kPosition);
-                tiltMotor.set(MathUtil.clamp(tiltControllerRoboRIO.calculate(throughBoreEncoder.getDistance(), tiltPosition),-0.5,0.5));
+                tiltMotor.set(MathUtil.clamp(tiltController.calculate(throughBoreEncoder.getDistance(), tiltPosition),-0.5,0.5));
 
             }
         );
@@ -293,6 +287,7 @@ public class Shooter extends SubsystemBase {
                 return Commands.runOnce(() -> {throughBoreEncoder.reset();;});
 
     }
+    
     public Command IdleShooter(){
         return Commands
         .run(
@@ -356,6 +351,7 @@ public class Shooter extends SubsystemBase {
         )
         .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
+
     public Command setFeederSpeed(double percentOutput) {
         return Commands.runOnce(() -> {feedMotor.set(percentOutput);},this);
     }

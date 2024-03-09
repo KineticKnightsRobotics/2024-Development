@@ -12,9 +12,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 //wpi
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -39,9 +37,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 //robot
-import frc.robot.subsystems.Vision;
 import frc.robot.lib.Constants;
-import frc.robot.LimelightHelpers;
 import frc.robot.lib.SwerveModule;
 import frc.robot.lib.Constants.KinematicsConstants;
 import frc.robot.lib.Constants.SwerveSubsystemConstants;
@@ -51,12 +47,10 @@ import frc.robot.lib.PID_Config.TrajectoryTurning;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import java.util.Optional;
 
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 
 
-import java.sql.Driver;
 //java
 import java.util.concurrent.TimeUnit;
 
@@ -421,36 +415,6 @@ public class SwerveDrive extends SubsystemBase {
         */
     }
 
-    /*
-    public Command followPath(String pathName,Boolean isChoreo) {
-        PathPlannerPath path;
-        if ( ! isChoreo){
-            path = PathPlannerPath.fromPathFile(pathName);
-        }
-        else {
-            path = PathPlannerPath.fromChoreoTrajectory(pathName);
-        }
-        return new SequentialCommandGroup(
-            new FollowPathHolonomic(
-                path,
-                () -> ODEMETER.getEstimatedPosition(),
-                () -> getChassisSpeeds(),
-                this::setAutoChassisSpeed, 
-                new HolonomicPathFollowerConfig(
-                    new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
-                    new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive),
-                    2,
-                    KinematicsConstants.RADIUS_DRIVE_CHASSIS,
-                    new ReplanningConfig()
-                ),
-                () -> {
-                    return false;
-                },
-                this
-            ),
-            new InstantCommand( () -> setChassisSpeed(new ChassisSpeeds(0,0,0),true))
-        );
-    */
     private Optional<Pose3d> getSpeakerPose() {
         var alliance = DriverStation.getAlliance();
         Optional<Pose3d> speakerPose = null;
@@ -476,7 +440,7 @@ public class SwerveDrive extends SubsystemBase {
         return null;
       }
 
-      public double getTranslationRelativeToSpeaker(){
+      public double getDistanceToSpeaker(){
         return Math.abs(getPose().getTranslation().getDistance(getSpeakerPose().get().getTranslation().toTranslation2d()));
     }
 
@@ -495,13 +459,11 @@ public class SwerveDrive extends SubsystemBase {
 
 
       public boolean isRobotInSpeakerZone(){
-        return getTranslationRelativeToSpeaker()<=4.5 && !isRobotInAmpZone();
+        return getDistanceToSpeaker()<=4.5 && !isRobotInAmpZone();
       }
 
       public Rotation2d getRotationRelativeToSpeaker() {
-        return getPose().getTranslation().minus(getSpeakerPose().get().getTranslation().toTranslation2d())
-            .unaryMinus()
-            .getAngle();
+        return getPose().getTranslation().minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
       }
 
       public double getCurrentDrive(){

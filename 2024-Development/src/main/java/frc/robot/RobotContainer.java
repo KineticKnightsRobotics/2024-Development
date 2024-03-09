@@ -5,10 +5,8 @@
 package frc.robot;
 
 import frc.robot.commands.*;
-import frc.robot.commands.unused.setRollerSpeed;
 import frc.robot.subsystems.*;
 import frc.robot.lib.Constants;
-import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.Constants.OIConstants;
 
 import com.pathplanner.lib.auto.NamedCommands;
@@ -17,10 +15,6 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -30,13 +24,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 
 /**
@@ -131,10 +118,9 @@ boolean toggle =false;
 
   int ShooterRPM = 4022;
 
-  //Trigger config
-  //Trigger ShooterReady = new Trigger(()->(SUBSYSTEM_SHOOTER.getTilterPosition() == SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getPose().getTranslation().getDistance(fieldLayout.getTagPose(DriverStation.getAlliance().isEmpty() || DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 3).get().getTranslation().toTranslation2d()))&&SUBSYSTEM_SHOOTER.getLineBreak() == true&&SUBSYSTEM_SHOOTER.getShooterLRPM() >= ShooterRPM));
+  //ROBOT TRIGGERS
 
- Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 10.0);
+  Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 10.0);
   Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
   Trigger NoteInFeederTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getLineBreak());//SUBSYSTEM_SHOOTER::getLineBreak);
   Trigger DriveCurrentLimitTrigger = new Trigger(()->SUBSYSTEM_SWERVEDRIVE.getCurrentDrive()>150);
@@ -230,13 +216,21 @@ DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,
 
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0));
+
+
+    //TODO: This will probably break the code, get ready to disable the robot :] !
+
+    NoteInFeederTrigger.negate().and(ShooterAtHomeTrigger.negate()).onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+
+
     //LockDriveTrigger.onTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
 
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.intakeDown(),
-        SUBSYSTEM_CONVEYER.intakeGamePiece(),
-        SUBSYSTEM_INTAKE.intakeUp()  
+        SUBSYSTEM_CONVEYER.intakeGamePiece()//,
+        //SUBSYSTEM_INTAKE.intakeUp()  TODO: Did this break the code?
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
     .onFalse(SUBSYSTEM_INTAKE.intakeUp());
