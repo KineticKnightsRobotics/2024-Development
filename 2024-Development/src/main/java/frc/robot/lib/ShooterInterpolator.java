@@ -10,6 +10,11 @@ public class ShooterInterpolator {
 
     public double data[][] = {
 
+
+
+
+
+
         /*
         0.0,0.0
         0.5,15
@@ -17,11 +22,7 @@ public class ShooterInterpolator {
         1.5,30.5
         2.0,33.5
          */
-        {0.0,0.0},
-        {0.5,15.0},
-        {1.0,25.0},
-        {1.5,30.5},
-        {2.0,33.5} 
+
         /*
         {0.00,0.0},
         {0.25,10.0},//,
@@ -40,11 +41,28 @@ public class ShooterInterpolator {
 
     public ShooterInterpolator() {
 
+        m_InterpolatingDoubleTreeMap.put(1.305,0.0);
+        m_InterpolatingDoubleTreeMap.put(1.47,10.0);
+        m_InterpolatingDoubleTreeMap.put(2.085,20.0);
+        m_InterpolatingDoubleTreeMap.put(2.65,30.0);
+        m_InterpolatingDoubleTreeMap.put(3.405, 30.5);
+
+
+        /*
+        m_InterpolatingDoubleTreeMap.put(0.0,0.0);
+
+        m_InterpolatingDoubleTreeMap.put(0.61,20.0);
+
+        m_InterpolatingDoubleTreeMap.put(2.29, 30.0);
+        */
+
+        /*
         m_InterpolatingDoubleTreeMap.put(0.0,0.0);
         m_InterpolatingDoubleTreeMap.put(0.5,15.0);
         m_InterpolatingDoubleTreeMap.put(1.0,25.0);
         m_InterpolatingDoubleTreeMap.put(1.5,30.5);
         m_InterpolatingDoubleTreeMap.put(2.0,33.5);
+        */
         /*
         for (int x = 0; x < data.length; x++) {
             m_InterpolatingDoubleTreeMap.put(data[x][0],data[x][1]);
@@ -53,8 +71,11 @@ public class ShooterInterpolator {
     }
 
     public double interpolateAngle(double distance) {
-        SmartDashboard.putNumber("Distance to Speaker", distance-Units.inchesToMeters(14)-Units.inchesToMeters(39));
+        SmartDashboard.putNumber("Distance to Speaker", distance);
         SmartDashboard.putNumber("Interpolated Angle", m_InterpolatingDoubleTreeMap.get(distance));
+
+        //m_InterpolatingDoubleTreeMap.get();
+
         return m_InterpolatingDoubleTreeMap.get(distance);
     }
 

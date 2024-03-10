@@ -11,6 +11,8 @@ import frc.robot.lib.Constants;
 import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.Constants.OIConstants;
 
+import java.util.function.DoubleSupplier;
+
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -155,8 +157,31 @@ boolean toggle =false;
       )
     );
 
-    /*
 
+    NamedCommands.registerCommand("IntakeDown", SUBSYSTEM_INTAKE.intakeDown());
+
+    NamedCommands.registerCommand("TempShoot", SUBSYSTEM_SHOOTER.shoot(4022, 2681, false));
+
+    NamedCommands.registerCommand("Shoot",
+      new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+          SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getTranslationRelativeToSpeaker())),
+          new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
+            () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
+            () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
+            () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
+            () -> true, 
+            () -> 0.02
+          )
+        ),
+        SUBSYSTEM_SHOOTER.shoot(4022,2681, false)
+      )
+    );
+
+    NamedCommands.registerCommand("CapturePiece", new SequentialCommandGroup(SUBSYSTEM_INTAKE.intakeDown(),SUBSYSTEM_CONVEYER.intakeGamePiece(),SUBSYSTEM_INTAKE.intakeUp()));
+
+
+    /*
     NamedCommands.registerCommand("ResetModulePosition", SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
     NamedCommands.registerCommand("IntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
     NamedCommands.registerCommand("IntakeUp" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position));
@@ -166,7 +191,6 @@ boolean toggle =false;
     NamedCommands.registerCommand("AutoSetShooterIdle", new autoSetShooterIdle(SUBSYSTEM_SHOOTER));
     NamedCommands.registerCommand("AutoLoadShooter", new loadShooterAuto(SUBSYSTEM_CONVEYER,SUBSYSTEM_SHOOTER));
     NamedCommands.registerCommand("ShooterDown", SUBSYSTEM_SHOOTER.setTilter(0.0));
-    NamedCommands.registerCommand("CapturePiece", new SequentialCommandGroup(SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position),new intakeLineBreak(SUBSYSTEM_CONVEYER, SUBSYSTEM_INTAKE),SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position)));
     
     
    */
@@ -220,13 +244,24 @@ boolean toggle =false;
 
 
     //TELEOP CONTROLS _________________________________________________________________________________________________________________________________________________________________
-DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
-    () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
-    () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
-    () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
-    () -> true, 
-    () -> 0.02));
- //   NoteInConveyerTrigger.or(NoteInFeederTrigger).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
+    DRIVER_R2.whileTrue(
+    
+    new ParallelCommandGroup(
+      new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
+        () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
+        () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
+        () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
+        () -> true, 
+        () -> 0.02
+      ),
+      SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getTranslationRelativeToSpeaker()))
+      )
+    ).onFalse(SUBSYSTEM_SHOOTER.setTilter(0.0));
+
+
+
+
+   //NoteInConveyerTrigger.or(NoteInFeederTrigger).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
 
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0));
@@ -253,10 +288,10 @@ DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,
 
     DRIVER_A.whileTrue(SUBSYSTEM_SHOOTER.shoot(4022,2681, false));
 
-    DRIVER_Y.onTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
+    DRIVER_Y.whileTrue(SUBSYSTEM_SHOOTER.aimTilter( () -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getTranslationRelativeToSpeaker())));
 
     //DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(0.6)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
-    DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setTilter(SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getTranslationRelativeToSpeaker()-Units.inchesToMeters(14)-Units.inchesToMeters(39)))).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    //DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setTilter(SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getTranslationRelativeToSpeaker()-Units.inchesToMeters(14)-Units.inchesToMeters(39)))).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
 
     //DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
 
@@ -270,13 +305,19 @@ DRIVER_R2.whileTrue(new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,
 
     OP_11.whileTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
     OP_12.whileTrue(SUBSYSTEM_SHOOTER.setTilter(0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(10)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTilter(20)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_15.whileTrue(SUBSYSTEM_SHOOTER.setTilter(30)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_16.whileTrue(SUBSYSTEM_SHOOTER.setTilter(35)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
 
-  //  OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER));
-    //OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
-    OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(25)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTilter(40)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_15.whileTrue(SUBSYSTEM_SHOOTER.setTilter(60)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_16.whileTrue(SUBSYSTEM_SHOOTER.setTilter(80)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+
+    OP_17.whileTrue(SUBSYSTEM_SHOOTER.setTilter(30.5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_18.whileTrue(SUBSYSTEM_SHOOTER.setTilter(31)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+
+    //OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER));
+   // OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
+
+
 
     //SYS ID CONTROLS _________________________________________________________________________________________________________________________________________________________________
 
