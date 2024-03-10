@@ -144,11 +144,15 @@ public class SwerveModule extends SubsystemBase {
 
     }
     public void moduleData2Dashboard(){
-        SmartDashboard.putNumber(MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " angle", Math.toDegrees(getTurningPosition()));
-        SmartDashboard.putNumber(MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
+        SmartDashboard.putNumber(MODULE_NAME +" "+ /*ENCODER_ABSOLUTE.getDeviceID() +*/ " angle", Math.toDegrees(getTurningPosition()));
+        SmartDashboard.putNumber(MODULE_NAME +" "+ /*ENCODER_ABSOLUTE.getDeviceID() +*/ " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
 
-        SmartDashboard.putNumber(MODULE_NAME + "Distance Travelled",getDrivePosition());
-        SmartDashboard.putNumber(MODULE_NAME + "Velocity", getDriveVelocity());
+        SmartDashboard.putNumber(MODULE_NAME + " Distance Travelled",getDrivePosition());
+        SmartDashboard.putNumber(MODULE_NAME + " Velocity", getDriveVelocity());
+
+        SmartDashboard.putNumber(MODULE_NAME + " Output", MOTOR_DRIVE.get());
+
+
     }
 
     public boolean isIdle() {

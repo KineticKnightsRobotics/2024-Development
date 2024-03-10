@@ -14,9 +14,9 @@
     "RightUnderSpeaker",
     "UnderSpeakerCentre"
   ],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 3.4,
-  "defaultMaxAngVel": 720.0,
-  "defaultMaxAngAccel": 720.0,
+  "defaultMaxVel": 0.5,
+  "defaultMaxAccel": 1.5,
+  "defaultMaxAngVel": 90.0,
+  "defaultMaxAngAccel": 90.0,
   "maxModuleSpeed": 3.6
 }

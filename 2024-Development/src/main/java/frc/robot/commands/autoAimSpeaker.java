@@ -46,7 +46,7 @@ public class autoAimSpeaker extends Command {
 
         angle = m_Shooter.shooterInterpolator.interpolateAngle(distance);
 
-        m_Shooter.setShooterPosition(angle);
+        //m_Shooter.aimTilter(angle);
 
 
         //m_Shooter.setTilter(m_Shooter.shooterInterpolator.interpolateAngle(m_Drive.getTranslationRelativeToSpeaker()));

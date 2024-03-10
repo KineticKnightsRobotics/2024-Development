@@ -52,7 +52,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 
 
 //java
-import java.util.concurrent.TimeUnit;
+//import java.util.concurrent.TimeUnit;
 
 
 public class SwerveDrive extends SubsystemBase {
@@ -124,8 +124,7 @@ public class SwerveDrive extends SubsystemBase {
     );
 
     public SwerveDrive() {
-        try {TimeUnit.SECONDS.sleep(1);}
-        catch(InterruptedException e){}
+        
         MODULE_FRONT_LEFT.resetTurnEncoders();
         MODULE_FRONT_RIGHT.resetTurnEncoders();
         MODULE_BACK_LEFT.resetTurnEncoders();
@@ -142,7 +141,7 @@ public class SwerveDrive extends SubsystemBase {
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                     new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
                     new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive),
-                    3.4,
+                    1.0,
                     KinematicsConstants.RADIUS_DRIVE_CHASSIS, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig(
                             
@@ -286,8 +285,8 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getRobotHeading() {
-        return Math.IEEEremainder(Constants.SwerveSubsystemConstants.REVERSED_GYRO ? navX.getAngle() : -navX.getAngle() , 360);
-        //return navX.getYaw();
+        //return Math.IEEEremainder(Constants.SwerveSubsystemConstants.REVERSED_GYRO ? navX.getAngle() : -navX.getAngle() , 360);
+        return -navX.getYaw();
     }
 
     public Rotation2d getRotation2d() {

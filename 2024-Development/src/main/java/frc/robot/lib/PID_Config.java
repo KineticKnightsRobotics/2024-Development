@@ -33,7 +33,7 @@ public class PID_Config {
 
     public class ShooterSubsystem {
         public class TilterPIDConfig {
-            public static final double Proportional = 0.03;
+            public static final double Proportional = 0.01;
             public static final double Integral = 0.0;
             public static final double Derivitive = 0.0;
         }
