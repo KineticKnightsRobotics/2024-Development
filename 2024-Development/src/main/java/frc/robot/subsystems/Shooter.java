@@ -34,6 +34,10 @@ import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
+
+import java.util.concurrent.TimeUnit;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.MathUtil;
 public class Shooter extends SubsystemBase {
@@ -134,9 +138,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Manual Shooter Angle", tiltPosition);
 
         throughBoreEncoder = new DutyCycleEncoder(4);
-        throughBoreEncoder.setDistancePerRotation(-360);
-        throughBoreEncoder.reset();
-        
+        throughBoreEncoder.setDistancePerRotation(-360);        
      
 
         // Create a new SysId routine for characterizing the shooter.
@@ -218,6 +220,14 @@ public class Shooter extends SubsystemBase {
                     this
                 )
             );
+
+
+
+
+        try {TimeUnit.SECONDS.sleep(1);}
+        catch(InterruptedException e){
+            throughBoreEncoder.reset();
+        }
     }
     
     @Override
@@ -227,9 +237,13 @@ public class Shooter extends SubsystemBase {
             hasResetThroughBoreEncoder=true;
         }
         SmartDashboard.putNumber("Through Bore Encoder", throughBoreEncoder.getDistance());
-        SmartDashboard.putNumber("Through Bore Encoder Absolute", throughBoreEncoder.getAbsolutePosition());
+        //SmartDashboard.putNumber("Through Bore Encoder Absolute", throughBoreEncoder.getAbsolutePosition());
+        //SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
         //SmartDashboard.putNumber("Shooter RPM Top", shooterMotorR.getEncoder().getVelocity());
         SmartDashboard.putNumber("Shooter RPM Bottom", shooterMotorL.getEncoder().getVelocity());
+        //SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
+        //SmartDashboard.putNumber("Tiler Position", getTilterPosition());
+        //SmartDashboard.putNumber("Tilter Follower Position",tiltMotor_Follower.getEncoder().getPosition());
         //SmartDashboard.putNumber("ShooterCurrentF",shooterMotorR.getOutputCurrent());
         //SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
         //SmartDashboard.putNumber("Tilter Setpoint", tiltPosition);
@@ -244,8 +258,13 @@ public class Shooter extends SubsystemBase {
         return tiltEncoder.getPosition();
     }
 
-    public void setShooterPosition(double angle) {
-        tiltMotor.set(MathUtil.clamp(tiltController.calculate(throughBoreEncoder.getDistance(), angle),-0.5,0.5));
+    public Command aimTilter(DoubleSupplier angleSupplier) {
+        return Commands.run(
+            () -> {
+                //tiltController.setReference(angle, ControlType.kPosition);
+                tiltMotor.set(MathUtil.clamp(tiltController.calculate(throughBoreEncoder.getDistance(), angleSupplier.getAsDouble()),-0.5,0.5));
+            }
+        );
     }
 
     public Command setTilter(double angle) {

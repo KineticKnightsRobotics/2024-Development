@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "TempShoot"
           }
         },
         {
@@ -30,7 +30,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CapturePiece"
+                  "name": "IntakeDown"
                 }
               }
             ]
@@ -45,12 +45,6 @@
                 "data": {
                   "pathName": "Note1ToScore"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
               }
             ]
           }
@@ -58,7 +52,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "TempShoot"
           }
         },
         {
@@ -74,7 +68,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CapturePiece"
+                  "name": "IntakeDown"
                 }
               }
             ]
@@ -89,12 +83,6 @@
                 "data": {
                   "pathName": "note2ToScorePos"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
               }
             ]
           }
@@ -102,7 +90,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "TempShoot"
           }
         },
         {
@@ -118,7 +106,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CapturePiece"
+                  "name": "IntakeDown"
                 }
               }
             ]
@@ -133,12 +121,6 @@
                 "data": {
                   "pathName": "note3ToScorePos"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
               }
             ]
           }
@@ -146,7 +128,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "TempShoot"
           }
         }
       ]
