@@ -144,15 +144,11 @@ public class SwerveModule extends SubsystemBase {
 
     }
     public void moduleData2Dashboard(){
-        SmartDashboard.putNumber(MODULE_NAME +" "+ /*ENCODER_ABSOLUTE.getDeviceID() +*/ " angle", Math.toDegrees(getTurningPosition()));
-        SmartDashboard.putNumber(MODULE_NAME +" "+ /*ENCODER_ABSOLUTE.getDeviceID() +*/ " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
+        SmartDashboard.putNumber(MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " angle", Math.toDegrees(getTurningPosition()));
+        SmartDashboard.putNumber(MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
 
-        SmartDashboard.putNumber(MODULE_NAME + " Distance Travelled",getDrivePosition());
-        SmartDashboard.putNumber(MODULE_NAME + " Velocity", getDriveVelocity());
-
-        SmartDashboard.putNumber(MODULE_NAME + " Output", MOTOR_DRIVE.get());
-
-
+        SmartDashboard.putNumber(MODULE_NAME + "Distance Travelled",getDrivePosition());
+        SmartDashboard.putNumber(MODULE_NAME + "Velocity", getDriveVelocity());
     }
 
     public boolean isIdle() {
@@ -204,7 +200,7 @@ public class SwerveModule extends SubsystemBase {
 
     public void setPercentOutput(SwerveModuleState state) {
         double percentOutput = state.speedMetersPerSecond/SwerveSubsystemConstants.LIMIT_HARD_SPEED_DRIVE;
-        MOTOR_DRIVE.set(-percentOutput);
+        MOTOR_DRIVE.set(/*-*/percentOutput);
     }
     
     public void stopModuleMotors(){

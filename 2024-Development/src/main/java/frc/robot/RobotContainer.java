@@ -166,7 +166,12 @@ boolean toggle =false;
       )
     );
 
-    NamedCommands.registerCommand("CapturePiece", new SequentialCommandGroup(SUBSYSTEM_INTAKE.intakeDown(),SUBSYSTEM_CONVEYER.intakeGamePiece(),SUBSYSTEM_INTAKE.intakeUp()));
+    NamedCommands.registerCommand("CapturePiece", new SequentialCommandGroup(
+      SUBSYSTEM_INTAKE.intakeDown(),
+      SUBSYSTEM_CONVEYER.intakeGamePiece(),
+      SUBSYSTEM_INTAKE.intakeUp()
+      )
+    );
 
 
     /*
@@ -256,7 +261,8 @@ boolean toggle =false;
 
 
     //TODO: This will probably break the code, get ready to disable the robot :] !
-    //NoteInFeederTrigger.negate().and(ShooterAtHomeTrigger.negate()).onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+    NoteInFeederTrigger.negate().and(ShooterAtHomeTrigger.negate()).onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
 
 
 
@@ -265,14 +271,14 @@ boolean toggle =false;
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.intakeDown(),
-        SUBSYSTEM_CONVEYER.intakeGamePiece(),
-        SUBSYSTEM_INTAKE.intakeUp()  
+        SUBSYSTEM_CONVEYER.intakeGamePiece()//,
+        //SUBSYSTEM_INTAKE.intakeUp()  TODO: Did this break the code?
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
     .onFalse(SUBSYSTEM_INTAKE.intakeUp());
 
     NoteInConveyerTrigger.and(ShooterAtHomeTrigger).onTrue(
-      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.3)//.withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2)//.withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
       .andThen(
         SUBSYSTEM_SHOOTER.loadGamePiece().withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
       )
@@ -287,6 +293,7 @@ boolean toggle =false;
 
     //DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(0.6)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
     //DRIVER_X.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER, SUBSYSTEM_SWERVEDRIVE));
+
     //DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());

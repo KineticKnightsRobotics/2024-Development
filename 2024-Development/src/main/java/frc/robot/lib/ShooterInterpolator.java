@@ -1,14 +1,20 @@
 package frc.robot.lib;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-//import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter;
 
 public class ShooterInterpolator {
 
 
     public double data[][] = {
+
+
+
+
+
+
         /*
         0.0,0.0
         0.5,15
@@ -65,13 +71,6 @@ public class ShooterInterpolator {
     }
 
     public double interpolateAngle(double distance) {
-
-        if (distance > 4.5) {
-            return 0.0;
-        }
-
-
-
         SmartDashboard.putNumber("Distance to Speaker", distance);
         SmartDashboard.putNumber("Interpolated Angle", m_InterpolatingDoubleTreeMap.get(distance));
         return m_InterpolatingDoubleTreeMap.get(distance);

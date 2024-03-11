@@ -139,9 +139,6 @@ public class Shooter extends SubsystemBase {
 
         throughBoreEncoder = new DutyCycleEncoder(4);
         throughBoreEncoder.setDistancePerRotation(-360);        
-
-
-        boolean YEET = false;
      
 
         // Create a new SysId routine for characterizing the shooter.
@@ -242,7 +239,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Through Bore Encoder", throughBoreEncoder.getDistance());
         //SmartDashboard.putNumber("Through Bore Encoder Absolute", throughBoreEncoder.getAbsolutePosition());
         //SmartDashboard.putBoolean("Shooter rollers running in sync", (Math.abs(getShooterFRPM() - getShooterLRPM()) <= 100 )); // Check if shooter rollers are running within 5 RPM of each other
-        SmartDashboard.putNumber("Shooter RPM Top", shooterMotorR.getEncoder().getVelocity());
+        //SmartDashboard.putNumber("Shooter RPM Top", shooterMotorR.getEncoder().getVelocity());
         SmartDashboard.putNumber("Shooter RPM Bottom", shooterMotorL.getEncoder().getVelocity());
         //SmartDashboard.putNumber("Shooter RPM Difference",Math.abs(getShooterFRPM() - getShooterLRPM()));
         //SmartDashboard.putNumber("Tiler Position", getTilterPosition());
@@ -342,11 +339,11 @@ public class Shooter extends SubsystemBase {
                 shooterControllerL.setReference(desiredRPM_1, ControlType.kVelocity,0,shooterFeedFoward.calculate(desiredRPM_1));
                 shooterControllerR.setReference(desiredRPM_2, ControlType.kVelocity,0,shooterFeedFoward.calculate(desiredRPM_2));
                 }
-                if (shooterMotorLEncoder.getVelocity() >= desiredRPM_1-20 && shooterMotorREncoder.getVelocity() >= desiredRPM_2-20) {// && Math.abs((shooterMotorLEncoder.getVelocity()-desiredRPM_1) - (shooterMotorREncoder.getVelocity()-desiredRPM_2)) < 50){
+                if (shooterMotorLEncoder.getVelocity() >= desiredRPM_1-20 && shooterMotorREncoder.getVelocity() >= desiredRPM_2-20){
                     feedMotor.set(1.0);
                 }
             },
-        this) 
+        this)
         .until(() -> ! getLineBreak())
         .andThen(new WaitCommand(1.0))
         .finallyDo(
