@@ -190,5 +190,15 @@
       "timestamp": 1.858654607410277
     }
   ],
-  "eventMarkers": []
+  "eventMarkers": [
+    {
+      "timestamp": 1.7,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "LoadShooter"
+        }
+      }
+    }
+  ]
 }

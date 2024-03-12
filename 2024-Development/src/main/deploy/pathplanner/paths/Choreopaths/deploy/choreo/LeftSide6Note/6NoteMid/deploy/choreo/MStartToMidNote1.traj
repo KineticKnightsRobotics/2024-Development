@@ -280,5 +280,15 @@
       "timestamp": 2.4777887812295867
     }
   ],
-  "eventMarkers": []
+  "eventMarkers": [
+    {
+      "timestamp": 2,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "CaptureNote"
+        }
+      }
+    }
+  ]
 }
