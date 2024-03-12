@@ -12,7 +12,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Translation2d;
 
-import edu.wpi.first.math.VecBuilder;
+//import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.numbers.N3;
 
@@ -43,7 +43,7 @@ public final class Constants {
 
     //Robot Geometry
     public static final double MODULE_WHEEL_DIAMETER = Units.inchesToMeters(4.0);
-    public static final double MODULE_DRIVE_GEAR_RATIO = 8.14 / 1.0; // Drive ratio of 8.14 : 1
+    public static final double MODULE_DRIVE_GEAR_RATIO = 7.130 / 1.0; // Drive ratio of 8.14 : 1
     public static final double MODULE_TURN_GEAR_RATIO = 1.0 / (150.0 / 7.0); // Turning ratio of (150 / 7) : 1
     public static final double MODULE_DRIVE_ROTATIONS_TO_METERS = ((MODULE_WHEEL_DIAMETER * Math.PI) / MODULE_DRIVE_GEAR_RATIO) /1.05; //1.0475;/// 0.77; -- multiplier to compensate for tread thickness
     public static final double MODULE_TURN_ROTATIONS_TO_RADIANS = MODULE_TURN_GEAR_RATIO * 2 * Math.PI;
@@ -85,10 +85,10 @@ public final class Constants {
     public static final boolean REVERSED_BACK_RIGHT_MOTOR_DRIVE = true;//false;//true;
 
     // Turning encoder offsets
-    public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE = Math.toRadians(-96.0 +  7.6+90);
-    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians(-118.7986 + 180);
-    public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE= Math.toRadians(-77.0 +  6+90);
-    public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE = Math.toRadians( 62.0 + -3.6+90);
+    public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE = Math.toRadians(-96.0+7.6+90);
+    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians(-118.7986+180); //What the fuck are these offsets?
+    public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE= Math.toRadians(-77.0+6+90);
+    public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE = Math.toRadians( 62.0+-3.6+90);
 
     // Robot drive speeds
     public static final double LIMIT_HARD_SPEED_DRIVE = 3.6; // hard limit for speed of chassis
@@ -123,13 +123,16 @@ public final class Constants {
   }
 
   public static class ShooterSubsystemConstants {
-
-    public static int ID_MOTOR_TILTER = 54;
+    public static int ID_MOTOR_FEEDER          = 51;
+    public static int ID_MOTOR_SHOOTER_LEFT    = 52;
+    public static int ID_MOTOR_SHOOTER_RIGHT   = 53;
+    public static int ID_MOTOR_TILTER          = 54;
     public static int ID_MOTOR_TILTER_FOLLOWER = 55;
-    public static int ID_MOTOR_SHOOTER_LEFT = 52;
-    public static int ID_MOTOR_SHOOTER_RIGHT = 53;
-    public static int ID_MOTOR_FEEDER = 51;
+    public static int ID_MOTOR_EXTENSION       = 56;
     public static int ID_SHOOTER_BEAMBREAK = 0;
+
+    public static double extensionUpPosition = 50;
+
     public static double MOTOR_FEEDER_GEARRATIO = 1 / 3;
     public static double SHOOTER_GEAR_RATIO = 36/1; // 36 : 1
     public static double SHOOTER_TICKS_TO_DEGREES = 360 / SHOOTER_GEAR_RATIO;
@@ -144,6 +147,10 @@ public final class Constants {
   public static class ClimberSubsystemConstants {
     public static int ID_LEFT_WINCH  = 61; //TODO: Remember to switch these back after drive practice.
     public static int ID_RIGHT_WINCH = 62;
+
+    public static double climberUpPosition = 50; //TOOD: Measure this.
+
+
   }
 
   public static class VisionConstants {

@@ -8,9 +8,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.LimelightHelpers;
-import frc.robot.lib.Constants.VisionConstants;
 import frc.robot.lib.Constants.VisionConstants.defaultSTD;
 
 public class Vision {
@@ -24,7 +22,7 @@ public class Vision {
         return LimelightHelpers.getBotPose2d_wpiBlue("limelight");
     }
 
-    public Matrix<N3,N1> getStandardDeviations(){
+    public Matrix<N3,N1> getStandardDeviations(){   //Borrowed all this from 3161 :]
         LimelightHelpers.PoseEstimate limelightPose = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
         //Get tag count and average position...
         int tagCount = limelightPose.tagCount;
@@ -39,13 +37,10 @@ public class Vision {
         }
         else {
             SmartDashboard.putNumberArray("Vision STD", defaultSTD.singleTagStD.times(1 + (Math.pow(avgDist, 2) / 30)).getData());
-            return defaultSTD.singleTagStD.times(1 + (Math.pow(avgDist, 2) / 30)); //Borrowed equation from 3161 :]
+            return defaultSTD.singleTagStD.times(1 + (Math.pow(avgDist, 2) / 30));
             //return defaultSTD.singleTagStD;
         }
     }
-
-    //Timer.getFPGATimestamp() - (m_LimeLight.getRoboPoseLatency()/1000)
-
     public double getTimestamp() {
         return Timer.getFPGATimestamp() - LimelightHelpers.getLatency_Capture("limelight")/1000;
     }

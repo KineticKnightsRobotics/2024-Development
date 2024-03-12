@@ -1,40 +1,12 @@
 package frc.robot.lib;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Shooter;
 
 public class ShooterInterpolator {
 
 
     public double data[][] = {
-
-
-
-
-
-
-        /*
-        0.0,0.0
-        0.5,15
-        1.0,25
-        1.5,30.5
-        2.0,33.5
-         */
-
-        /*
-        {0.00,0.0},
-        {0.25,10.0},//,
-        {0.50,20.0},
-        {0.75,30.0},
-        {1.00,35.0},
-        {1.25,40.0},
-        {1.50,42.5},
-        {1.75,45.0},
-        {2.00,47.5},
-        {2.25,50.0}
-        */
     };
 
     InterpolatingDoubleTreeMap m_InterpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
@@ -47,22 +19,6 @@ public class ShooterInterpolator {
         m_InterpolatingDoubleTreeMap.put(2.65,30.0);
         m_InterpolatingDoubleTreeMap.put(3.405, 30.5);
 
-
-        /*
-        m_InterpolatingDoubleTreeMap.put(0.0,0.0);
-
-        m_InterpolatingDoubleTreeMap.put(0.61,20.0);
-
-        m_InterpolatingDoubleTreeMap.put(2.29, 30.0);
-        */
-
-        /*
-        m_InterpolatingDoubleTreeMap.put(0.0,0.0);
-        m_InterpolatingDoubleTreeMap.put(0.5,15.0);
-        m_InterpolatingDoubleTreeMap.put(1.0,25.0);
-        m_InterpolatingDoubleTreeMap.put(1.5,30.5);
-        m_InterpolatingDoubleTreeMap.put(2.0,33.5);
-        */
         /*
         for (int x = 0; x < data.length; x++) {
             m_InterpolatingDoubleTreeMap.put(data[x][0],data[x][1]);

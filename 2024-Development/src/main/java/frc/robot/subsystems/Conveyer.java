@@ -10,11 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 //import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //robot
@@ -41,7 +38,7 @@ public class Conveyer extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putData(this);
-        SmartDashboard.putBoolean("Note in Conveyer", getLineBreak());
+        SmartDashboard.putBoolean("Conveyer", getLineBreak());
         SmartDashboard.putNumber("convey_Left", conveyerMotorLeft.getOutputCurrent());
         SmartDashboard.putNumber("convey_Right", conveyerMotorRight.getOutputCurrent());
     }

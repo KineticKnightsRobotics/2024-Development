@@ -26,22 +26,6 @@ import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 
-/*
- * TODO: Intake
- * Intake Intake Pivot function
- * find forward position
- * find backwards position
- * zeroing encoder with voltage limit switch
- * 
- * Commands:
- * 
- * Move intake to forward position
- * Manually run roller, stop on end
- * Automatically run roller until Conveyer subsystem linebreak returns true
- * 
- */
-
-
 public class Intake extends SubsystemBase {
     
     private final CANSparkMax rollerMotor;

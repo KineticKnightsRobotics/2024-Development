@@ -211,7 +211,7 @@ public class SwerveDrive extends SubsystemBase {
        // Shuffleboard.getTab("Teleoperated").add("Gyro",navX.getYaw());
        // SmartDashboard.putNumber("Robot Heading", getRobotHeading());
         SmartDashboard.putData("Field", field);field.setRobotPose(getPose());
-        SmartDashboard.putString("Robot Odemeter position", ODEMETER.getEstimatedPosition().toString());
+        SmartDashboard.putString("Drive Odemeter Position", ODEMETER.getEstimatedPosition().toString());
 
         SmartDashboard.putString("Vision Pose", vision.getEstimatedRoboPose().toString());
         SmartDashboard.putString("Vision STD", vision.getStandardDeviations().toString());
@@ -223,11 +223,11 @@ public class SwerveDrive extends SubsystemBase {
         MODULE_BACK_LEFT.moduleData2Dashboard();
         MODULE_BACK_RIGHT.moduleData2Dashboard();
 
-        SmartDashboard.putNumber("Gyro Heading", -navX.getYaw());
+        SmartDashboard.putNumber("Drive Gyro Heading", -navX.getYaw());
 
         updatePoseEstimator();
 
-        SmartDashboard.putBoolean("Chassis Idle", getChassisIdle());
+        SmartDashboard.putBoolean("Drive Chassis Idle", getChassisIdle());
         if (!getChassisIdle()) {
             idle_Timer_Lock.reset();
             idle_Timer_Zero.reset();
@@ -237,8 +237,8 @@ public class SwerveDrive extends SubsystemBase {
             idle_Timer_Zero.reset();
         }
 
-        SmartDashboard.putNumber("Idle Timer Locking", idle_Timer_Lock.get());
-        SmartDashboard.putNumber("Lock Timer", getLockTimer());
+        SmartDashboard.putNumber("Drive Idle Timer Locking", idle_Timer_Lock.get());
+        SmartDashboard.putNumber("Drive Lock Timer", getLockTimer());
     }
 
     public Pose2d getPose() {

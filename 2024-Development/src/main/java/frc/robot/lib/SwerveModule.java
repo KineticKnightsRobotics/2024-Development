@@ -144,11 +144,11 @@ public class SwerveModule extends SubsystemBase {
 
     }
     public void moduleData2Dashboard(){
-        SmartDashboard.putNumber(MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " angle", Math.toDegrees(getTurningPosition()));
-        SmartDashboard.putNumber(MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
+        SmartDashboard.putNumber("Drive " + MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " angle", Math.toDegrees(getTurningPosition()));
+        SmartDashboard.putNumber("Drive " + MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
 
-        SmartDashboard.putNumber(MODULE_NAME + "Distance Travelled",getDrivePosition());
-        SmartDashboard.putNumber(MODULE_NAME + "Velocity", getDriveVelocity());
+        SmartDashboard.putNumber("Drive " + MODULE_NAME + " Distance Travelled",getDrivePosition());
+        SmartDashboard.putNumber("Drive " + MODULE_NAME + " Velocity", getDriveVelocity());
     }
 
     public boolean isIdle() {
@@ -189,13 +189,7 @@ public class SwerveModule extends SubsystemBase {
      * Set new speed for the driving motors
      */
     public void setSpeed(SwerveModuleState state) {
-
-        //TODO: Convert from MPS to RPM
-
         PID_VELOCITY.setReference(state.speedMetersPerSecond, ControlType.kVelocity,0,FEEDFORWARD_VELOCITY.calculate(state.speedMetersPerSecond));
-        //double percentOutput = state.speedMetersPerSecond/SwerveSubsystemConstants.LIMIT_HARD_SPEED_DRIVE;
-        //MOTOR_DRIVE.set(percentOutput);
-
     }
 
     public void setPercentOutput(SwerveModuleState state) {

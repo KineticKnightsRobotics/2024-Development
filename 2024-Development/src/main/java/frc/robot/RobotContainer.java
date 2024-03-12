@@ -9,7 +9,7 @@ import frc.robot.subsystems.*;
 import frc.robot.lib.Constants;
 import frc.robot.lib.Constants.OIConstants;
 
-import java.util.function.DoubleSupplier;
+//import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -24,10 +24,12 @@ import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 //import edu.wpi.first.wpilibj2.command.PIDCommand;
 //import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
+//import edu.wpi.first.apriltag.AprilTagFieldLayout;
+//import edu.wpi.first.apriltag.AprilTagFields;
 
 
 /**
@@ -48,7 +50,7 @@ public class RobotContainer {
   private final Climber SUBSYSTEM_CLIMBER = new Climber();
   private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive();
 
-  private final AprilTagFieldLayout fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+  //private final AprilTagFieldLayout fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
 
   //private Command lockCommand = new RunCommand(() -> SUBSYSTEM_SWERVEDRIVE.lockChassis(),SUBSYSTEM_SWERVEDRIVE);
@@ -146,47 +148,9 @@ boolean toggle =false;
     );
 
 
-    NamedCommands.registerCommand("IntakeDown", SUBSYSTEM_INTAKE.intakeDown());
-
-    NamedCommands.registerCommand("TempShoot", SUBSYSTEM_SHOOTER.shoot(4022, 2681, false));
-
-    NamedCommands.registerCommand("Shoot",
-      new SequentialCommandGroup(
-        new ParallelDeadlineGroup(
-          SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
-          new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
-            () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
-            () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
-            () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
-            () -> true, 
-            () -> 0.02
-          )
-        ),
-        SUBSYSTEM_SHOOTER.shoot(4022,2681, false)
-      )
-    );
-
-    NamedCommands.registerCommand("CapturePiece", new SequentialCommandGroup(
-      SUBSYSTEM_INTAKE.intakeDown(),
-      SUBSYSTEM_CONVEYER.intakeGamePiece(),
-      SUBSYSTEM_INTAKE.intakeUp()
-      )
-    );
+    configureNamedCommands();
 
 
-    /*
-    NamedCommands.registerCommand("ResetModulePosition", SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
-    NamedCommands.registerCommand("IntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
-    NamedCommands.registerCommand("IntakeUp" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position));
-    NamedCommands.registerCommand("AutoConveyer", new intakeLineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
-    NamedCommands.registerCommand("AutoAimSpeaker", new autoAimSpeaker(SUBSYSTEM_SHOOTER));
-    NamedCommands.registerCommand("AutoRunShooter", new autoRunShooter(SUBSYSTEM_SHOOTER/*,SUBSYSTEM_CONVEYER,2500.0));
-    NamedCommands.registerCommand("AutoSetShooterIdle", new autoSetShooterIdle(SUBSYSTEM_SHOOTER));
-    NamedCommands.registerCommand("AutoLoadShooter", new loadShooterAuto(SUBSYSTEM_CONVEYER,SUBSYSTEM_SHOOTER));
-    NamedCommands.registerCommand("ShooterDown", SUBSYSTEM_SHOOTER.setTilter(0.0));
-    
-    
-   */
     
     //intake down, feed note to panel, set intake up)
     // Configure the trigger bindings
@@ -196,77 +160,40 @@ boolean toggle =false;
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     //new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
-    /*
-    DRIVER_B.onTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
-    DRIVER_R1.whileTrue(
-      new SequentialCommandGroup(
-        SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position),
-        new intakeLineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE),
-        SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position)
-      )
-    );
-    DRIVER_R1.onFalse(SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position));
-    DRIVER_L1.whileTrue(
-      new ParallelCommandGroup(  
-        //new SHOOTER_runFeeder(-0.40, SUBSYSTEM_SHOOTER),
-        new setRollerSpeed(SUBSYSTEM_INTAKE, -0.8),
-        new runConveyer(0.4, SUBSYSTEM_CONVEYER),
-        new setShooterSpeed(-0.30, SUBSYSTEM_SHOOTER)
-      )
-    );
-   
 
-      /*rightTrigger().whileTrue( new PIDCommand(
-      new PIDController(0.05,0,0),
-      // Close the loop on the turn rate
-      SUBSYSTEM_SWERVEDRIVE::getRobotHeading,
-      // Setpoint is 0
-      0,
-      // Pipe the output to the turning controls
-      output ->  new joystickDrive(
-        SUBSYSTEM_SWERVEDRIVE, 
-        () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
-        () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
-        () -> output, 
-        () -> true, 
-        () -> 0.02
-      ),
-      // Require the robot drive
-      SUBSYSTEM_SWERVEDRIVE));
-    */
+
+    //TELEOP ROBOT TRIGGERED EVENTS
+    NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
+    NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0));
+
+    //TODO: This will probably break the robot if it doesnt work, get ready to disable :]
+    NoteInFeederTrigger.negate().and(ShooterAtHomeTrigger.negate()).onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+    NoteInConveyerTrigger.and(ShooterAtHomeTrigger).onTrue(
+      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2)//.withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+      .andThen(
+        SUBSYSTEM_SHOOTER.loadGamePiece().withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+      )
+      .andThen(
+        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
+      )
+    );
 
 
     //TELEOP CONTROLS _________________________________________________________________________________________________________________________________________________________________
     DRIVER_R2.whileTrue(
-    
-    new ParallelCommandGroup(
-      new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
-        () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
-        () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
-        () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
-        () -> true, 
-        () -> 0.02
-      ),
-      SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker()))
-      )
+      new ParallelCommandGroup(
+        new rotationTargetLockDrive(
+            SUBSYSTEM_SWERVEDRIVE,   
+            () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
+            () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
+            () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
+            () -> true, 
+            () -> 0.02
+          ),
+          SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker()))
+        )
     ).onFalse(SUBSYSTEM_SHOOTER.setTilter(0.0));
-
-
-
-
-   //NoteInConveyerTrigger.or(NoteInFeederTrigger).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
-
-    NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
-    NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0));
-
-
-    //TODO: This will probably break the code, get ready to disable the robot :] !
-
-    NoteInFeederTrigger.negate().and(ShooterAtHomeTrigger.negate()).onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
-
-
-
-    //LockDriveTrigger.onTrue(SUBSYSTEM_SWERVEDRIVE.lockDrive());
 
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
@@ -277,24 +204,11 @@ boolean toggle =false;
     )
     .onFalse(SUBSYSTEM_INTAKE.intakeUp());
 
-    NoteInConveyerTrigger.and(ShooterAtHomeTrigger).onTrue(
-      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2)//.withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
-      .andThen(
-        SUBSYSTEM_SHOOTER.loadGamePiece().withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
-      )
-      .andThen(
-        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0) //TODO: Does this break the code?
-      )
-    );
-
-    DRIVER_A.whileTrue(SUBSYSTEM_SHOOTER.shoot(4022,2681, false));
+    DRIVER_R1.whileTrue(SUBSYSTEM_SHOOTER.shoot(4022,2681, false));
 
     DRIVER_Y.whileTrue(SUBSYSTEM_SHOOTER.aimTilter( () -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())));
 
-    //DRIVER_X.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(0.6)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
-    //DRIVER_X.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER, SUBSYSTEM_SWERVEDRIVE));
-
-    //DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(1.70,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
+    DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(2.0,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
 
@@ -315,6 +229,8 @@ boolean toggle =false;
     OP_17.whileTrue(SUBSYSTEM_SHOOTER.setTilter(30.5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     OP_18.whileTrue(SUBSYSTEM_SHOOTER.setTilter(31)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
 
+    OP_19.whileTrue(SUBSYSTEM_SHOOTER.setTilterVoltage(0.46)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+
     //OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER));
    // OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
 
@@ -322,6 +238,7 @@ boolean toggle =false;
 
     //SYS ID CONTROLS _________________________________________________________________________________________________________________________________________________________________
 
+    /* 
     SYSID_1.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistaticLeft(SysIdRoutine.Direction.kForward));
     SYSID_2.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistaticLeft(SysIdRoutine.Direction.kReverse));
     SYSID_3.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamicLeft(SysIdRoutine.Direction.kForward));
@@ -331,6 +248,7 @@ boolean toggle =false;
     SYSID_6.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistaticRight(SysIdRoutine.Direction.kReverse));
     SYSID_7.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamicRight(SysIdRoutine.Direction.kForward));
     SYSID_8.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamicRight(SysIdRoutine.Direction.kReverse));
+    */
 
     SYSID_9.whileTrue(SUBSYSTEM_SWERVEDRIVE.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
     SYSID_10.whileTrue(SUBSYSTEM_SWERVEDRIVE.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
@@ -347,12 +265,66 @@ boolean toggle =false;
     SYSID_19.whileTrue(SUBSYSTEM_INTAKE.sysIdDynamic(SysIdRoutine.Direction.kForward).until(() -> SUBSYSTEM_INTAKE.getIntakePosition() >= Constants.IntakeSubsystemConstants.Forward_IntakePivot_Position));
     SYSID_20.whileTrue(SUBSYSTEM_INTAKE.sysIdDynamic(SysIdRoutine.Direction.kReverse).until(() -> SUBSYSTEM_INTAKE.getIntakePosition() <= Constants.IntakeSubsystemConstants.Reverse_IntakePivot_Position));
 
+    /*
     SYSID_21.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistaticTilter(SysIdRoutine.Direction.kForward).until(() -> SUBSYSTEM_SHOOTER.getTilterPosition() >= 60));
     SYSID_22.whileTrue(SUBSYSTEM_SHOOTER.sysIdQuasistaticTilter(SysIdRoutine.Direction.kReverse).until(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 0 ));
     SYSID_23.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamicTiler(SysIdRoutine.Direction.kForward).until(() -> SUBSYSTEM_SHOOTER.getTilterPosition() >= 60));
     SYSID_24.whileTrue(SUBSYSTEM_SHOOTER.sysIdDynamicTiler(SysIdRoutine.Direction.kReverse).until(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 0 ));
+    */
 
   }
+
+  public void configureNamedCommands() {
+    NamedCommands.registerCommand("ShootNoAim", SUBSYSTEM_SHOOTER.shoot(4022, 2681, false));
+
+    NamedCommands.registerCommand("Shoot",
+      new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+          SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
+          new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
+            () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
+            () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
+            () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
+            () -> true, 
+            () -> 0.02
+          )
+        ),
+        SUBSYSTEM_SHOOTER.shoot(4022,2681, false),
+        SUBSYSTEM_SHOOTER.setTilter(0.0)
+      )
+    );
+
+    NamedCommands.registerCommand("LoadShooter", 
+      new SequentialCommandGroup(
+        SUBSYSTEM_INTAKE.intakeDown(),
+        SUBSYSTEM_CONVEYER.intakeGamePiece()//,
+        //SUBSYSTEM_INTAKE.intakeUp()  TODO: Did this break the code?
+      ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+    );
+
+    NamedCommands.registerCommand("CaptureNote", new SequentialCommandGroup(
+      SUBSYSTEM_INTAKE.intakeDown(),
+      SUBSYSTEM_CONVEYER.intakeGamePiece(),
+      SUBSYSTEM_INTAKE.intakeUp()
+      )
+    );
+
+
+    /*
+    NamedCommands.registerCommand("ResetModulePosition", SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
+    NamedCommands.registerCommand("IntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
+    NamedCommands.registerCommand("IntakeUp" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position));
+    NamedCommands.registerCommand("AutoConveyer", new intakeLineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
+    NamedCommands.registerCommand("AutoAimSpeaker", new autoAimSpeaker(SUBSYSTEM_SHOOTER));
+    NamedCommands.registerCommand("AutoRunShooter", new autoRunShooter(SUBSYSTEM_SHOOTER/*,SUBSYSTEM_CONVEYER,2500.0));
+    NamedCommands.registerCommand("AutoSetShooterIdle", new autoSetShooterIdle(SUBSYSTEM_SHOOTER));
+    NamedCommands.registerCommand("AutoLoadShooter", new loadShooterAuto(SUBSYSTEM_CONVEYER,SUBSYSTEM_SHOOTER));
+    NamedCommands.registerCommand("ShooterDown", SUBSYSTEM_SHOOTER.setTilter(0.0));
+    
+    
+   */
+  }
+
 
   public Command getAutonomousCommand() {
     //return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Shop Pickup Note 2");

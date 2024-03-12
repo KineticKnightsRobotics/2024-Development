@@ -26,41 +26,37 @@ public class PID_Config {
     public class IntakeSubsystem {
         public class IntakePivotControllerPID {
             public static final double Proportional = 0.12;
-            public static final double Integral = 0.0;
-            public static final double Derivitive = 2.0;
+            public static final double Integral     = 0.0;
+            public static final double Derivitive   = 2.0;
         }
     }
 
     public class ShooterSubsystem {
+        public class ExtensionPID {
+            public static final double Proportional = 0.05;
+            public static final double Integral     = 0.0;
+            public static final double Derivitive   = 0.0;
+        }
         public class TilterPIDConfig {
             public static final double Proportional = 0.03;
-            public static final double Integral = 0.0;
-            public static final double Derivitive = 0.0;
+            public static final double Integral     = 0.0;
+            public static final double Derivitive   = 0.0;
+            public static class TilterFeedForward {
+                public static final double shooterKS = 0.0;
+                public static final double shooterKG = 0.32;
+                public static final double shooterKV = 0.02;
+                public static final double shooterKA = 0.0;
+            }
         }
         public class ShooterVelocityPID {
-            /*
-            public static final double Proportional = 6e-5;
-            public static final double Integral = 0.0;
-            public static final double Derivitive = 0.0;
-            public class ShooterFeedForward{
-                public static final double shooterKV = 0.38;
-                public static final double shooterKA = 0.20;
-            }
-            */
             public static final double Proportional = 4.8839E-35;//0.0;//1.7129E-277;
-            public static final double Integral = 0.0;
-            public static final double Derivitive = 0.0;
+            public static final double Integral     = 0.0;
+            public static final double Derivitive   = 0.0;
             public class ShooterFeedForward{
                 public static final double shooterKS = 0.31978;//0.45994;//0.46249;
                 public static final double shooterKV = 0.13246;//0.0021643;//0.00042223;
                 public static final double shooterKA = 0.025332;//0.00041488;//0.0021651;
             }
-        }
-        //Currently unused
-        public class FeederPositionKinematicsPID {
-            public static final double Proportional = 0.1;
-            public static final double Integral = 0.0;
-            public static final double Derivitive = 0.0;
         }
     }
 
