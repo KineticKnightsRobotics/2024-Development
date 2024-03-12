@@ -9,9 +9,10 @@
     "UnderSpeakerAutos"
   ],
   "autoFolders": [
+    "ChoreoLeftSide",
     "ChoreoRightSide",
     "LeftUnderSpeaker",
-    "ChoreoLeftSide",
+    "ChoreoMidNotes",
     "RightUnderSpeaker",
     "UnderSpeakerCentre"
   ],
