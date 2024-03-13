@@ -32,15 +32,6 @@
                     "translationConstrained": true,
                     "headingConstrained": true,
                     "controlIntervalCount": 40
-                },
-                {
-                    "x": 14.295150756835938,
-                    "y": -2.734905958175659,
-                    "heading": 0,
-                    "isInitialGuess": false,
-                    "translationConstrained": true,
-                    "headingConstrained": true,
-                    "controlIntervalCount": 40
                 }
             ],
             "trajectory": [
@@ -214,7 +205,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": true
+            "isTrajectoryStale": false
         },
         "Note1ToNote2": {
             "waypoints": [
@@ -437,7 +428,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": true
+            "isTrajectoryStale": false
         },
         "Note2ToNote3": {
             "waypoints": [
@@ -687,7 +678,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": true
+            "isTrajectoryStale": false
         },
         "Note3ToNote4": {
             "waypoints": [
@@ -962,7 +953,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": true
+            "isTrajectoryStale": false
         },
         "Note4ToScore": {
             "waypoints": [
@@ -1210,7 +1201,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": true
+            "isTrajectoryStale": false
         },
         "ScoreToNote5": {
             "waypoints": [
@@ -1532,7 +1523,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": true
+            "isTrajectoryStale": false
         },
         "Note5ToScore": {
             "waypoints": [
@@ -1558,6 +1549,15 @@
                     "x": 2.86,
                     "y": 6.283,
                     "heading": 0.356,
+                    "isInitialGuess": false,
+                    "translationConstrained": true,
+                    "headingConstrained": true,
+                    "controlIntervalCount": 40
+                },
+                {
+                    "x": 4.546502590179443,
+                    "y": 5.409908294677734,
+                    "heading": 0,
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,

@@ -4,8 +4,8 @@
   "holonomicMode": true,
   "pathFolders": [
     "LeftUnderSpeakerAutos",
-    "TeleOp Paths",
     "RightUnderSpeakerAutos",
+    "TeleOp Paths",
     "UnderSpeakerAutos"
   ],
   "autoFolders": [
