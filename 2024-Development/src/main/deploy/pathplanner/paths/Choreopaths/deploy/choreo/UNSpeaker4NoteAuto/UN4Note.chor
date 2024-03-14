@@ -26,8 +26,8 @@
                 },
                 {
                     "x": 2.5,
-                    "y": 4.10645866394043,
-                    "heading": 0,
+                    "y": 4.3,
+                    "heading": -0.5,
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,
@@ -178,14 +178,14 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "USNote1ToScore": {
             "waypoints": [
                 {
                     "x": 2.5,
-                    "y": 4.10645866394043,
-                    "heading": 0,
+                    "y": 4.3,
+                    "heading": -0.3614117131828025,
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,
@@ -345,7 +345,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "USScoreToNote2": {
             "waypoints": [
