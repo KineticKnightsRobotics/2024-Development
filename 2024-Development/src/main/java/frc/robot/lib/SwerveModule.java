@@ -56,7 +56,7 @@ public class SwerveModule extends SubsystemBase {
     private final MutableMeasure<Angle> m_SysID_Position = mutable(Rotations.of(0));
     private final MutableMeasure<Velocity<Angle>> m_SysID_Velocity = mutable(RotationsPerSecond.of(0));
 
-    private final SysIdRoutine m_SysIdRoutine;
+    //private final SysIdRoutine m_SysIdRoutine;
 
     /**
     *@param    int ID_MOTOR_DRIVE,
@@ -125,6 +125,7 @@ public class SwerveModule extends SubsystemBase {
         //MOTOR_TURN.burnFlash();
         //MOTOR_DRIVE.burnFlash();
 
+        /* 
         m_SysIdRoutine = 
             new SysIdRoutine(
                 new SysIdRoutine.Config(),
@@ -141,6 +142,7 @@ public class SwerveModule extends SubsystemBase {
                     this
                 )
             );
+        */
 
     }
     public void moduleData2Dashboard(){
@@ -244,12 +246,14 @@ public class SwerveModule extends SubsystemBase {
     }
 
 
+    /*
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
         return m_SysIdRoutine.quasistatic(direction);
     }
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_SysIdRoutine.dynamic(direction);
     }
+    */
 
     public double getModuleCurrent(){
         return MOTOR_DRIVE.getOutputCurrent() + MOTOR_TURN.getOutputCurrent();

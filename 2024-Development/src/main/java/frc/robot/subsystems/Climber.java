@@ -28,7 +28,7 @@ public class Climber extends SubsystemBase {
         rightWinch.setIdleMode(IdleMode.kBrake);
 
         leftWinch.setInverted(false);
-        rightWinch.setInverted(false);
+        rightWinch.setInverted(true);
     }
 
     public void setWinchOutput(double percentOutput) {

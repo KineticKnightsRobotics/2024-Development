@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2004756927490234,
-      "y": 4.45
+      "x": 1.1599400043487549,
+      "y": 4.619157314300537
     },
-    "rotation": -57.994599642232934
+    "rotation": -56.309949107001266
   },
   "command": {
     "type": "sequential",
@@ -18,34 +18,9 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "CaptureNote"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "RStartToNote1.1"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "LoadShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "name": "IntakeDown"
           }
         },
         {
@@ -53,77 +28,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "CaptureNote"
+                  "pathName": "LStartToNote1"
                 }
               },
               {
-                "type": "path",
-                "data": {
-                  "pathName": "RNote1ToNote2.1"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LoadShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
                 "type": "named",
                 "data": {
-                  "name": "CaptureNote"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "RNote2ToNote3"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LoadShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "CaptureNote"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "RNote3ToNote4.1"
+                  "name": "CapturePiece"
                 }
               }
             ]
@@ -133,16 +46,66 @@
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LNote1ToStart.1"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "LoadShooter"
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeDown"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RNote4ToScore.1"
+                  "pathName": "MStartToMidNote1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CapturePiece"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MMidNote1ToSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LoadShooter"
                 }
               }
             ]
@@ -159,15 +122,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "CaptureNote"
+                  "pathName": "MSpeakerToMidNote2"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "RScoreToNote5.1"
+                  "name": "CaptureNote"
                 }
               }
             ]
@@ -180,7 +143,57 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RNote5ToScore.1"
+                  "pathName": "MNote2ToSpeaker.1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LoadShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MSpeakerToMidNote3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CaptureNote"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MMidNote3ToSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LoadShooter"
                 }
               }
             ]
