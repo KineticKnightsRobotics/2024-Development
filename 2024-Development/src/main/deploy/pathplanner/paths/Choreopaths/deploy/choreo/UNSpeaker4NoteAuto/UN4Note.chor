@@ -475,7 +475,7 @@
                     "controlIntervalCount": 7
                 },
                 {
-                    "x": 2.3,
+                    "x": 2.25,
                     "y": 5.55,
                     "heading": 0,
                     "isInitialGuess": false,
@@ -490,72 +490,72 @@
                     "y": 5.55,
                     "heading": 0,
                     "angularVelocity": 0,
-                    "velocityX": -5.755779779163014e-19,
+                    "velocityX": -8.571268816749493e-19,
                     "velocityY": 0,
                     "timestamp": 0
                 },
                 {
-                    "x": 1.5462845588666614,
+                    "x": 1.5379512252660756,
                     "y": 5.55,
                     "heading": 0,
                     "angularVelocity": 0,
-                    "velocityX": 0.7805294185565573,
+                    "velocityX": 0.7346711595011148,
                     "velocityY": 0,
-                    "timestamp": 0.09360959784021218
+                    "timestamp": 0.08810977610296444
                 },
                 {
-                    "x": 1.6924146443443266,
+                    "x": 1.667414643806099,
                     "y": 5.55,
                     "heading": 0,
                     "angularVelocity": 0,
-                    "velocityX": 1.5610587893679841,
+                    "velocityX": 1.4693422712677577,
                     "velocityY": 0,
-                    "timestamp": 0.18721919568042436
+                    "timestamp": 0.1762195522059289
                 },
                 {
-                    "x": 1.9116097569465635,
+                    "x": 1.8616097569465635,
                     "y": 5.55,
                     "heading": 0,
                     "angularVelocity": 0,
-                    "velocityX": 2.341588017250036,
+                    "velocityX": 2.204013240409641,
                     "velocityY": 0,
-                    "timestamp": 0.28082879352063655
+                    "timestamp": 0.26432932830889333
                 },
                 {
-                    "x": 2.1308048695488004,
+                    "x": 2.055804870087028,
                     "y": 5.55,
                     "heading": 0,
                     "angularVelocity": 0,
-                    "velocityX": 2.341588017250036,
+                    "velocityX": 2.204013240409641,
                     "velocityY": 0,
-                    "timestamp": 0.3744383913608487
+                    "timestamp": 0.3524391044118578
                 },
                 {
-                    "x": 2.276934955026466,
+                    "x": 2.1852682886270514,
                     "y": 5.55,
                     "heading": 0,
                     "angularVelocity": 0,
-                    "velocityX": 1.561058789367984,
+                    "velocityX": 1.469342271267758,
                     "velocityY": 0,
-                    "timestamp": 0.4680479892010609
+                    "timestamp": 0.4405488805148222
                 },
                 {
-                    "x": 2.35,
+                    "x": 2.25,
                     "y": 5.55,
                     "heading": 0,
                     "angularVelocity": 0,
-                    "velocityX": 0.7805294185565573,
+                    "velocityX": 0.734671159501115,
                     "velocityY": 0,
-                    "timestamp": 0.5616575870412731
+                    "timestamp": 0.5286586566177867
                 },
                 {
-                    "x": 2.35,
+                    "x": 2.25,
                     "y": 5.55,
                     "heading": 0,
                     "angularVelocity": 0,
-                    "velocityX": -7.99767836551704e-19,
+                    "velocityX": -1.1742055470143049e-18,
                     "velocityY": 0,
-                    "timestamp": 0.6552671848814853
+                    "timestamp": 0.6167684327207511
                 }
             ],
             "trajectoryWaypoints": [
@@ -571,9 +571,9 @@
                     "controlIntervalCount": 7
                 },
                 {
-                    "timestamp": 0.6552671848814853,
+                    "timestamp": 0.6167684327207511,
                     "isStopPoint": true,
-                    "x": 2.35,
+                    "x": 2.25,
                     "y": 5.55,
                     "heading": 0,
                     "isInitialGuess": false,
