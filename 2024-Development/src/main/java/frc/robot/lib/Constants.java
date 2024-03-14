@@ -129,9 +129,12 @@ public final class Constants {
     public static int ID_MOTOR_TILTER          = 54;
     public static int ID_MOTOR_TILTER_FOLLOWER = 55;
     public static int ID_MOTOR_EXTENSION       = 56;
-    public static int ID_SHOOTER_BEAMBREAK = 0;
+    public static int ID_SHOOTER_BEAMBREAK     = 0;
 
-    public static double extensionUpPosition = 50;
+    public static double extensionUpPosition = 0.0;
+
+    public static double SHOOTER_EXTENSION_GEAR = 25/1;
+    public static double EXTENSION_ROT_TO_HEIGHT = 5.5 / SHOOTER_EXTENSION_GEAR;
 
     public static double MOTOR_FEEDER_GEARRATIO = 1 / 3;
     public static double SHOOTER_GEAR_RATIO = 36/1; // 36 : 1

@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
@@ -56,6 +57,8 @@ import java.util.concurrent.TimeUnit;
 
 
 public class SwerveDrive extends SubsystemBase {
+
+    private double GyroOffset = 0.0;
 
     private Vision vision = new Vision(this);
 
@@ -170,7 +173,7 @@ public class SwerveDrive extends SubsystemBase {
         PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
         field.setRobotPose(getPose());
 
-
+        /* 
         m_SysIdRoutine = 
             new SysIdRoutine(
                 new SysIdRoutine.Config(),
@@ -179,7 +182,7 @@ public class SwerveDrive extends SubsystemBase {
                         MODULE_FRONT_LEFT.MOTOR_DRIVE.set(volts.in(Volts));
                         MODULE_BACK_LEFT.MOTOR_DRIVE.set(volts.in(Volts));
                         MODULE_FRONT_RIGHT.MOTOR_DRIVE.set(volts.in(Volts));
-                        MODULE_BACK_RIGHT.MOTOR_DRIVE.set(volts.in(Volts));/*set(volts.in(Volts));*/
+                        MODULE_BACK_RIGHT.MOTOR_DRIVE.set(volts.in(Volts));/*set(volts.in(Volts));
                     },
                     log -> {
                         log.motor("Front Left Module")
@@ -202,6 +205,7 @@ public class SwerveDrive extends SubsystemBase {
                     this
                 )
             );
+        */
 
 
     }
@@ -286,7 +290,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getRobotHeading() {
-        return Math.IEEEremainder(Constants.SwerveSubsystemConstants.REVERSED_GYRO ? navX.getAngle() : -navX.getAngle() , 360);
+        return Math.IEEEremainder(Constants.SwerveSubsystemConstants.REVERSED_GYRO ? navX.getAngle() : -navX.getAngle() , 360) + GyroOffset;
         //return navX.getYaw();
     }
 
@@ -355,7 +359,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public Command zeroRobotHeading() {
-        return Commands.runOnce(() -> navX.zeroYaw());
+        return Commands.runOnce(() -> {navX.zeroYaw();GyroOffset = ODEMETER.getEstimatedPosition().getRotation().getDegrees();});
     }
 
     public Command zeroModuleAngles() {
@@ -475,6 +479,8 @@ public class SwerveDrive extends SubsystemBase {
         return idle_Timer_Lock.get();
       }
 
+
+    /*
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
         return m_SysIdRoutine.quasistatic(direction);
     }
@@ -487,4 +493,5 @@ public class SwerveDrive extends SubsystemBase {
     public Command sysIdDynamicModuleTurning(SysIdRoutine.Direction direction) {
         return MODULE_FRONT_LEFT.sysIdDynamic(direction);
     }
+    */
 }

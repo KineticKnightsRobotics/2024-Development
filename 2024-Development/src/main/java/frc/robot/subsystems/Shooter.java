@@ -7,6 +7,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 //import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,6 +50,8 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 
@@ -70,9 +73,9 @@ public class Shooter extends SubsystemBase {
     private final SimpleMotorFeedforward shooterFeedFoward;
     public final CANSparkMax tiltMotor;
     private final CANSparkMax tiltMotor_Follower;
-    private final ArmFeedforward tiltFeedforward;
-    //private final SparkPIDController tiltController;
-    private final ProfiledPIDController tiltController;
+    //private final ArmFeedforward tiltFeedforward;
+    private final PIDController tiltController;
+    //private final ProfiledPIDController tiltController;
     private final RelativeEncoder tiltEncoder;
     private final CANSparkMax shooterMotorL; //TOP roller
     private final CANSparkMax shooterMotorR; //BOTTOM roller
@@ -104,11 +107,12 @@ public class Shooter extends SubsystemBase {
         
         tiltMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER, CANSparkLowLevel.MotorType.kBrushless);
         tiltMotor.setIdleMode(IdleMode.kBrake);
-        tiltMotor.setSmartCurrentLimit(45);
+        tiltMotor.setSmartCurrentLimit(40);
         tiltMotor_Follower = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER_FOLLOWER, CANSparkLowLevel.MotorType.kBrushless);
         tiltMotor_Follower.setIdleMode(IdleMode.kBrake);
         tiltMotor_Follower.setSmartCurrentLimit(45);
         tiltMotor.setInverted(true);
+        tiltMotor.setSoftLimit(SoftLimitDirection.kForward, 90);
         tiltMotor_Follower.setInverted(false);
         tiltMotor_Follower.follow(tiltMotor);
 
@@ -116,11 +120,22 @@ public class Shooter extends SubsystemBase {
         tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
         tiltEncoder.setPosition(0.0);
 
+        tiltController = new PIDController(
+            TilterPIDConfig.Proportional,
+            TilterPIDConfig.Integral,
+            TilterPIDConfig.Derivitive
+        );
+
+
+        //TODO: Next Week Stuff :]
+        /*
         tiltController = new ProfiledPIDController(
             TilterPIDConfig.Proportional,
             TilterPIDConfig.Integral,
             TilterPIDConfig.Derivitive,
-            new Constraints(272, 50)
+           new TrapezoidProfile.Constraints(50, 10),
+           0.02
+
         );
 
         tiltFeedforward = new ArmFeedforward(
@@ -129,6 +144,7 @@ public class Shooter extends SubsystemBase {
             TilterFeedForward.shooterKV, 
             TilterFeedForward.shooterKA
         );
+        */
 
         
 
@@ -186,7 +202,14 @@ public class Shooter extends SubsystemBase {
         tilterABSEncoder.setDistancePerRotation(-360);       
 
         extensionMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_EXTENSION, MotorType.kBrushless);
+
+        extensionMotor.setIdleMode(IdleMode.kBrake);
+        extensionMotor.setInverted(true);
+        extensionMotor.setSmartCurrentLimit(40);
+
         extensionEncoder = extensionMotor.getEncoder();
+        extensionEncoder.setPositionConversionFactor(ShooterSubsystemConstants.EXTENSION_ROT_TO_HEIGHT);
+
         extensionController = extensionMotor.getPIDController();
 
         extensionController.setP(ExtensionPID.Proportional);
@@ -292,6 +315,7 @@ public class Shooter extends SubsystemBase {
             tilterABSEncoder.reset();
             hasResetThroughBoreEncoder=true;
         }
+        
         SmartDashboard.putNumber("Shooter Extension Position", extensionEncoder.getPosition());
 
         SmartDashboard.putNumber("Shooter Tilter Position", tilterABSEncoder.getDistance());
@@ -319,8 +343,11 @@ public class Shooter extends SubsystemBase {
     public Command aimTilter(DoubleSupplier angleSupplier) {
         return Commands.run(
             () -> {
+                //tiltController.setGoal(angleSupplier.getAsDouble());
+
                 //tiltController.setReference(angle, ControlType.kPosition);
-                tiltMotor.set(MathUtil.clamp(tiltController.calculate(tilterABSEncoder.getDistance(), angleSupplier.getAsDouble()),-0.5,0.5));
+                tiltMotor.set(MathUtil.clamp(tiltController.calculate(tilterABSEncoder.getDistance(), angleSupplier.getAsDouble()),-0.2,0.2));
+                //tiltMotor.setVoltage(tiltController.calculate(getTilterPosition()) + shooterFeedFoward.calculate(tiltController.getSetpoint().velocity) );
             }
         );
     }
@@ -328,8 +355,12 @@ public class Shooter extends SubsystemBase {
     public Command setTilter(double angle) {
         return Commands.run(
             () -> {
+                //tiltController.setGoal(angle);
                 //tiltController.setReference(angle, ControlType.kPosition);
-                tiltMotor.set(MathUtil.clamp(tiltController.calculate(tilterABSEncoder.getDistance(), angle),-0.5,0.5));
+
+                //tiltMotor.setVoltage(tiltController.calculate(getTilterPosition()) + shooterFeedFoward.calculate(tiltController.getSetpoint().velocity));
+
+                tiltMotor.set(MathUtil.clamp(tiltController.calculate(tilterABSEncoder.getDistance(), angle),-0.2,0.2));
             }
         );
     }
@@ -365,7 +396,7 @@ public class Shooter extends SubsystemBase {
         return Commands.run(
             () -> {
                 //tiltController.setReference(tiltPosition, ControlType.kPosition);
-                tiltMotor.set(MathUtil.clamp(tiltController.calculate(tilterABSEncoder.getDistance(), tiltPosition),-0.5,0.5));
+                tiltMotor.set(MathUtil.clamp(tiltController.calculate(tilterABSEncoder.getDistance(), tiltPosition),-0.2,0.2));
 
             }
         );
@@ -449,14 +480,9 @@ public class Shooter extends SubsystemBase {
         return Commands.runOnce(() -> {extensionMotor.set(percentOutput);});
     }
 
-    public Command extensionUp() {
-        return Commands.runOnce(() -> {extensionController.setReference(ShooterSubsystemConstants.extensionUpPosition, ControlType.kPosition);});
+    public Command setExtensionHeight(double height) {
+        return Commands.runOnce(() -> {extensionController.setReference(height, ControlType.kPosition);});
     }
-    
-    public Command extensionDown() {
-        return Commands.runOnce(() -> {extensionController.setReference(0.0, ControlType.kPosition);});
-    }
-
 
     /*
     public Command sysIdQuasistaticTilter(SysIdRoutine.Direction direction) {

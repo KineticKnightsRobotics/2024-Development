@@ -37,7 +37,7 @@ public class Conveyer extends SubsystemBase {
     }
     @Override
     public void periodic() {
-        SmartDashboard.putData(this);
+        //SmartDashboard.putData(this);
         SmartDashboard.putBoolean("Conveyer", getLineBreak());
         SmartDashboard.putNumber("convey_Left", conveyerMotorLeft.getOutputCurrent());
         SmartDashboard.putNumber("convey_Right", conveyerMotorRight.getOutputCurrent());
@@ -50,8 +50,8 @@ public class Conveyer extends SubsystemBase {
         return 
         Commands.run(
             ()-> {
-                conveyerMotorLeft.set(0.5);
-                conveyerMotorRight.set(0.5);
+                conveyerMotorLeft.set(0.2);
+                conveyerMotorRight.set(0.2);
             }
         ,this)
         .until(() -> getLineBreak())
