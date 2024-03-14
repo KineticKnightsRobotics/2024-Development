@@ -36,7 +36,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CapturePiece"
+                  "name": "CaptureNote"
                 }
               }
             ]
@@ -51,12 +51,6 @@
                 "data": {
                   "pathName": "LNote1ToScore"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
               }
             ]
           }
@@ -64,7 +58,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "ShootNoAim"
           }
         },
         {
@@ -95,12 +89,6 @@
                 "data": {
                   "pathName": "LNote2ToNote3"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CapturePiece"
-                }
               }
             ]
           }
@@ -114,12 +102,6 @@
                 "data": {
                   "pathName": "LNote3ToScore"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
               }
             ]
           }
@@ -127,7 +109,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "ShootNoAim"
           }
         },
         {
@@ -143,7 +125,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CapturePiece"
+                  "name": "CaptureNote"
                 }
               }
             ]
@@ -157,100 +139,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "LNote4ToScore"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoRunShooter"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LScoreToNote5"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CapturePiece"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LNote5toScore"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoRunShooter"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LScoreToNote6"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CapturePiece"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LNote6ToScore"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
                 }
               }
             ]

@@ -5,7 +5,7 @@
       "x": 1.4,
       "y": 5.55
     },
-    "rotation": -4.3866411626213315e-27
+    "rotation": 9.564216720431755e-20
   },
   "command": {
     "type": "sequential",
@@ -51,12 +51,6 @@
                 "data": {
                   "pathName": "USNote1ToScore"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "LoadShooter"
-                }
               }
             ]
           }
@@ -94,12 +88,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "USNote2ToScore"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "LoadShooter"
                 }
               }
             ]
@@ -139,11 +127,43 @@
                 "data": {
                   "pathName": "USNote3ToScore"
                 }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoAim"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "USScoreToNote4"
+                }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "LoadShooter"
+                  "name": "CaptureNote"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "USNote4ToScore"
                 }
               }
             ]
