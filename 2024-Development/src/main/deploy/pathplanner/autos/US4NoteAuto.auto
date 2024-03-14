@@ -136,44 +136,6 @@
           "data": {
             "name": "ShootNoAim"
           }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "USScoreToNote4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CaptureNote"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "USNote4ToScore"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNoAim"
-          }
         }
       ]
     }
