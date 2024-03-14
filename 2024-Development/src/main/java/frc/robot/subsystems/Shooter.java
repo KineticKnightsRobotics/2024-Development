@@ -112,7 +112,6 @@ public class Shooter extends SubsystemBase {
         tiltMotor_Follower.setIdleMode(IdleMode.kBrake);
         tiltMotor_Follower.setSmartCurrentLimit(45);
         tiltMotor.setInverted(true);
-        tiltMotor.setSoftLimit(SoftLimitDirection.kForward, 90);
         tiltMotor_Follower.setInverted(false);
         tiltMotor_Follower.follow(tiltMotor);
 
@@ -125,6 +124,8 @@ public class Shooter extends SubsystemBase {
             TilterPIDConfig.Integral,
             TilterPIDConfig.Derivitive
         );
+
+        tiltController.setTolerance(0.4);
 
 
         //TODO: Next Week Stuff :]
@@ -196,7 +197,7 @@ public class Shooter extends SubsystemBase {
         shooterMotorLEncoder.setPositionConversionFactor(1);
         shooterMotorLEncoder.setVelocityConversionFactor(1);
 
-        SmartDashboard.putNumber("Manual Shooter Angle", tiltPosition);
+        //SmartDashboard.putNumber("Manual Shooter Angle", tiltPosition);
 
         tilterABSEncoder = new DutyCycleEncoder(4);
         tilterABSEncoder.setDistancePerRotation(-360);       
@@ -336,6 +337,10 @@ public class Shooter extends SubsystemBase {
         return !lineBreak.get();
     }
 
+    public double getExtensionPosition() {
+        return extensionEncoder.getPosition();
+    }
+
     public double getTilterPosition () {
         return tiltEncoder.getPosition();
     }
@@ -362,6 +367,8 @@ public class Shooter extends SubsystemBase {
 
                 tiltMotor.set(MathUtil.clamp(tiltController.calculate(tilterABSEncoder.getDistance(), angle),-0.2,0.2));
             }
+        //).until(
+        //    tiltController.atSetpoint()
         );
     }
     /*
@@ -408,12 +415,12 @@ public class Shooter extends SubsystemBase {
 
     }
     
-    public Command IdleShooter(){
+    public Command IdleShooter(double idleRPM_L,double idleRPM_R){
         return Commands
         .run(
             ()->{
-                shooterMotorL.set(0.264);
-                shooterMotorR.set(0.264);
+                shooterMotorL.set(idleRPM_L);
+                shooterMotorR.set(idleRPM_R);
             }
         )
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);

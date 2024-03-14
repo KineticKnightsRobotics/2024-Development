@@ -18,6 +18,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -100,13 +101,26 @@ public class RobotContainer {
   //ROBOT TRIGGERS
 
   Trigger ShooterAtAmp = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() > 60);
-  Trigger ShooterUnderHome = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() < -3.0);
-  Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 10.0 && SUBSYSTEM_SHOOTER.getTilterPosition() > -3.0);
+
+  Trigger ShooterUnderHome = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() < -1.0);
+
+  Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 10.0 && SUBSYSTEM_SHOOTER.getTilterPosition() > -3.0 && SUBSYSTEM_SHOOTER.getExtensionPosition() < 0.10);
+
   Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
+
   Trigger NoteInFeederTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getLineBreak());//SUBSYSTEM_SHOOTER::getLineBreak);
+
   Trigger DriveCurrentLimitTrigger = new Trigger(()->SUBSYSTEM_SWERVEDRIVE.getCurrentDrive()>150);
+
   Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer() >=0.521);
-  Trigger toggleTrigger = new Trigger(()-> SUBSYSTEM_CONVEYER.getToggle());
+
+
+  //Trigger toggleTrigger = new Trigger(()-> SUBSYSTEM_CONVEYER.getToggle());
+
+
+
+
+
  // Trigger sensorTrigger = new Trigger(() -> SUBSYSeo TEM_CONVEYER.getLineBreak());
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -124,10 +138,6 @@ public class RobotContainer {
 
 
     configureNamedCommands();
-
-    
-    //intake down, feed note to panel, set intake up)
-    // Configure the trigger bindings
     configureBindings();
   }
 
@@ -136,28 +146,27 @@ public class RobotContainer {
     //new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
 
 
-    //TELEOP ROBOT TRIGGERED EVENTS
+    //TELEOP ROBOT TRIGGERED EVENTS _______________________________________________________________________________________________________________________________________________________________________
+
+    //When Shooter falls under the home position, set it back to 0
     ShooterUnderHome.onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter());
+    //When Note is in the shooter, idle the flywheels and stop the conveyer.
+    NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1500,1500));
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0));
 
-    //TODO: This will probably break the robot if it doesnt work, get ready to disable :]
-    NoteInFeederTrigger.negate().and(ShooterAtHomeTrigger.negate()).onTrue(
-      SUBSYSTEM_SHOOTER.setTilter(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
-      .alongWith(SUBSYSTEM_SHOOTER.setExtensionHeight(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
-      ));
+    //When the shooter has no note and isn't at home position, set it to home position.
+    NoteInFeederTrigger.negate().and(ShooterAtHomeTrigger.negate()).onTrue(new WaitCommand(1).andThen(SUBSYSTEM_SHOOTER.setTilter(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf)));
 
+    //When there is a note in the conveyer, and the shooter is at home position, run the feed through command.
     NoteInConveyerTrigger.and(ShooterAtHomeTrigger).onTrue(
-      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2)//.withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
-      .andThen(
-        SUBSYSTEM_SHOOTER.loadGamePiece().withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
-      )
-      .andThen(
-        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
-      )
+      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2).andThen(
+        SUBSYSTEM_SHOOTER.loadGamePiece().withInterruptBehavior(InterruptionBehavior.kCancelIncoming)).andThen(
+        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0))
     );
 
-    //TELEOP CONTROLS _________________________________________________________________________________________________________________________________________________________________
+    //TELEOP CONTROLS _____________________________________________________________________________________________________________________________________________________________________________________
+    
+    //Lock
     DRIVER_R2.whileTrue(
       new ParallelCommandGroup(
         new rotationTargetLockDrive(
@@ -168,9 +177,20 @@ public class RobotContainer {
             () -> true, 
             () -> 0.02
           ),
-          SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker()))
+          SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
+          SUBSYSTEM_SHOOTER.IdleShooter(4022,2681)
         )
-    ).onFalse(SUBSYSTEM_SHOOTER.setTilter(0.0));
+    );//.onFalse(SUBSYSTEM_SHOOTER.setTilter(0.0));
+
+    DRIVER_R1.whileTrue(
+      (ShooterAtAmp.getAsBoolean() ? 
+        SUBSYSTEM_SHOOTER.shoot(1500, 1500, false)
+        :
+        SUBSYSTEM_SHOOTER.shoot(4022,2681, false)
+        )
+    );
+
+
 
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
@@ -181,13 +201,7 @@ public class RobotContainer {
     )
     .onFalse(SUBSYSTEM_INTAKE.intakeUp());
 
-    DRIVER_R1.whileTrue(
-      (ShooterAtAmp.getAsBoolean() ? 
-        SUBSYSTEM_SHOOTER.shoot(1500, 1500, false)
-        :
-        SUBSYSTEM_SHOOTER.shoot(4022,2681, false)
-        )
-    );
+
 
     DRIVER_A.whileTrue(
       new ParallelCommandGroup(
@@ -195,7 +209,7 @@ public class RobotContainer {
         SUBSYSTEM_SHOOTER.setTilter(90)
         )
     ).onFalse(
-      new ParallelCommandGroup(
+      new SequentialCommandGroup(
         SUBSYSTEM_SHOOTER.setExtensionHeight(0.0),
         SUBSYSTEM_SHOOTER.setTilter(0.0)
       )
