@@ -10,9 +10,10 @@
   ],
   "autoFolders": [
     "ChoreoLeftSide",
+    "ChoreoMidNotes",
     "ChoreoRightSide",
     "LeftUnderSpeaker",
-    "ChoreoMidNotes",
+    "ChoreoUnderSpeaker",
     "RightUnderSpeaker",
     "UnderSpeakerCentre"
   ],
