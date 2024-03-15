@@ -21,15 +21,8 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.lib.Constants.ModuleConstants;
 import frc.robot.lib.Constants.SwerveSubsystemConstants;
 
@@ -51,10 +44,6 @@ public class SwerveModule extends SubsystemBase {
     private final String MODULE_NAME;
 
     private final SimpleMotorFeedforward FEEDFORWARD_VELOCITY;
-
-    private final MutableMeasure<Voltage> m_SysID_Voltage = mutable(Volts.of(0));
-    private final MutableMeasure<Angle> m_SysID_Position = mutable(Rotations.of(0));
-    private final MutableMeasure<Velocity<Angle>> m_SysID_Velocity = mutable(RotationsPerSecond.of(0));
 
     //private final SysIdRoutine m_SysIdRoutine;
 
@@ -125,32 +114,13 @@ public class SwerveModule extends SubsystemBase {
         //MOTOR_TURN.burnFlash();
         //MOTOR_DRIVE.burnFlash();
 
-        /* 
-        m_SysIdRoutine = 
-            new SysIdRoutine(
-                new SysIdRoutine.Config(),
-                new SysIdRoutine.Mechanism(
-                    (Measure<Voltage> volts) -> {
-                        MOTOR_TURN.set(volts.in(Volts));
-                    },
-                    log -> {log
-                        .motor("Module - Turning")
-                        .voltage(m_SysID_Voltage.mut_replace(MOTOR_TURN.getAppliedOutput() * MOTOR_TURN.getBusVoltage(),Volts))
-                        .angularPosition(m_SysID_Position.mut_replace(ENCODER_TURN.getPosition(),Rotations))
-                        .angularVelocity(m_SysID_Velocity.mut_replace(ENCODER_TURN.getVelocity(),RotationsPerSecond));
-                    },
-                    this
-                )
-            );
-        */
-
     }
     public void moduleData2Dashboard(){
         SmartDashboard.putNumber("Drive " + MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " angle", Math.toDegrees(getTurningPosition()));
         SmartDashboard.putNumber("Drive " + MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
 
-        SmartDashboard.putNumber("Drive " + MODULE_NAME + " Distance Travelled",getDrivePosition());
-        SmartDashboard.putNumber("Drive " + MODULE_NAME + " Velocity", getDriveVelocity());
+        //SmartDashboard.putNumber("Drive " + MODULE_NAME + " Distance Travelled",getDrivePosition());
+        //SmartDashboard.putNumber("Drive " + MODULE_NAME + " Velocity", getDriveVelocity());
     }
 
     public boolean isIdle() {
@@ -244,16 +214,6 @@ public class SwerveModule extends SubsystemBase {
     public SwerveModulePosition getModulePosition() {
         return new SwerveModulePosition(getDrivePosition(),new Rotation2d(getTurningPosition()));
     }
-
-
-    /*
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return m_SysIdRoutine.quasistatic(direction);
-    }
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return m_SysIdRoutine.dynamic(direction);
-    }
-    */
 
     public double getModuleCurrent(){
         return MOTOR_DRIVE.getOutputCurrent() + MOTOR_TURN.getOutputCurrent();

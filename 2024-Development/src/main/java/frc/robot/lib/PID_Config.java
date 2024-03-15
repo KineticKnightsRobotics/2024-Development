@@ -33,14 +33,21 @@ public class PID_Config {
 
     public class ShooterSubsystem {
         public class ExtensionPID {
-            public static final double Proportional = 0.1;
+            public static final double Proportional = 0.2;
             public static final double Integral     = 0.0;
             public static final double Derivitive   = 0.0;
         }
         public class TilterPIDConfig {
-            public static final double Proportional = 0.045;//0.0025;
-            public static final double Integral     = 0.0045;
-            public static final double Derivitive   = 0.00225;
+            public class extended {
+                public static final double Proportional = 0.022;//0.035;//0.0025;
+                public static final double Integral     = 0.0;//0.0045;
+                public static final double Derivitive   = 0.0;//0.00225;
+            }
+            public class home {
+                public static final double Proportional = 0.022;//0.035;//0.0025;
+                public static final double Integral     = 0.0;//0.0045;
+                public static final double Derivitive   = 0.0;//0.00225;
+            }
             public static class TilterFeedForward {
                 public static final double shooterKS = 0.7;
                 public static final double shooterKG = 0.32;
