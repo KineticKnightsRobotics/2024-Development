@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.7112,
-  "robotLength": 0.71,
+  "robotWidth": 0.876,
+  "robotLength": 0.876,
   "holonomicMode": true,
   "pathFolders": [
     "LeftUnderSpeakerAutos",
@@ -17,9 +17,9 @@
     "RightUnderSpeaker",
     "UnderSpeakerCentre"
   ],
-  "defaultMaxVel": 0.5,
-  "defaultMaxAccel": 1.5,
-  "defaultMaxAngVel": 90.0,
-  "defaultMaxAngAccel": 90.0,
-  "maxModuleSpeed": 3.6
+  "defaultMaxVel": 3.25,
+  "defaultMaxAccel": 3.25,
+  "defaultMaxAngVel": 360.0,
+  "defaultMaxAngAccel": 720.0,
+  "maxModuleSpeed": 4.0
 }

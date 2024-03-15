@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2,
+      "x": 1.35,
       "y": 5.55
     },
     "rotation": 0
@@ -30,29 +30,22 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeDown"
+                  "name": "CaptureNote"
                 }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note1ToScore"
-                }
-              }
-            ]
+            "pathName": "Note1ToScore"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "TempShoot"
+            "name": "ShootNoAim"
           }
         },
         {
@@ -68,29 +61,22 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeDown"
+                  "name": "CaptureNote"
                 }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "note2ToScorePos"
-                }
-              }
-            ]
+            "pathName": "note2ToScorePos"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "TempShoot"
+            "name": "ShootNoAim"
           }
         },
         {
@@ -106,34 +92,27 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeDown"
+                  "name": "CapturePiece"
                 }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "note3ToScorePos"
-                }
-              }
-            ]
+            "pathName": "note3ToScorePos"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "TempShoot"
+            "name": "ShootNoAim"
           }
         }
       ]
     }
   },
-  "folder": "UnderSpeakerCentre",
+  "folder": null,
   "choreoAuto": false
 }
