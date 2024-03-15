@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.1599400043487549,
-      "y": 4.619157314300537
+      "x": 1.35,
+      "y": 5.55
     },
-    "rotation": -56.309949107001266
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,13 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeDown"
+            "name": "ShootNoAim"
           }
         },
         {
@@ -30,13 +24,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LStartToNote1.1"
+                  "pathName": "startPosToNote1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "CaptureNote"
+                  "name": "IntakeDown"
                 }
               }
             ]
@@ -49,13 +43,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LNote1ToScore"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "LoadShooter"
+                  "pathName": "Note1ToScore"
                 }
               }
             ]
@@ -64,13 +52,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeDown"
+            "name": "TempShoot"
           }
         },
         {
@@ -80,44 +62,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LScoretoNote2.1"
+                  "pathName": "scorePosToNote2"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "CaptureNote"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LoadShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LNote2ToNote3.1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CaptureNote"
+                  "name": "IntakeDown"
                 }
               }
             ]
@@ -130,13 +81,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LNote3ToScore.1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "LoadShooter"
+                  "pathName": "note2ToScorePos"
                 }
               }
             ]
@@ -145,12 +90,50 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "TempShoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "scorePosToNote3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeDown"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "note3ToScorePos"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "TempShoot"
           }
         }
       ]
     }
   },
-  "folder": null,
-  "choreoAuto": true
+  "folder": "UnderSpeakerCentre",
+  "choreoAuto": false
 }
