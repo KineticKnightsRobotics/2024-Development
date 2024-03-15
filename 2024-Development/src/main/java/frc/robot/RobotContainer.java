@@ -19,6 +19,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -96,6 +97,7 @@ public class RobotContainer {
   Trigger OP_18 = new Trigger(JOYSTICK_OPERATOR.button(18));
   Trigger OP_19 = new Trigger(JOYSTICK_OPERATOR.button(19));
   Trigger OP_20 = new Trigger(JOYSTICK_OPERATOR.button(20));
+  Trigger OP_21 = new Trigger(JOYSTICK_OPERATOR.button(21));
 
   //Translation2d tag = fieldLayout.getTagPose(DriverStation.getAlliance().isEmpty() || DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 3).get().getTranslation().toTranslation2d();
 
@@ -212,8 +214,6 @@ public class RobotContainer {
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
     .onFalse(SUBSYSTEM_INTAKE.intakeUp());
-
-
     DRIVER_A.whileTrue(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setExtensionHeight(6),
@@ -227,11 +227,7 @@ public class RobotContainer {
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
       //)
     );
-
-
     DRIVER_X.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.84,7.73),new Rotation2d(-90.0)) , AutonomousConstants.PathFindingConstraints.kConstraints));
-
-    //DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(2.0,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
     DRIVER_B.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.45,5.52),new Rotation2d(0.0)), AutonomousConstants.PathFindingConstraints.kConstraints));
 
 
@@ -239,21 +235,58 @@ public class RobotContainer {
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
 
 
-    OP_1.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(0.7)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
-    OP_2.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.7)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0));
-
-    OP_4.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.2)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
-    OP_9.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
-
-
-
-    OP_11.whileTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
+    //Reverse override subsystems
+    OP_1.whileTrue(
+      new ParallelCommandGroup(
+        SUBSYSTEM_SHOOTER.setFeederSpeed(-0.2),
+        SUBSYSTEM_CONVEYER.setConveyerSpeed(-0.2),
+        Commands.run(() -> SUBSYSTEM_INTAKE.setRollerSpeed(0.2)),
+        SUBSYSTEM_SHOOTER.reverseShooter()
+        
+      )
+    ).onFalse(
+      new ParallelCommandGroup(
+        SUBSYSTEM_SHOOTER.setFeederSpeed(0.0),
+        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0),
+        Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(0.0)),
+        SUBSYSTEM_SHOOTER.stopShooter()
+      )
+    );
+    OP_2.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
+    OP_3.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
+    OP_6.whileTrue(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(-0.2))).onFalse(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(0.0)));
+    OP_7.whileTrue(SUBSYSTEM_SHOOTER.reverseShooter()).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
+    OP_8.onTrue(SUBSYSTEM_SHOOTER.stopShooter());
+    //Climber controls
+    OP_4.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(0.7)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
+    OP_9.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.7)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0));
+    //Manual Shooter Extension
+    OP_5.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.5)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
+    OP_10.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.5)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
+    //Manual Tilter Angles
     OP_12.whileTrue(SUBSYSTEM_SHOOTER.setTilter(0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_11.whileTrue(SUBSYSTEM_SHOOTER.setTilter(85)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(10)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTilter(20)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_15.whileTrue(SUBSYSTEM_SHOOTER.setTilter(30)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    //Override bring the shooter down
+    OP_16.whileTrue(SUBSYSTEM_SHOOTER.setTilterVoltage(-0.7)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    //Override Shooter Buttons.
+    OP_17.whileTrue(SUBSYSTEM_SHOOTER.shoot(4000, 4000, true)).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
+    OP_18.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(0.8)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
+    //Override zero tilter THIS BREAKS THE CODE IF YOU ZERO WHILE AT A NON 0 ANGLE.
+    OP_19.and(OP_20).onTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
+    //Override start shooter idle.
+    OP_21.onTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
 
-    //OP_8.whileTrue(new ampPosition(SUBSYSTEM_SHOOTER, 6, 80).withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
 
     /*
+    OP_4.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.2)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
+    OP_9.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
+    OP_11.whileTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
+    OP_12.whileTrue(SUBSYSTEM_SHOOTER.setTilter(0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    //OP_8.whileTrue(new ampPosition(SUBSYSTEM_SHOOTER, 6, 80).withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
     OP_8.whileTrue(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setExtensionHeight(6),
@@ -265,22 +298,15 @@ public class RobotContainer {
         SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0)
       )
     );
-    */
-
-
     //OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(45.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    
     OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(10)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTilter(20)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     OP_15.whileTrue(SUBSYSTEM_SHOOTER.setTilter(30)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     OP_16.whileTrue(SUBSYSTEM_SHOOTER.setTilter(35)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-
-
     OP_17.whileTrue(SUBSYSTEM_SHOOTER.setTilter(30.5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     OP_18.whileTrue(SUBSYSTEM_SHOOTER.setTilter(31)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-
+    */
     //OP_19.whileTrue(SUBSYSTEM_SHOOTER.setTilterVoltage(0.7)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-
     //OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER));
    // OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
 

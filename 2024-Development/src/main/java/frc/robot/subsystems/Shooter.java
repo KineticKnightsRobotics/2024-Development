@@ -369,6 +369,16 @@ public class Shooter extends SubsystemBase {
         .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
+    public Command reverseShooter() {
+        return Commands
+            .runOnce(
+                () -> {
+                    shooterMotorL.set(-0.1);
+                    shooterMotorR.set(-0.1);
+                }
+            );
+    }
+
     public Command stopShooter() {
         return Commands.
             runOnce(
