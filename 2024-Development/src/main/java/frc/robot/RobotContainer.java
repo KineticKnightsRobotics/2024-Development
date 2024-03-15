@@ -154,7 +154,7 @@ public class RobotContainer {
     //TELEOP ROBOT TRIGGERED EVENTS _______________________________________________________________________________________________________________________________________________________________________
 
     //When Shooter falls under the home position, set it back to 0
-    ShooterUnderHome.onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    ShooterUnderHome.onTrue(SUBSYSTEM_SHOOTER.setTilter(2.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //When Note is in the shooter, idle the flywheels and stop the conveyer.
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000,1000));
     NoteInFeederTrigger.negate().whileTrue(SUBSYSTEM_SHOOTER.stopShooter());
@@ -230,10 +230,10 @@ public class RobotContainer {
     DRIVER_X.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.84,7.73),new Rotation2d(-90.0)) , AutonomousConstants.PathFindingConstraints.kConstraints));
     DRIVER_B.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.45,5.52),new Rotation2d(0.0)), AutonomousConstants.PathFindingConstraints.kConstraints));
 
-
-
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
 
+
+    //OPERATOR CONTROLS________________________________________________________________________________________________________________________________________________________________
 
     //Reverse override subsystems
     OP_1.whileTrue(
