@@ -22,6 +22,7 @@ public class joystickDrive extends Command {
     private final DoubleSupplier SUPPLIER_ySpeed;
     private final DoubleSupplier SUPPLIER_zSpeed;
     private final BooleanSupplier SUPPLIER_Field_Oriented;
+    private final BooleanSupplier flipControls;
     private final DoubleSupplier SUPPLIER_Period;
 
     //private final SlewRateLimiter xLimiter, yLimiter, zLimiter;
@@ -32,6 +33,7 @@ public class joystickDrive extends Command {
         DoubleSupplier ySpeed, 
         DoubleSupplier zSpeed,
         BooleanSupplier fieldOriented,
+        BooleanSupplier _flipControls,
         DoubleSupplier timePeriod
         ){
         subsystem = m_subsystem;
@@ -39,6 +41,7 @@ public class joystickDrive extends Command {
         SUPPLIER_ySpeed = ySpeed;
         SUPPLIER_zSpeed = zSpeed;
         SUPPLIER_Field_Oriented = fieldOriented;
+        flipControls = _flipControls;
         SUPPLIER_Period = timePeriod;
         addRequirements(subsystem);
         //this.xLimiter = new SlewRateLimiter(Constants.SwerveSubsystemConstants.LIMIT_SOFT_ACCELERATION_SPEED);
@@ -51,6 +54,12 @@ public class joystickDrive extends Command {
         double joystickX = SUPPLIER_xSpeed.getAsDouble();
         double joystickY = SUPPLIER_ySpeed.getAsDouble(); //grab speeds and apply deadband
         double joystickZ = SUPPLIER_zSpeed.getAsDouble();
+
+        if (flipControls.getAsBoolean()) {
+            joystickX *= -1;
+            joystickY *= -1;
+            joystickZ *= -1;
+        }
 
         //double xSpeed   = (Math.pow(joystickX, 2) * (joystickX<0 ? -1 : 1) /1.0) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * (RobotContainer.DRIVER_LT() ? 0.3 : 1);      // * 0.2;
         //double ySpeed   = (Math.pow(joystickY, 2) * (joystickY<0 ? -1 : 1) /1.0) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * (RobotContainer.DRIVER_LT() ? 0.3 : 1);      // * 0.2; //Determine new velocity
@@ -85,7 +94,7 @@ public class joystickDrive extends Command {
      
         
         subsystem.setChassisSpeed(chassisSpeed,true);
-SmartDashboard.putNumber("RT", RobotContainer.DRIVER_RT());
+        SmartDashboard.putNumber("RT", RobotContainer.DRIVER_RT());
         /*
         if (subsystem.idle_Timer_Lock.get() > 0.5) {
             subsystem.lockChassis();

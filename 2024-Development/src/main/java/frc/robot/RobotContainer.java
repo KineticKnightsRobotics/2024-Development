@@ -7,7 +7,6 @@ package frc.robot;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.lib.Constants.*;
-import frc.robot.lib.Constants.OIConstants;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -31,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 //import edu.wpi.first.wpilibj2.command.PIDCommand;
 //import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -137,6 +137,7 @@ public class RobotContainer {
         () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
         () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
         () -> true, 
+        ()-> getAllianceFlip(),
         () -> 0.02
       )
     );
@@ -188,6 +189,7 @@ public class RobotContainer {
             () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
             () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
             () -> true, 
+            () -> getAllianceFlip(),
             () -> 0.02
           ),
           //SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
@@ -327,6 +329,7 @@ public class RobotContainer {
             () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
             () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
             () -> true, 
+            () -> getAllianceFlip(),
             () -> 0.02
           )
         ),
@@ -400,6 +403,17 @@ public class RobotContainer {
 }*/
  public static double DRIVER_RT() {
     return JOYSTICK_DRIVER.getRawAxis(2);
+  }
+
+  /**
+   * @return Whether or not we are on red alliance
+   */
+  public boolean getAllianceFlip() {
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+        return alliance.get() == DriverStation.Alliance.Red;
+    }
+    return false;
   }
 
 }
