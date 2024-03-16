@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2,
+      "x": 1.25,
       "y": 5.55
     },
     "rotation": 0
@@ -14,13 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoLoadShooter"
+            "name": "ZeroRobotHeading"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "LoadShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoAim"
           }
         },
         {
@@ -36,7 +42,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CapturePiece"
+                  "name": "CaptureNote"
                 }
               }
             ]
@@ -51,12 +57,6 @@
                 "data": {
                   "pathName": "Note1ToScore"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
               }
             ]
           }
@@ -64,7 +64,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "ShootNoAim"
           }
         },
         {
@@ -95,12 +95,6 @@
                 "data": {
                   "pathName": "note2ToScorePos"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
               }
             ]
           }
@@ -108,7 +102,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "ShootNoAim"
           }
         }
       ]

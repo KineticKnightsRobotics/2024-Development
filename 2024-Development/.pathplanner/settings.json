@@ -1,25 +1,26 @@
 {
-  "robotWidth": 0.7112,
+  "robotWidth": 0.71,
   "robotLength": 0.71,
   "holonomicMode": true,
   "pathFolders": [
     "LeftUnderSpeakerAutos",
     "RightUnderSpeakerAutos",
+    "StrikeoutPaths",
     "TeleOp Paths",
     "UnderSpeakerAutos"
   ],
   "autoFolders": [
     "ChoreoLeftSide",
     "ChoreoMidNotes",
-    "ChoreoRightSide",
-    "LeftUnderSpeaker",
     "ChoreoUnderSpeaker",
+    "LeftUnderSpeaker",
     "RightUnderSpeaker",
+    "StrikeoutAuto",
     "UnderSpeakerCentre"
   ],
-  "defaultMaxVel": 0.5,
-  "defaultMaxAccel": 1.5,
-  "defaultMaxAngVel": 90.0,
-  "defaultMaxAngAccel": 90.0,
+  "defaultMaxVel": 3.5,
+  "defaultMaxAccel": 4.0,
+  "defaultMaxAngVel": 720.0,
+  "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 3.6
 }
