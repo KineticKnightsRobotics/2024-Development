@@ -56,6 +56,7 @@ public class Intake extends SubsystemBase {
         intakePivotMotor.setClosedLoopRampRate(0);
         intakePivotMotor.setIdleMode(IdleMode.kBrake);
         intakePivotMotor.setSmartCurrentLimit(60);
+        intakePivotMotor.setInverted(false);
 
         intakePivotEncoder = intakePivotMotor.getEncoder();
         intakePivotEncoder.setPositionConversionFactor(IntakeSubsystemConstants.INTAKE_PIVOT_ROTATIONS_TO_DEGRESS);

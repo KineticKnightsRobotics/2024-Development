@@ -6,8 +6,10 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import frc.robot.lib.Constants;
+import frc.robot.lib.Constants.*;
 import frc.robot.lib.Constants.OIConstants;
+
+import com.pathplanner.lib.auto.AutoBuilder;
 
 //import java.util.function.DoubleSupplier;
 
@@ -26,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 //import edu.wpi.first.wpilibj2.command.PIDCommand;
 //import edu.wpi.first.math.controller.PIDController;
@@ -102,7 +105,7 @@ public class RobotContainer {
 
   Trigger ShooterAtAmp = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() > 60);
 
-  Trigger ShooterUnderHome = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() < -1.0);
+  Trigger ShooterUnderHome = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() < -3.0);
 
   Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 10.0 && SUBSYSTEM_SHOOTER.getTilterPosition() > -3.0 && SUBSYSTEM_SHOOTER.getExtensionPosition() < 0.10);
 
@@ -151,18 +154,26 @@ public class RobotContainer {
     //When Shooter falls under the home position, set it back to 0
     ShooterUnderHome.onTrue(SUBSYSTEM_SHOOTER.setTilter(0.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //When Note is in the shooter, idle the flywheels and stop the conveyer.
-    NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1500,1500));
-    NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0));
+    NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000,1000));
+    NoteInFeederTrigger.negate().whileTrue(SUBSYSTEM_SHOOTER.stopShooter());
+    NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0).alongWith(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0)));
 
     //When the shooter has no note and isn't at home position, set it to home position.
-    NoteInFeederTrigger.negate().and(ShooterAtHomeTrigger.negate()).onTrue(new WaitCommand(1).andThen(SUBSYSTEM_SHOOTER.setTilter(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf)));
+    //NoteInFeederTrigger.negate().and(ShooterAtHomeTrigger.negate()).onTrue(
+    //  new WaitCommand(1)
+    //  .andThen(
+    //    SUBSYSTEM_SHOOTER.setTilter(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+    //  ).alongWith(
+    //    SUBSYSTEM_SHOOTER.setExtensionHeight(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+    //  )
+    //);
 
     //When there is a note in the conveyer, and the shooter is at home position, run the feed through command.
-    NoteInConveyerTrigger.and(ShooterAtHomeTrigger).onTrue(
-      SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2).andThen(
-        SUBSYSTEM_SHOOTER.loadGamePiece().withInterruptBehavior(InterruptionBehavior.kCancelIncoming)).andThen(
-        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0))
-    );
+    //NoteInConveyerTrigger.and(ShooterAtHomeTrigger).onTrue(
+    //  SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2).andThen(
+    //    SUBSYSTEM_SHOOTER.loadGamePiece().withInterruptBehavior(InterruptionBehavior.kCancelIncoming)).andThen(
+    //    SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0))
+    //);
 
     //TELEOP CONTROLS _____________________________________________________________________________________________________________________________________________________________________________________
     
@@ -171,16 +182,16 @@ public class RobotContainer {
       new ParallelCommandGroup(
         new rotationTargetLockDrive(
             SUBSYSTEM_SWERVEDRIVE,   
-            () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
-            () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
+            () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
+            () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
             () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
             () -> true, 
             () -> 0.02
           ),
-          SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
+          //SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
           SUBSYSTEM_SHOOTER.IdleShooter(4022,2681)
         )
-    );//.onFalse(SUBSYSTEM_SHOOTER.setTilter(0.0));
+    ).onFalse(SUBSYSTEM_SHOOTER.IdleShooter(1500, 1500));
 
     DRIVER_R1.whileTrue(
       (ShooterAtAmp.getAsBoolean() ? 
@@ -195,37 +206,41 @@ public class RobotContainer {
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.intakeDown(),
-        SUBSYSTEM_CONVEYER.intakeGamePiece()//,
-        //SUBSYSTEM_INTAKE.intakeUp()  TODO: Did this break the code?
+        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2),
+        SUBSYSTEM_SHOOTER.loadGamePiece()
+        //SUBSYSTEM_INTAKE.intakeUp()
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
     .onFalse(SUBSYSTEM_INTAKE.intakeUp());
 
 
-
     DRIVER_A.whileTrue(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setExtensionHeight(6),
-        SUBSYSTEM_SHOOTER.setTilter(90)
-        )
-    ).onFalse(
-      new SequentialCommandGroup(
-        SUBSYSTEM_SHOOTER.setExtensionHeight(0.0),
+        SUBSYSTEM_SHOOTER.setTilter(85)
+        ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+    )
+    .whileFalse(
+      //new ParallelCommandGroup(
+      SUBSYSTEM_SHOOTER.setExtensionHeight(0.0).andThen(
         SUBSYSTEM_SHOOTER.setTilter(0.0)
-      )
+      ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+      //)
     );
 
 
+    DRIVER_X.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.84,7.73),new Rotation2d(-90.0)) , AutonomousConstants.PathFindingConstraints.kConstraints));
 
-    DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(2.0,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
+    //DRIVER_B.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(new Pose2d(new Translation2d(2.0,5.52),SUBSYSTEM_SWERVEDRIVE.getRotation2d())));
+    DRIVER_B.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.45,5.52),new Rotation2d(0.0)), AutonomousConstants.PathFindingConstraints.kConstraints));
+
+
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
 
 
     OP_1.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(0.7)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
-    //OP_1.onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
     OP_2.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.7)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0));
-    //OP_2.onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
 
     OP_4.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.2)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
     OP_9.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
@@ -235,12 +250,14 @@ public class RobotContainer {
     OP_11.whileTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
     OP_12.whileTrue(SUBSYSTEM_SHOOTER.setTilter(0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
 
+    //OP_8.whileTrue(new ampPosition(SUBSYSTEM_SHOOTER, 6, 80).withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
 
+    /*
     OP_8.whileTrue(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setExtensionHeight(6),
-        SUBSYSTEM_SHOOTER.setTilter(90)
+        SUBSYSTEM_SHOOTER.setTilter(80)
         )
     ).onFalse(
       new ParallelCommandGroup(
@@ -248,6 +265,7 @@ public class RobotContainer {
         SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0)
       )
     );
+    */
 
 
     //OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(45.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
@@ -272,7 +290,7 @@ public class RobotContainer {
   }
 
   public void configureNamedCommands() {
-    NamedCommands.registerCommand("ShootNoAim", SUBSYSTEM_SHOOTER.shoot(4022, 2681, false));
+    NamedCommands.registerCommand("ShootNoAim", SUBSYSTEM_SHOOTER.shoot(4022, 2681, false).andThen(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000)));
 
     NamedCommands.registerCommand("Shoot",
       new SequentialCommandGroup(
@@ -291,22 +309,34 @@ public class RobotContainer {
       )
     );
 
+    /*
     NamedCommands.registerCommand("LoadShooter", 
-      new SequentialCommandGroup(
-        SUBSYSTEM_INTAKE.intakeDown(),
-        SUBSYSTEM_CONVEYER.intakeGamePiece()//,
-        //SUBSYSTEM_INTAKE.intakeUp()  TODO: Did this break the code?
-      ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
-    );
+        SUBSYSTEM_SHOOTER.setFeederSpeed(0.4)
+        .andThen(
+          SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2)
+        )
+        .until(() -> SUBSYSTEM_SHOOTER.getLineBreak())
+        .andThen(
+          SUBSYSTEM_SHOOTER.setFeederSpeed(0.0)
+        ).alongWith(
+          SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
+        ) 
+    );*/
+    
 
     NamedCommands.registerCommand("IntakeDown", SUBSYSTEM_INTAKE.intakeDown());
 
-    NamedCommands.registerCommand("CaptureNote", new SequentialCommandGroup(
-      SUBSYSTEM_INTAKE.intakeDown(),
-      SUBSYSTEM_CONVEYER.intakeGamePiece(),
-      SUBSYSTEM_INTAKE.intakeUp()
-      )
+    NamedCommands.registerCommand("CaptureNote", 
+    new SequentialCommandGroup(
+        SUBSYSTEM_INTAKE.intakeDown(),
+        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2),
+        SUBSYSTEM_SHOOTER.loadGamePiece(),
+        SUBSYSTEM_SHOOTER.setFeederSpeed(0.0),
+        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
+        )
     );
+
+    NamedCommands.registerCommand("ZeroRobotHeading", SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading().andThen(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.02)));
 
 
     /*
@@ -332,7 +362,8 @@ public class RobotContainer {
         //return new PathPlannerAuto("TwoNoteAuto");
 
         //return null;
-        return new PathPlannerAuto("FourNoteAutoUnderSpeaker");
+        //return SUBSYSTEM_SHOOTER.setFeederSpeed(0.5);
+        return new PathPlannerAuto("US4NoteAuto");
   } 
 
   public static boolean DRIVER_LT() {

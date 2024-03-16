@@ -22,7 +22,6 @@ public class rotationTargetLockDrive extends Command {
     private final SwerveDrive subsystem;
     private final DoubleSupplier SUPPLIER_xSpeed;
     private final DoubleSupplier SUPPLIER_ySpeed;
-    private final DoubleSupplier SUPPLIER_zSpeed;
     private final BooleanSupplier SUPPLIER_Field_Oriented;
     private final DoubleSupplier SUPPLIER_Period;
 private PIDController rotationPID = new PIDController(RotationTargetLock.Proportional,RotationTargetLock.Integral,RotationTargetLock.Derivitive);
@@ -39,7 +38,6 @@ private PIDController rotationPID = new PIDController(RotationTargetLock.Proport
         subsystem = m_subsystem;
         SUPPLIER_xSpeed = xSpeed;
         SUPPLIER_ySpeed = ySpeed;
-        SUPPLIER_zSpeed = zSpeed;
         SUPPLIER_Field_Oriented = fieldOriented;
         SUPPLIER_Period = timePeriod;
         addRequirements(subsystem);
@@ -54,11 +52,11 @@ private PIDController rotationPID = new PIDController(RotationTargetLock.Proport
     public void execute() {
                 // double[] positionData = LimelightHelpers.getTargetPose_RobotSpace("limelight");
                 //  double desiredAngle = positionData[5];
-        double joystickX = SUPPLIER_xSpeed.getAsDouble() * (Math.abs(SUPPLIER_xSpeed.getAsDouble()) > 0.05 ? 1.0 : 0.0);
-        double joystickY = SUPPLIER_ySpeed.getAsDouble() * (Math.abs(SUPPLIER_ySpeed.getAsDouble()) > 0.05 ? 1.0 : 0.0); //grab speeds and apply deadband
+        double joystickX = SUPPLIER_xSpeed.getAsDouble();
+        double joystickY = SUPPLIER_ySpeed.getAsDouble();
 
-        double xSpeed   = (Math.pow(joystickX, 2) * (joystickX<0 ? -1 : 1) /1.0) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * (RobotContainer.DRIVER_LT() ? 0.3 : 1);      // * 0.2;
-        double ySpeed   = (Math.pow(joystickY, 2) * (joystickY<0 ? -1 : 1) /1.0) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * (RobotContainer.DRIVER_LT() ? 0.3 : 1);      // * 0.2; //Determine new velocity
+        double xSpeed   = ((joystickX * joystickX) * (joystickX<0 ? -1 : 1)) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;     // * 0.2;
+        double ySpeed   = ((joystickY * joystickX) * (joystickY<0 ? -1 : 1)) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;     // * 0.2; //Determine new velocity
         double rotSpeed = rotationPID.calculate(subsystem.getRotation2d().getDegrees(), subsystem.getRotationRelativeToSpeaker().getDegrees()+180.0);
         boolean fieldRelative = SUPPLIER_Field_Oriented.getAsBoolean();
         double timePeriod = SUPPLIER_Period.getAsDouble();

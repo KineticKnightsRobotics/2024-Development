@@ -26,17 +26,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
-//static wpi
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Volts;
-import static edu.wpi.first.units.MutableMeasure.mutable;
 //robot
 import frc.robot.lib.Constants;
 import frc.robot.lib.SwerveModule;
@@ -113,11 +102,6 @@ public class SwerveDrive extends SubsystemBase {
     public AprilTagFieldLayout kTagLayout;
     public SysIdRoutine m_SysIdRoutine;
 
-    private MutableMeasure<Voltage> m_SysID_Voltage = mutable(Volts.of(0));
-    private MutableMeasure<Distance> m_SysID_Position = mutable(Meters.of(0));
-    private MutableMeasure<Velocity<Distance>> m_SysID_Velocity = mutable(MetersPerSecond.of(0));
-
-
     //private final SwerveDriveOdometry ODEMETER = new SwerveDriveOdometry(KinematicsConstants.KINEMATICS_DRIVE_CHASSIS, getRotation2d(), getModulePositions());
     public final SwerveDrivePoseEstimator ODEMETER = new SwerveDrivePoseEstimator(
         KinematicsConstants.KINEMATICS_DRIVE_CHASSIS,
@@ -172,42 +156,6 @@ public class SwerveDrive extends SubsystemBase {
 
         PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
         field.setRobotPose(getPose());
-
-        /* 
-        m_SysIdRoutine = 
-            new SysIdRoutine(
-                new SysIdRoutine.Config(),
-                new SysIdRoutine.Mechanism(
-                    (Measure<Voltage> volts) -> {
-                        MODULE_FRONT_LEFT.MOTOR_DRIVE.set(volts.in(Volts));
-                        MODULE_BACK_LEFT.MOTOR_DRIVE.set(volts.in(Volts));
-                        MODULE_FRONT_RIGHT.MOTOR_DRIVE.set(volts.in(Volts));
-                        MODULE_BACK_RIGHT.MOTOR_DRIVE.set(volts.in(Volts));/*set(volts.in(Volts));
-                    },
-                    log -> {
-                        log.motor("Front Left Module")
-                        .voltage        (m_SysID_Voltage.mut_replace(MODULE_FRONT_LEFT.MOTOR_DRIVE.getAppliedOutput() * MODULE_FRONT_LEFT.MOTOR_DRIVE.getBusVoltage(),Volts))
-                        .linearPosition(m_SysID_Position.mut_replace(MODULE_FRONT_LEFT.ENCODER_DRIVE.getPosition(),Meters))
-                        .linearVelocity((m_SysID_Velocity.mut_replace(MODULE_FRONT_LEFT.ENCODER_DRIVE.getVelocity(),MetersPerSecond)));
-                        log.motor("Back Left Module")
-                        .voltage        (m_SysID_Voltage.mut_replace(MODULE_BACK_LEFT.MOTOR_DRIVE.getAppliedOutput() * MODULE_BACK_LEFT.MOTOR_DRIVE.getBusVoltage(),Volts))
-                        .linearPosition(m_SysID_Position.mut_replace(MODULE_BACK_LEFT.ENCODER_DRIVE.getPosition(),Meters))
-                        .linearVelocity((m_SysID_Velocity.mut_replace(MODULE_BACK_LEFT.ENCODER_DRIVE.getVelocity(),MetersPerSecond)));
-                        log.motor("Front Right Module")
-                        .voltage        (m_SysID_Voltage.mut_replace(MODULE_FRONT_RIGHT.MOTOR_DRIVE.getAppliedOutput() * MODULE_FRONT_RIGHT.MOTOR_DRIVE.getBusVoltage(),Volts))
-                        .linearPosition(m_SysID_Position.mut_replace(MODULE_FRONT_RIGHT.ENCODER_DRIVE.getPosition(),Meters))
-                        .linearVelocity((m_SysID_Velocity.mut_replace(MODULE_FRONT_RIGHT.ENCODER_DRIVE.getVelocity(),MetersPerSecond)));
-                        log.motor("Back Right Module")
-                        .voltage        (m_SysID_Voltage.mut_replace(MODULE_BACK_RIGHT.MOTOR_DRIVE.getAppliedOutput() * MODULE_BACK_RIGHT.MOTOR_DRIVE.getBusVoltage(),Volts))
-                        .linearPosition(m_SysID_Position.mut_replace(MODULE_BACK_RIGHT.ENCODER_DRIVE.getPosition(),Meters))
-                        .linearVelocity((m_SysID_Velocity.mut_replace(MODULE_BACK_RIGHT.ENCODER_DRIVE.getVelocity(),MetersPerSecond)));
-                    },
-                    this
-                )
-            );
-        */
-
-
     }
 
     @Override
@@ -217,9 +165,9 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putData("Field", field);field.setRobotPose(getPose());
         SmartDashboard.putString("Drive Odemeter Position", ODEMETER.getEstimatedPosition().toString());
 
-        SmartDashboard.putString("Vision Pose", vision.getEstimatedRoboPose().toString());
-        SmartDashboard.putString("Vision STD", vision.getStandardDeviations().toString());
-        SmartDashboard.putNumber("Vision Latency", vision.getTimestamp());
+        //SmartDashboard.putString("Vision Pose", vision.getEstimatedRoboPose().toString());
+        //SmartDashboard.putString("Vision STD", vision.getStandardDeviations().toString());
+        //SmartDashboard.putNumber("Vision Latency", vision.getTimestamp());
 
 
         MODULE_FRONT_LEFT.moduleData2Dashboard();
@@ -241,8 +189,8 @@ public class SwerveDrive extends SubsystemBase {
             idle_Timer_Zero.reset();
         }
 
-        SmartDashboard.putNumber("Drive Idle Timer Locking", idle_Timer_Lock.get());
-        SmartDashboard.putNumber("Drive Lock Timer", getLockTimer());
+        //SmartDashboard.putNumber("Drive Idle Timer Locking", idle_Timer_Lock.get());
+        //SmartDashboard.putNumber("Drive Lock Timer", getLockTimer());
     }
 
     public Pose2d getPose() {
@@ -449,15 +397,14 @@ public class SwerveDrive extends SubsystemBase {
         return Math.abs(getPose().getTranslation().getDistance(getSpeakerPose().get().getTranslation().toTranslation2d()));
     }
 
-      public boolean isRobotInAmpZone(){ //This should probably be rewritten to be like the speaker April Tag one.
+    public boolean isRobotInAmpZone(){ //This should probably be rewritten to be like the speaker April Tag one.
         var alliance = DriverStation.getAlliance();
 
         if(alliance.isPresent()){
             if(alliance.get() == DriverStation.Alliance.Blue);
-                    return getPose().getY()>=7.5 && getPose().getX()<=4;
+            return getPose().getY()>=7.5 && getPose().getX()<=4;
         } else {
-                                return getPose().getY()>=7.5 && getPose().getX()>=12.5;
-
+            return getPose().getY()>=7.5 && getPose().getX()>=12.5;
         }
       }
 

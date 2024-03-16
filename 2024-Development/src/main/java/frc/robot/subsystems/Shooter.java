@@ -5,19 +5,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
-//import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-/* 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
-*/
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,71 +18,41 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.lib.PID_Config.ShooterSubsystem.ShooterVelocityPID;
 import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
-import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig.TilterFeedForward;
 import frc.robot.lib.PID_Config.ShooterSubsystem.ExtensionPID;
-//import frc.robot.lib.PID_Config.ShooterSubsystem.TilterPIDConfig;
 import frc.robot.lib.Constants.ShooterSubsystemConstants;
 import frc.robot.lib.ShooterInterpolator;
-
-/*
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import static edu.wpi.first.units.MutableMeasure.mutable;
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
-*/
-
-import java.util.concurrent.TimeUnit;
 import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-
 
 public class Shooter extends SubsystemBase {
         boolean hasResetThroughBoreEncoder = false;
 
     private final DutyCycleEncoder tilterABSEncoder;
-    /*
-    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
-    private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
-    // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
-    private final MutableMeasure<Angle> m_angle = mutable(Rotations.of(0));
-    // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
-    private final MutableMeasure<Velocity<Angle>> m_velocity = mutable(RotationsPerSecond.of(0));
-    //
-    */
-    //private final MutableMeasure<Angle> m_degrees = mutable(Degrees.of(0));
-    //private final MutableMeasure<Velocity<Angle>> m_velocity_degrees = mutable(DegreesPerSecond.of(0));
+
     private final SimpleMotorFeedforward shooterFeedFoward;
     public final CANSparkMax tiltMotor;
     private final CANSparkMax tiltMotor_Follower;
-    //private final ArmFeedforward tiltFeedforward;
-    private final PIDController tiltController;
-    //private final ProfiledPIDController tiltController;
+    public final PIDController tiltControllerHome;
+    public final PIDController tiltControllerExtend;
     private final RelativeEncoder tiltEncoder;
+
     private final CANSparkMax shooterMotorL; //TOP roller
     private final CANSparkMax shooterMotorR; //BOTTOM roller
     private final SparkPIDController shooterControllerL;
     private final SparkPIDController shooterControllerR;
+    private final RelativeEncoder shooterMotorREncoder;
+    private final RelativeEncoder shooterMotorLEncoder;
+
     private final CANSparkMax feedMotor;
     private final RelativeEncoder feedEncoder;
     private final DigitalInput lineBreak;
-    private final RelativeEncoder shooterMotorREncoder;
-    private final RelativeEncoder shooterMotorLEncoder;
     private final double tiltPosition = 0.0;
+    
     public final ShooterInterpolator shooterInterpolator;
-
     private final CANSparkMax extensionMotor;
     private final RelativeEncoder extensionEncoder;
-    private final SparkPIDController extensionController;
+    public final SparkPIDController extensionController;
 
     /*
     private final SysIdRoutine m_sysIdRoutineTilter;
@@ -119,14 +80,20 @@ public class Shooter extends SubsystemBase {
         tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
         tiltEncoder.setPosition(0.0);
 
-        tiltController = new PIDController(
-            TilterPIDConfig.Proportional,
-            TilterPIDConfig.Integral,
-            TilterPIDConfig.Derivitive
+        tilterABSEncoder = new DutyCycleEncoder(4);
+        tilterABSEncoder.setDistancePerRotation(-360);  
+
+        tiltControllerHome = new PIDController(
+            TilterPIDConfig.home.Proportional,
+            TilterPIDConfig.home.Integral,
+            TilterPIDConfig.home.Derivitive
         );
 
-        tiltController.setTolerance(0.4);
-
+        tiltControllerExtend = new PIDController(
+            TilterPIDConfig.extended.Proportional,
+            TilterPIDConfig.extended.Integral,
+            TilterPIDConfig.extended.Derivitive
+        );
 
         //TODO: Next Week Stuff :]
         /*
@@ -197,10 +164,7 @@ public class Shooter extends SubsystemBase {
         shooterMotorLEncoder.setPositionConversionFactor(1);
         shooterMotorLEncoder.setVelocityConversionFactor(1);
 
-        //SmartDashboard.putNumber("Manual Shooter Angle", tiltPosition);
-
-        tilterABSEncoder = new DutyCycleEncoder(4);
-        tilterABSEncoder.setDistancePerRotation(-360);       
+        //SmartDashboard.putNumber("Manual Shooter Angle", tiltPosition);     
 
         extensionMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_EXTENSION, MotorType.kBrushless);
 
@@ -216,102 +180,11 @@ public class Shooter extends SubsystemBase {
         extensionController.setP(ExtensionPID.Proportional);
         extensionController.setI(ExtensionPID.Integral);
         extensionController.setD(ExtensionPID.Derivitive);
-
-     
-
-        // Create a new SysId routine for characterizing the shooter.
-        /*
-        m_sysIdRoutineTilter =
-            new SysIdRoutine(
-                // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
-                new SysIdRoutine.Config(),
-                new SysIdRoutine.Mechanism(
-                    // Tell SysId how to plumb the driving voltage to the motor(s).
-                    (Measure<Voltage> volts) -> {
-                    shooterMotorL.setVoltage(volts.in(Volts));
-                    },
-                    // Tell SysId how to record a frame of data for each motor on the mechanism being
-                    // characterized.
-                    log -> {
-                        // Record a frame for the shooter motor.
-                        log.motor("Shooter Tilter")
-                            .voltage(
-                                m_appliedVoltage.mut_replace(
-                                tiltMotor.getAppliedOutput() * tiltMotor.getBusVoltage(), Volts))
-                            .angularPosition(m_angle.mut_replace(tiltEncoder.getPosition(), Degrees))
-                            .angularVelocity(
-                                m_velocity.mut_replace(tiltEncoder.getVelocity(), DegreesPerSecond));
-                    },
-                    // Tell SysId to make generated commands require this subsystem, suffix test state in
-                    // WPILog with this subsystem's name ("shooter")
-                    this
-                )
-            );
-        m_sysIdRoutineShooterLeft = 
-            new SysIdRoutine(
-                // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
-                new SysIdRoutine.Config(),
-                new SysIdRoutine.Mechanism(
-                    // Tell SysId how to plumb the driving voltage to the motor(s).
-                    (Measure<Voltage> volts) -> {
-                    shooterMotorL.setVoltage(volts.in(Volts));
-                    },
-                    // Tell SysId how to record a frame of data for each motor on the mechanism being
-                    // characterized.
-                    log -> {
-                        // Record a frame for the shooter motor.
-                        log.motor("shooter-wheel-left")
-                            .voltage(
-                                m_appliedVoltage.mut_replace(
-                                shooterMotorL.getAppliedOutput() * shooterMotorL.getBusVoltage(), Volts))
-                            .angularPosition(m_angle.mut_replace(shooterMotorLEncoder.getPosition(), Rotations))
-                            .angularVelocity(
-                                m_velocity.mut_replace(shooterMotorLEncoder.getVelocity(), RotationsPerSecond));
-                    },
-                    // Tell SysId to make generated commands require this subsystem, suffix test state in
-                    // WPILog with this subsystem's name ("shooter")
-                    this
-                )
-            );
-        m_sysIdRoutineShooterRight = 
-            new SysIdRoutine(
-                // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
-                new SysIdRoutine.Config(),
-                new SysIdRoutine.Mechanism(
-                    // Tell SysId how to plumb the driving voltage to the motor(s).
-                    (Measure<Voltage> volts) -> {
-                    shooterMotorR.setVoltage(volts.in(Volts));
-                    },
-                    // Tell SysId how to record a frame of data for each motor on the mechanism being
-                    // characterized.
-                    log -> {
-                        // Record a frame for the shooter motor.
-                        log.motor("shooter-wheel-right")
-                            .voltage(
-                                m_appliedVoltage.mut_replace(
-                                shooterMotorR.getAppliedOutput() * shooterMotorR.getBusVoltage(), Volts))
-                            .angularPosition(m_angle.mut_replace(shooterMotorREncoder.getPosition(), Rotations))
-                            .angularVelocity(
-                                m_velocity.mut_replace(shooterMotorREncoder.getVelocity(), RotationsPerSecond));
-                    },
-                    // Tell SysId to make generated commands require this subsystem, suffix test state in
-                    // WPILog with this subsystem's name ("shooter")
-                    this
-                )
-            );
-        */
-
-
-
-        try {TimeUnit.SECONDS.sleep(1);}
-        catch(InterruptedException e){
-            tilterABSEncoder.reset();
-            hasResetThroughBoreEncoder = true;
-        }
     }
     
     @Override
     public void periodic() {
+
         if (!hasResetThroughBoreEncoder) {
             tilterABSEncoder.reset();
             hasResetThroughBoreEncoder=true;
@@ -323,9 +196,9 @@ public class Shooter extends SubsystemBase {
 
         //SmartDashboard.putNumber("Through Bore Encoder Absolute", throughBoreEncoder.getAbsolutePosition());
 
-        SmartDashboard.putNumber("Shooter RPM Top", shooterMotorR.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Shooter RPM Left", shooterMotorLEncoder.getVelocity());
 
-        SmartDashboard.putNumber("Shooter RPM Bottom", shooterMotorL.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Shooter RPM Right", shooterMotorREncoder.getVelocity());
 
         //SmartDashboard.putNumber("ShooterCurrentF",shooterMotorR.getOutputCurrent());
         //SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
@@ -342,7 +215,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getTilterPosition () {
-        return tiltEncoder.getPosition();
+        return tilterABSEncoder.getDistance();
     }
 
     public Command aimTilter(DoubleSupplier angleSupplier) {
@@ -351,7 +224,7 @@ public class Shooter extends SubsystemBase {
                 //tiltController.setGoal(angleSupplier.getAsDouble());
 
                 //tiltController.setReference(angle, ControlType.kPosition);
-                tiltMotor.set(MathUtil.clamp(tiltController.calculate(tilterABSEncoder.getDistance(), angleSupplier.getAsDouble()),-0.2,0.2));
+                tiltMotor.set(MathUtil.clamp(tiltControllerHome.calculate(tilterABSEncoder.getDistance(), angleSupplier.getAsDouble()),-0.2,0.2));
                 //tiltMotor.setVoltage(tiltController.calculate(getTilterPosition()) + shooterFeedFoward.calculate(tiltController.getSetpoint().velocity) );
             }
         );
@@ -360,24 +233,41 @@ public class Shooter extends SubsystemBase {
     public Command setTilter(double angle) {
         return Commands.run(
             () -> {
-                //tiltController.setGoal(angle);
-                //tiltController.setReference(angle, ControlType.kPosition);
+                /*
+                if (extensionEncoder.getPosition() < 2) {
+                    // Tilting from home for shooting
+                    if (tilterABSEncoder.getDistance() > 90 && tiltControllerHome.calculate(tilterABSEncoder.getDistance(),angle) > 0) {
+                        tiltMotor.set(0.0);
+                    }
+                    else {
+                        tiltMotor.set(MathUtil.clamp(tiltControllerHome.calculate(tilterABSEncoder.getDistance(), angle),-0.25,0.25));
+                    }
+                }
+                else {
+                    if (tilterABSEncoder.getDistance() > 90 && tiltControllerExtend.calculate(tilterABSEncoder.getDistance(),angle) > 0) {
+                        tiltMotor.set(0.0);
+                    }
+                    else {
+                        tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tilterABSEncoder.getDistance(), angle),-0.25,0.25));
+                    }
+                }
+                */
+                if (tilterABSEncoder.getDistance() > 90 && tiltControllerExtend.calculate(tilterABSEncoder.getDistance(),angle) > 0) {
+                    tiltMotor.set(0.0);
+                    }
+                else {
+                    tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tilterABSEncoder.getDistance(), angle),-0.25,0.25));
+                }
 
-                //tiltMotor.setVoltage(tiltController.calculate(getTilterPosition()) + shooterFeedFoward.calculate(tiltController.getSetpoint().velocity));
-
-                tiltMotor.set(MathUtil.clamp(tiltController.calculate(tilterABSEncoder.getDistance(), angle),-0.2,0.2));
             }
         //).until(
         //    tiltController.atSetpoint()
+        ).finallyDo(
+           () -> {
+                tiltMotor.stopMotor();
+           }
         );
     }
-    /*
-    public Command setTiltertoManual() {
-        if (SmartDashboard.getNumber("Manual Shooter Angle",0.0) != tiltPosition) {
-            tiltPosition = SmartDashboard.getNumber("Manual Shooter Angle", 0.0);
-        }
-        SmartDashboard.putNumber("Current Manual Positon", tiltPosition);
-    */ // old
 
     public Command stopTilter(){
         return Commands.runOnce(
@@ -403,7 +293,7 @@ public class Shooter extends SubsystemBase {
         return Commands.run(
             () -> {
                 //tiltController.setReference(tiltPosition, ControlType.kPosition);
-                tiltMotor.set(MathUtil.clamp(tiltController.calculate(tilterABSEncoder.getDistance(), tiltPosition),-0.2,0.2));
+                tiltMotor.set(MathUtil.clamp(tiltControllerHome.calculate(tilterABSEncoder.getDistance(), tiltPosition),-0.2,0.2));
 
             }
         );
@@ -417,10 +307,10 @@ public class Shooter extends SubsystemBase {
     
     public Command IdleShooter(double idleRPM_L,double idleRPM_R){
         return Commands
-        .run(
+        .runOnce(
             ()->{
-                shooterMotorL.set(idleRPM_L);
-                shooterMotorR.set(idleRPM_R);
+                shooterMotorL.set(0.25);
+                shooterMotorR.set(0.25);
             }
         )
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
@@ -473,10 +363,20 @@ public class Shooter extends SubsystemBase {
         .until(() -> getLineBreak())
         .finallyDo(
             () -> {
-                feedMotor.set(0.0);
+                //feedMotor.set(0.0);
             }
         )
         .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+    }
+
+    public Command stopShooter() {
+        return Commands.
+            runOnce(
+                () -> {
+                    shooterMotorL.stopMotor();
+                    shooterMotorR.stopMotor();
+                }
+            );
     }
 
     public Command setFeederSpeed(double percentOutput) {
@@ -489,26 +389,5 @@ public class Shooter extends SubsystemBase {
 
     public Command setExtensionHeight(double height) {
         return Commands.runOnce(() -> {extensionController.setReference(height, ControlType.kPosition);});
-    }
-
-    /*
-    public Command sysIdQuasistaticTilter(SysIdRoutine.Direction direction) {
-        return m_sysIdRoutineTilter.quasistatic(direction);
-    }
-    public Command sysIdDynamicTiler(SysIdRoutine.Direction direction) {
-        return m_sysIdRoutineTilter.dynamic(direction);
-    }
-    public Command sysIdQuasistaticLeft(SysIdRoutine.Direction direction) {
-        return m_sysIdRoutineShooterLeft.quasistatic(direction);
-    }
-    public Command sysIdDynamicLeft(SysIdRoutine.Direction direction) {
-        return m_sysIdRoutineShooterLeft.dynamic(direction);
-    }
-    public Command sysIdQuasistaticRight(SysIdRoutine.Direction direction) {
-        return m_sysIdRoutineShooterRight.quasistatic(direction);
-    }
-    public Command sysIdDynamicRight(SysIdRoutine.Direction direction) {
-        return m_sysIdRoutineShooterRight.dynamic(direction);
-    }
-    */    
+    }   
 }
