@@ -384,14 +384,11 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
-    //return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Shop Pickup Note 2");
-  //  return Autos.simpleFollowPath(SUBSYSTEM_SWERVEDRIVE, "Test1");
-    //return Autos.simpleFollowChoreo(SUBSYSTEM_SWERVEDRIVE, "Test3");
         //return new PathPlannerAuto("TwoNoteAuto");
-
-        //return null;
         //return SUBSYSTEM_SHOOTER.setFeederSpeed(0.5);
-        return new PathPlannerAuto("US4NoteAuto");
+        //return new PathPlannerAuto("US4NoteAuto");
+        
+        return autoChooser.getSelected();
   } 
 
   public static boolean DRIVER_LT() {
