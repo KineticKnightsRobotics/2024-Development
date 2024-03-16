@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.25,
-        "y": 5.55
+        "x": 0.5139505774507043,
+        "y": 7.710082447191922
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2489787012749378,
-        "y": 5.553919733431884
+        "x": 0.49546117110252225,
+        "y": 7.70083774401783
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.35,
-        "y": 4.1
+        "x": 0.5139505774507043,
+        "y": 7.710082447191922
       },
       "prevControl": {
-        "x": 1.35,
-        "y": 4.1
+        "x": 0.5139505774507043,
+        "y": 7.710082447191922
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,9 +32,9 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 4.0,
-    "maxAngularVelocity": 720.0,
+    "maxVelocity": 3.25,
+    "maxAcceleration": 3.25,
+    "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
@@ -43,10 +43,10 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "UnderSpeakerAutos",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

@@ -120,7 +120,7 @@ public class RobotContainer {
 
 
 
-  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("4NoteAutoUnderSpeaker");
+  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
