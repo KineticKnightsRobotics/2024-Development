@@ -15,8 +15,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-//import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -35,7 +34,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 //import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.apriltag.AprilTagFieldLayout;
 //import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -46,7 +44,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RobotContainer {
 
-  //private final SendableChooser<Command> autoChooser;
+
+  //Init auto chooser
+
+  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("4NoteAutoUnderSpeaker");
 
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
@@ -142,6 +143,9 @@ public class RobotContainer {
         () -> 0.02
       )
     );
+
+
+    SmartDashboard.putData("Autos", autoChooser);
 
 
     configureNamedCommands();
