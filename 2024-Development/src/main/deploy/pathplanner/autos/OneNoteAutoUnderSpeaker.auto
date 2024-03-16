@@ -14,12 +14,18 @@
         {
           "type": "named",
           "data": {
+            "name": "ZeroRobotHeading"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "ShootNoAim"
           }
         }
       ]
     }
   },
-  "folder": "UnderSpeakerCentre",
+  "folder": null,
   "choreoAuto": false
 }

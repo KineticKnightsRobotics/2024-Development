@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoLoadShooter"
+            "name": "zeroRobotHeading"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "ShootNoAim"
           }
         },
         {
@@ -36,7 +36,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CapturePiece"
+                  "name": "CaptureNote"
                 }
               }
             ]
@@ -51,12 +51,6 @@
                 "data": {
                   "pathName": "Lnote1ToScore"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
               }
             ]
           }
@@ -64,7 +58,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "ShootNoAim"
           }
         },
         {
@@ -80,7 +74,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CapturePiece"
+                  "name": "CaptureNote"
                 }
               }
             ]
@@ -95,12 +89,6 @@
                 "data": {
                   "pathName": "Lnote2ToScore"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
-                }
               }
             ]
           }
@@ -108,12 +96,12 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "ShootNoAim"
           }
         }
       ]
     }
   },
-  "folder": "LeftUnderSpeaker",
+  "folder": null,
   "choreoAuto": false
 }

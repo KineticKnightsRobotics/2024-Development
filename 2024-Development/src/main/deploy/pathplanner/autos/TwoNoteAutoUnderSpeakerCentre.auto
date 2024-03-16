@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "LoadShooter"
+            "name": "ZeroRobotHeading"
           }
         },
         {
@@ -102,6 +102,6 @@
       ]
     }
   },
-  "folder": "UnderSpeakerCentre",
+  "folder": null,
   "choreoAuto": false
 }

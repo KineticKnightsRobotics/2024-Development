@@ -20,12 +20,6 @@
         {
           "type": "named",
           "data": {
-            "name": "LoadShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "ShootNoAim"
           }
         },
@@ -108,6 +102,6 @@
       ]
     }
   },
-  "folder": "UnderSpeakerCentre",
+  "folder": null,
   "choreoAuto": false
 }

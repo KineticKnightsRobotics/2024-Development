@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "LoadShooter"
+            "name": "ZeroRobotHeading"
           }
         },
         {
@@ -154,6 +154,6 @@
       ]
     }
   },
-  "folder": "ChoreoMidNotes",
+  "folder": null,
   "choreoAuto": true
 }
