@@ -104,7 +104,8 @@ public class RobotContainer {
   int ShooterRPM = 4022;
 
   //ROBOT TRIGGERS
-
+  Trigger alwaysOn = new Trigger(() -> true);
+    
   Trigger ShooterAtAmp = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() > 60);
 
   Trigger ShooterUnderHome = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() < -3.0);
@@ -155,6 +156,7 @@ public class RobotContainer {
     //TELEOP ROBOT TRIGGERED EVENTS _______________________________________________________________________________________________________________________________________________________________________
 
     //When Shooter falls under the home position, set it back to 0
+    alwaysOn.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.02));
     ShooterUnderHome.onTrue(SUBSYSTEM_SHOOTER.setTilter(2.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //When Note is in the shooter, idle the flywheels and stop the conveyer.
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000,1000));
@@ -272,12 +274,12 @@ public class RobotContainer {
     OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTilter(20)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     OP_15.whileTrue(SUBSYSTEM_SHOOTER.setTilter(30)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //Override bring the shooter down
-    OP_16.whileTrue(SUBSYSTEM_SHOOTER.setTilterVoltage(-0.7)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_16.whileTrue(SUBSYSTEM_SHOOTER.setTilterVoltage(-2)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //Override Shooter Buttons.
-    OP_17.whileTrue(SUBSYSTEM_SHOOTER.shoot(4000, 4000, true)).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
-    OP_18.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(0.8)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
+    OP_19.whileTrue(SUBSYSTEM_SHOOTER.shoot(4000, 4000, true)).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
+    OP_20.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(0.8)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
     //Override zero tilter THIS BREAKS THE CODE IF YOU ZERO WHILE AT A NON 0 ANGLE.
-    OP_19.and(OP_20).onTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
+    OP_17.and(OP_18).onTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
     //Override start shooter idle.
     OP_21.onTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
 
