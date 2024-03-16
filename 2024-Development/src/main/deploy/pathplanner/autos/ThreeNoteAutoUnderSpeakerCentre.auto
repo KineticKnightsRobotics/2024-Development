@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.35,
+      "x": 1.25,
       "y": 5.55
     },
     "rotation": 0
@@ -11,6 +11,18 @@
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ZeroRobotHeading"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LoadShooter"
+          }
+        },
         {
           "type": "named",
           "data": {
@@ -37,9 +49,16 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Note1ToScore"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note1ToScore"
+                }
+              }
+            ]
           }
         },
         {
@@ -68,76 +87,27 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "note2ToScorePos"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNoAim"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "scorePosToNote3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CapturePiece"
+                  "pathName": "note2ToScorePos"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "note3ToScorePos"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "ShootNoAim"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "scorePosToNote4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CaptureNote"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Note4toScorePos"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "UnderSpeakerCentre",
   "choreoAuto": false
 }

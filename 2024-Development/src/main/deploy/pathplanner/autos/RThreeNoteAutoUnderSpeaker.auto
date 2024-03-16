@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4,
-      "y": 5.55
+      "x": 0.85,
+      "y": 6.5
     },
-    "rotation": 5.562908826767066e-19
+    "rotation": 67.0
   },
   "command": {
     "type": "sequential",
@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ZeroRobotHeading"
+            "name": "AutoLoadShooter"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "AutoRunShooter"
           }
         },
         {
@@ -30,13 +30,19 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "USStartToNote1"
+                  "pathName": "RstartToNote1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "CaptureNote"
+                  "name": "CapturePiece"
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": []
                 }
               }
             ]
@@ -49,45 +55,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "USNote1ToScore"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNoAim"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "USScoreToNote2"
+                  "pathName": "Rnote1ToScore"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "CaptureNote"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "USNote2ToScore"
+                  "name": "AutoLoadShooter"
                 }
               }
             ]
@@ -96,7 +70,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "AutoRunShooter"
           }
         },
         {
@@ -106,13 +80,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "USScoreToNote3"
+                  "pathName": "RscoreToNote2"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "CaptureNote"
+                  "name": "CapturePiece"
                 }
               }
             ]
@@ -125,7 +99,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "USNote3ToScore"
+                  "pathName": "Rnote2ToScore"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoLoadShooter"
                 }
               }
             ]
@@ -134,12 +114,12 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "AutoRunShooter"
           }
         }
       ]
     }
   },
-  "folder": "ChoreoUnderSpeaker",
-  "choreoAuto": true
+  "folder": "RightUnderSpeaker",
+  "choreoAuto": false
 }

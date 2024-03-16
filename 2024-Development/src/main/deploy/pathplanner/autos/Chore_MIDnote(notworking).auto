@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.1599400043487549,
-      "y": 4.619157314300537
+      "x": 1.2046852111816406,
+      "y": 4.459847927093506
     },
-    "rotation": -56.309949107001266
+    "rotation": -59.42077079011235
   },
   "command": {
     "type": "sequential",
@@ -14,63 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "LoadShooter"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeDown"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LStartToNote1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CapturePiece"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LNote1ToStart.1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "LoadShooter"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeDown"
+            "name": "ShootNoAim"
           }
         },
         {
@@ -130,35 +80,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CaptureNote"
+                  "name": null
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "MNote2ToSpeaker.1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "LoadShooter"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         },
         {
@@ -169,12 +94,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "MSpeakerToMidNote3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CaptureNote"
                 }
               }
             ]
@@ -189,25 +108,52 @@
                 "data": {
                   "pathName": "MMidNote3ToSpeaker"
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "LoadShooter"
+                  "pathName": "MSpeakerToMidNote4"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MMidNote4ToSpeaker"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MSpeakerToMidNote5"
+                }
+              }
+            ]
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "ChoreoMidNotes",
   "choreoAuto": true
 }
