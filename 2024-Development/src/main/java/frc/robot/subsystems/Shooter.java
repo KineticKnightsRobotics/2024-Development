@@ -80,7 +80,7 @@ public class Shooter extends SubsystemBase {
         tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
         tiltEncoder.setPosition(0.0);
 
-        tilterABSEncoder = new DutyCycleEncoder(4);
+        tilterABSEncoder = new DutyCycleEncoder(6);
         tilterABSEncoder.setDistancePerRotation(-360);  
 
         tiltControllerHome = new PIDController(
