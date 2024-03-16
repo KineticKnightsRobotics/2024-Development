@@ -46,9 +46,6 @@ public class RobotContainer {
 
 
   //Init auto chooser
-
-  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("4NoteAutoUnderSpeaker");
-
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Intake SUBSYSTEM_INTAKE = new Intake();
@@ -122,13 +119,9 @@ public class RobotContainer {
   Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer() >=0.521);
 
 
-  //Trigger toggleTrigger = new Trigger(()-> SUBSYSTEM_CONVEYER.getToggle());
 
+  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("4NoteAutoUnderSpeaker");
 
-
-
-
- // Trigger sensorTrigger = new Trigger(() -> SUBSYSeo TEM_CONVEYER.getLineBreak());
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -145,10 +138,10 @@ public class RobotContainer {
     );
 
 
+    configureNamedCommands();
     SmartDashboard.putData("Autos", autoChooser);
 
 
-    configureNamedCommands();
     configureBindings();
   }
 
