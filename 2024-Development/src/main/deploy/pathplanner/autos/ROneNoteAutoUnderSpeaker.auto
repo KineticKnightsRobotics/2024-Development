@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoLoadShooter"
+            "name": "ZeroRobotHeading"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "ShootNoAim"
           }
         }
       ]
