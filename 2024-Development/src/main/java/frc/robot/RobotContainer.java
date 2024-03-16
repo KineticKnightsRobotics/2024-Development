@@ -120,7 +120,7 @@ public class RobotContainer {
 
 
 
-  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
+  //private final SendableChooser<Command> autoChooser;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -139,7 +139,11 @@ public class RobotContainer {
 
 
     configureNamedCommands();
-    SmartDashboard.putData("Autos", autoChooser);
+
+
+    //autoChooser = AutoBuilder.buildAutoChooser();
+
+    //SmartDashboard.putData("Autos", autoChooser);
 
 
     configureBindings();
@@ -218,13 +222,13 @@ public class RobotContainer {
     DRIVER_A.whileTrue(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setExtensionHeight(6),
-        SUBSYSTEM_SHOOTER.setTilter(85)
+        SUBSYSTEM_SHOOTER.setTilter(140)
         ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
     .whileFalse(
       //new ParallelCommandGroup(
       SUBSYSTEM_SHOOTER.setExtensionHeight(0.0).andThen(
-        SUBSYSTEM_SHOOTER.setTilter(0.0)
+      SUBSYSTEM_SHOOTER.setTilter(0.0)
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
       //)
     );
@@ -266,10 +270,10 @@ public class RobotContainer {
     OP_10.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.5)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
     //Manual Tilter Angles
     OP_12.whileTrue(SUBSYSTEM_SHOOTER.setTilter(0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_11.whileTrue(SUBSYSTEM_SHOOTER.setTilter(85)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(10)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTilter(20)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_15.whileTrue(SUBSYSTEM_SHOOTER.setTilter(30)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    //OP_11.whileTrue(SUBSYSTEM_SHOOTER.setTilter(85)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    //OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(10)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    //OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTilter(20)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    //OP_15.whileTrue(SUBSYSTEM_SHOOTER.setTilter(30)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //Override bring the shooter down
     OP_16.whileTrue(SUBSYSTEM_SHOOTER.setTilterVoltage(-2)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //Override Shooter Buttons.
@@ -387,8 +391,9 @@ public class RobotContainer {
         //return new PathPlannerAuto("TwoNoteAuto");
         //return SUBSYSTEM_SHOOTER.setFeederSpeed(0.5);
         //return new PathPlannerAuto("US4NoteAuto");
-        
-        return autoChooser.getSelected();
+
+        return new PathPlannerAuto("FourNoteAutoUnderSpeakerCentre");
+        //552305
   } 
 
   public static boolean DRIVER_LT() {

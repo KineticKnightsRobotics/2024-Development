@@ -14,18 +14,18 @@
         {
           "type": "named",
           "data": {
-            "name": "ZeroRobotHeading"
+            "name": "AutoLoadShooter"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "AutoRunShooter"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "RightUnderSpeaker",
   "choreoAuto": false
 }

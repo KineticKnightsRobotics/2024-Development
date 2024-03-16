@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 0.85,
-        "y": 4.51
+        "y": 4.4
       },
       "prevControl": null,
       "nextControl": {
         "x": 0.8518593133223602,
-        "y": 4.189693393559279
+        "y": 4.079693393559279
       },
       "isLocked": false,
       "linkedName": null
@@ -46,10 +46,10 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": -4.117331417562144,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "StrikeoutPaths",
+  "folder": null,
   "previewStartingState": {
     "rotation": -61.59620180319136,
     "velocity": 0

@@ -40,7 +40,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 26.924619503450078,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "RightUnderSpeakerAutos",

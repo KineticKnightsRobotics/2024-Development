@@ -192,7 +192,7 @@ public class Shooter extends SubsystemBase {
         
         SmartDashboard.putNumber("Shooter Extension Position", extensionEncoder.getPosition());
 
-        SmartDashboard.putNumber("Shooter Tilter Position", tilterABSEncoder.getDistance());
+        SmartDashboard.putNumber("Shooter Tilter Position", tiltEncoder.getPosition());
 
         //SmartDashboard.putNumber("Through Bore Encoder Absolute", throughBoreEncoder.getAbsolutePosition());
 
@@ -215,7 +215,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getTilterPosition () {
-        return tilterABSEncoder.getDistance();
+        return tiltEncoder.getPosition();
     }
 
     public Command aimTilter(DoubleSupplier angleSupplier) {
@@ -224,7 +224,7 @@ public class Shooter extends SubsystemBase {
                 //tiltController.setGoal(angleSupplier.getAsDouble());
 
                 //tiltController.setReference(angle, ControlType.kPosition);
-                tiltMotor.set(MathUtil.clamp(tiltControllerHome.calculate(tilterABSEncoder.getDistance(), angleSupplier.getAsDouble()),-0.2,0.2));
+                tiltMotor.set(MathUtil.clamp(tiltControllerHome.calculate(tiltEncoder.getPosition(), angleSupplier.getAsDouble()),-0.2,0.2));
                 //tiltMotor.setVoltage(tiltController.calculate(getTilterPosition()) + shooterFeedFoward.calculate(tiltController.getSetpoint().velocity) );
             }
         );
@@ -236,27 +236,27 @@ public class Shooter extends SubsystemBase {
                 /*
                 if (extensionEncoder.getPosition() < 2) {
                     // Tilting from home for shooting
-                    if (tilterABSEncoder.getDistance() > 90 && tiltControllerHome.calculate(tilterABSEncoder.getDistance(),angle) > 0) {
+                    if (tiltEncoder.getPosition() > 90 && tiltControllerHome.calculate(tiltEncoder.getPosition(),angle) > 0) {
                         tiltMotor.set(0.0);
                     }
                     else {
-                        tiltMotor.set(MathUtil.clamp(tiltControllerHome.calculate(tilterABSEncoder.getDistance(), angle),-0.25,0.25));
+                        tiltMotor.set(MathUtil.clamp(tiltControllerHome.calculate(tiltEncoder.getPosition(), angle),-0.25,0.25));
                     }
                 }
                 else {
-                    if (tilterABSEncoder.getDistance() > 90 && tiltControllerExtend.calculate(tilterABSEncoder.getDistance(),angle) > 0) {
+                    if (tiltEncoder.getPosition() > 90 && tiltControllerExtend.calculate(tiltEncoder.getPosition(),angle) > 0) {
                         tiltMotor.set(0.0);
                     }
                     else {
-                        tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tilterABSEncoder.getDistance(), angle),-0.25,0.25));
+                        tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tiltEncoder.getPosition(), angle),-0.25,0.25));
                     }
                 }
                 */
-                if (tilterABSEncoder.getDistance() > 90 && tiltControllerExtend.calculate(tilterABSEncoder.getDistance(),angle) > 0) {
+                if (tiltEncoder.getPosition() > 155 && tiltControllerExtend.calculate(tiltEncoder.getPosition(),angle) > 0) {
                     tiltMotor.set(0.0);
                     }
                 else {
-                    tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tilterABSEncoder.getDistance(), angle),-0.25,0.25));
+                    tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tiltEncoder.getPosition(), angle),-0.25,0.25));
                 }
 
             }
@@ -293,7 +293,7 @@ public class Shooter extends SubsystemBase {
         return Commands.run(
             () -> {
                 //tiltController.setReference(tiltPosition, ControlType.kPosition);
-                tiltMotor.set(MathUtil.clamp(tiltControllerHome.calculate(tilterABSEncoder.getDistance(), tiltPosition),-0.2,0.2));
+                tiltMotor.set(MathUtil.clamp(tiltControllerHome.calculate(tiltEncoder.getPosition(), tiltPosition),-0.2,0.2));
 
             }
         );

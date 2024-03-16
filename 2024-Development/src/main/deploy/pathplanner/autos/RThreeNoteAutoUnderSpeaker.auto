@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ZeroRobotHeading"
+            "name": "AutoLoadShooter"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "AutoRunShooter"
           }
         },
         {
@@ -36,7 +36,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CaptureNote"
+                  "name": "CapturePiece"
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": []
                 }
               }
             ]
@@ -51,6 +57,12 @@
                 "data": {
                   "pathName": "Rnote1ToScore"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoLoadShooter"
+                }
               }
             ]
           }
@@ -58,7 +70,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "AutoRunShooter"
           }
         },
         {
@@ -74,7 +86,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CaptureNote"
+                  "name": "CapturePiece"
                 }
               }
             ]
@@ -93,7 +105,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShootNoAim"
+                  "name": "AutoLoadShooter"
                 }
               }
             ]
@@ -102,12 +114,12 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "AutoRunShooter"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "RightUnderSpeaker",
   "choreoAuto": false
 }

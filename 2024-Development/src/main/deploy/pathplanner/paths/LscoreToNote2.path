@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.4,
-        "y": 5.3
+        "x": 2.35,
+        "y": 5.4
       },
       "prevControl": {
-        "x": 1.9720272009264392,
-        "y": 5.73769945359796
+        "x": 2.3498700249652753,
+        "y": 5.397214918754162
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,8 +39,8 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 31.78001398664516,
-    "rotateFast": false
+    "rotation": 14.97033004903785,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "LeftUnderSpeakerAutos",

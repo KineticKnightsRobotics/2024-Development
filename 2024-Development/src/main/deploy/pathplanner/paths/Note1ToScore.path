@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.55,
+        "x": 2.45,
         "y": 6.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.55,
+        "x": 2.45,
         "y": 6.75
       },
       "isLocked": false,
@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 1.25,
+        "x": 1.32,
         "y": 5.55
       },
       "prevControl": {
-        "x": 1.2489787012749378,
+        "x": 1.3189787012749379,
         "y": 5.553919733431884
       },
       "nextControl": null,
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "UnderSpeakerAutos",
   "previewStartingState": {
-    "rotation": 41.30861401354873,
+    "rotation": 31.265283626643292,
     "velocity": 0
   },
   "useDefaultConstraints": true

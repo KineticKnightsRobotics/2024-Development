@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ZeroRobotHeading"
+            "name": "AutoLoadShooter"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "AutoRunShooter"
           }
         },
         {
@@ -36,7 +36,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CaptureNote"
+                  "name": "CapturePiece"
                 }
               }
             ]
@@ -51,6 +51,12 @@
                 "data": {
                   "pathName": "Lnote1ToScore"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoLoadShooter"
+                }
               }
             ]
           }
@@ -58,12 +64,12 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "AutoRunShooter"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "LeftUnderSpeaker",
   "choreoAuto": false
 }

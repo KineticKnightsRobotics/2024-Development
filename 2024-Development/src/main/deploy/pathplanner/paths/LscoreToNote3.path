@@ -4,37 +4,31 @@
     {
       "anchor": {
         "x": 0.9,
-        "y": 4.5
+        "y": 4.45
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9000000000000008,
-        "y": 4.5
+        "x": 2.3351571027466376,
+        "y": 4.396702226737787
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.55,
-        "y": 6.55
+        "x": 2.6,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 1.9672398891983602,
-        "y": 6.70587890005148
+        "x": 1.9806048873359012,
+        "y": 6.352084749214543
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 58.512965760350546,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,8 +39,8 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 58.57043438516148,
-    "rotateFast": false
+    "rotation": 58.57,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "LeftUnderSpeakerAutos",

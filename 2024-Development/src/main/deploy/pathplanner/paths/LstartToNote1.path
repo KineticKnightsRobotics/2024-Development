@@ -4,23 +4,23 @@
     {
       "anchor": {
         "x": 0.9,
-        "y": 4.55
+        "y": 4.45
       },
       "prevControl": null,
       "nextControl": {
         "x": 0.9,
-        "y": 4.55
+        "y": 4.45
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.35,
+        "x": 2.2,
         "y": 4.23
       },
       "prevControl": {
-        "x": 2.349616952788408,
+        "x": 2.199616952788408,
         "y": 4.231914754540409
       },
       "nextControl": null,
@@ -40,7 +40,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": -15.945395900922781,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "LeftUnderSpeakerAutos",
