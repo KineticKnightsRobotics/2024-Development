@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 0.85,
-        "y": 6.5
+        "y": 6.55
       },
       "prevControl": null,
       "nextControl": {
         "x": 0.85,
-        "y": 6.5
+        "y": 6.55
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.62,
-        "y": 5.64
+        "x": 2.5,
+        "y": 5.67
       },
       "prevControl": {
-        "x": 2.62,
-        "y": 5.64
+        "x": 2.5,
+        "y": 5.67
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "RightUnderSpeakerAutos",
   "previewStartingState": {
-    "rotation": 65.55620342081446,
+    "rotation": 61.79580774194272,
     "velocity": 0
   },
   "useDefaultConstraints": true

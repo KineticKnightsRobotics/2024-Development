@@ -28,15 +28,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "SOStartToMidNote1"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "CaptureNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SOScoreToMidNote1"
                 }
               }
             ]

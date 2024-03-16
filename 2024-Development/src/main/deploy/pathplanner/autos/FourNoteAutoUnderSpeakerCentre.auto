@@ -20,12 +20,6 @@
         {
           "type": "named",
           "data": {
-            "name": "LoadShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "ShootNoAim"
           }
         },
@@ -80,7 +74,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CapturePiece"
+                  "name": "CaptureNote"
                 }
               }
             ]
@@ -94,6 +88,44 @@
                 "type": "path",
                 "data": {
                   "pathName": "note2ToScorePos"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoAim"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "scorePosToNote3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CaptureNote"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "note3ToScorePos"
                 }
               }
             ]

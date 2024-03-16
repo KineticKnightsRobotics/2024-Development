@@ -2,27 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.85,
-      "y": 6.5
+      "x": 3.170542098659955,
+      "y": 6.917623905177881
     },
-    "rotation": 67.0
+    "rotation": 62.43729546296047
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoLoadShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoRunShooter"
-          }
-        },
         {
           "type": "parallel",
           "data": {
@@ -36,13 +24,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CapturePiece"
-                }
-              },
-              {
-                "type": "parallel",
-                "data": {
-                  "commands": []
+                  "name": "CaptureNote"
                 }
               }
             ]
@@ -56,12 +38,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "Rnote1ToScore"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoLoadShooter"
                 }
               }
             ]
@@ -124,7 +100,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RscoreToNote3"
+                  "pathName": null
                 }
               },
               {
@@ -143,7 +119,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Rnote3ToScore"
+                  "pathName": "RScoreToNte3"
                 }
               },
               {
