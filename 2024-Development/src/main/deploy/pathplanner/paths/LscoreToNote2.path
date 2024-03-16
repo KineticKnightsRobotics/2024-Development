@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 0.9,
-        "y": 4.6
+        "y": 4.45
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8974524110185659,
-        "y": 4.600707590040772
+        "x": 1.11398639953678,
+        "y": 4.119293746170431
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6,
-        "y": 5.446926533663493
+        "x": 2.4,
+        "y": 5.3
       },
       "prevControl": {
-        "x": 2.6,
-        "y": 5.446926533663493
+        "x": 1.9720272009264392,
+        "y": 5.73769945359796
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,20 +32,20 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 4.0,
-    "maxAngularVelocity": 720.0,
+    "maxVelocity": 3.25,
+    "maxAcceleration": 3.25,
+    "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 17.878696595841458,
+    "rotation": 31.78001398664516,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "LeftUnderSpeakerAutos",
   "previewStartingState": {
-    "rotation": -58.56458102808707,
+    "rotation": -61.18920625702696,
     "velocity": 0
   },
   "useDefaultConstraints": true

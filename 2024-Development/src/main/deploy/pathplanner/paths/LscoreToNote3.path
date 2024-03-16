@@ -4,31 +4,37 @@
     {
       "anchor": {
         "x": 0.9,
-        "y": 4.6
+        "y": 4.5
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.9000000000000008,
-        "y": 4.6
+        "y": 4.5
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.75,
-        "y": 6.75
+        "x": 2.55,
+        "y": 6.55
       },
       "prevControl": {
-        "x": 2.7455167706543944,
-        "y": 6.750298239932973
+        "x": 1.9672398891983602,
+        "y": 6.70587890005148
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 58.512965760350546,
+      "rotateFast": true
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
