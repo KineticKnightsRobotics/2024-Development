@@ -74,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LscoreToNote2"
+                  "pathName": null
                 }
               },
               {
@@ -114,6 +114,6 @@
       ]
     }
   },
-  "folder": "LeftUnderSpeaker",
+  "folder": null,
   "choreoAuto": false
 }
