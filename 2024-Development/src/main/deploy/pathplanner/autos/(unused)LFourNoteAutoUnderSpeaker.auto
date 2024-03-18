@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2046852111816406,
-      "y": 4.459847927093506
+      "x": 0.9,
+      "y": 4.6
     },
-    "rotation": -59.42077079011235
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "LoadShooter"
+            "name": "AutoLoadShooter"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "AutoRunShooter"
           }
         },
         {
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MStartToMidNote1"
+                  "pathName": "LstartToNote1"
                 }
               },
               {
@@ -49,13 +49,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MMidNote1ToSpeaker"
+                  "pathName": "Lnote1ToScore"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "LoadShooter"
+                  "name": "AutoLoadShooter"
                 }
               }
             ]
@@ -64,7 +64,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "AutoRunShooter"
           }
         },
         {
@@ -74,13 +74,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MSpeakerToMidNote2"
+                  "pathName": "LscoreToNote2"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": null
+                  "name": "CapturePiece"
                 }
               }
             ]
@@ -93,7 +93,38 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MSpeakerToMidNote3"
+                  "pathName": "Lnote2ToScore"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoLoadShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoRunShooter"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LscoreToNote3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CapturePiece"
                 }
               }
             ]
@@ -106,54 +137,27 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MMidNote3ToSpeaker"
+                  "pathName": "Lnote3ToScore"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoLoadShooter"
                 }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "MSpeakerToMidNote4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "MMidNote4ToSpeaker"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "MSpeakerToMidNote5"
-                }
-              }
-            ]
+            "name": "AutoRunShooter"
           }
         }
       ]
     }
   },
-  "folder": "ChoreoMidNotes",
-  "choreoAuto": true
+  "folder": "unused",
+  "choreoAuto": false
 }

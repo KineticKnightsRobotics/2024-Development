@@ -8,7 +8,9 @@
     "TeleOp Paths",
     "UnderSpeakerAutos"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "unused"
+  ],
   "defaultMaxVel": 3.25,
   "defaultMaxAccel": 3.25,
   "defaultMaxAngVel": 360.0,

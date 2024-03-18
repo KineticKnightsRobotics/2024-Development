@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.1599400043487549,
-      "y": 4.619157314300537
+      "x": 1.2004756927490234,
+      "y": 4.45
     },
-    "rotation": -56.309949107001266
+    "rotation": -57.994599642232934
   },
   "command": {
     "type": "sequential",
@@ -14,42 +14,23 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoLoadShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoRunShooter"
+            "name": "Shoot"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LStartToNote1"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "CaptureNote"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LNote1ToScore"
+                  "pathName": "RStartToNote1.1"
                 }
               }
             ]
@@ -58,75 +39,136 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LScoretoNote2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CapturePiece"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LNote2ToNote3"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LNote3ToScore"
-                }
-              }
-            ]
+            "name": "LoadShooter"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "Shoot"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LNote3ToNote4"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "CaptureNote"
                 }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RNote1ToNote2.1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LoadShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CaptureNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RNote2ToNote3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LoadShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CaptureNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RNote3ToNote4.1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "LoadShooter"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RNote4ToScore.1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CaptureNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RScoreToNote5.1"
+                }
               }
             ]
           }
@@ -138,7 +180,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LNote4ToScore"
+                  "pathName": "RNote5ToScore.1"
                 }
               }
             ]
@@ -147,12 +189,12 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoRunShooter"
+            "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": "ChoreoLeftSide",
+  "folder": "unused",
   "choreoAuto": true
 }

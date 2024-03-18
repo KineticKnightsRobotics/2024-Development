@@ -26,9 +26,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 
 public class Shooter extends SubsystemBase {
-    boolean hasResetThroughBoreEncoder = false;
-
-    private final DutyCycleEncoder tilterABSEncoder;
 
     private final SimpleMotorFeedforward shooterFeedFoward;
     public final CANSparkMax tiltMotor;
@@ -79,9 +76,6 @@ public class Shooter extends SubsystemBase {
         tiltEncoder = tiltMotor.getEncoder();
         tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
         tiltEncoder.setPosition(0.0);
-
-        tilterABSEncoder = new DutyCycleEncoder(6);
-        tilterABSEncoder.setDistancePerRotation(-360);  
 
         tiltControllerHome = new PIDController(
             TilterPIDConfig.home.Proportional,
@@ -184,11 +178,6 @@ public class Shooter extends SubsystemBase {
     
     @Override
     public void periodic() {
-
-        if (!hasResetThroughBoreEncoder) {
-            tilterABSEncoder.reset();
-            hasResetThroughBoreEncoder=true;
-        }
         
         SmartDashboard.putNumber("Shooter Extension Position", extensionEncoder.getPosition());
 
@@ -289,19 +278,9 @@ public class Shooter extends SubsystemBase {
         );
     }
 
-    public Command setTiltertoManual() {
-        return Commands.run(
-            () -> {
-                //tiltController.setReference(tiltPosition, ControlType.kPosition);
-                tiltMotor.set(MathUtil.clamp(tiltControllerHome.calculate(tiltEncoder.getPosition(), tiltPosition),-0.2,0.2));
-
-            }
-        );
-    }
-
     public Command zeroTilter(double angle) {
         //return Commands.runOnce(() -> {tiltEncoder.setPosition(angle);});
-                return Commands.runOnce(() -> {tilterABSEncoder.reset();;});
+                return Commands.runOnce(() -> {tiltEncoder.setPosition(0.0);});
 
     }
     

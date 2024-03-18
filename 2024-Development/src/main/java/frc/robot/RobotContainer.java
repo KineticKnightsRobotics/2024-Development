@@ -364,7 +364,8 @@ public class RobotContainer {
         SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2),
         SUBSYSTEM_SHOOTER.loadGamePiece(),
         SUBSYSTEM_SHOOTER.setFeederSpeed(0.0),
-        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
+        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0),
+        SUBSYSTEM_INTAKE.intakeUp()
         )
     );
 
