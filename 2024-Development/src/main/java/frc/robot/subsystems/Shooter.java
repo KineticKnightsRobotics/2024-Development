@@ -26,7 +26,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 
 public class Shooter extends SubsystemBase {
-        boolean hasResetThroughBoreEncoder = false;
+    boolean hasResetThroughBoreEncoder = false;
 
     private final DutyCycleEncoder tilterABSEncoder;
 
@@ -252,12 +252,12 @@ public class Shooter extends SubsystemBase {
                     }
                 }
                 */
-                if (tiltEncoder.getPosition() > 155 && tiltControllerExtend.calculate(tiltEncoder.getPosition(),angle) > 0) {
-                    tiltMotor.set(0.0);
-                    }
-                else {
-                    tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tiltEncoder.getPosition(), angle),-0.25,0.25));
-                }
+                //if (tiltEncoder.getPosition() > 155 && tiltControllerExtend.calculate(tiltEncoder.getPosition(),angle) > 0) {
+                //    tiltMotor.set(0.0);
+                //    }
+                //else {
+                tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tiltEncoder.getPosition(), angle),-0.25,0.25));
+                //}
 
             }
         //).until(

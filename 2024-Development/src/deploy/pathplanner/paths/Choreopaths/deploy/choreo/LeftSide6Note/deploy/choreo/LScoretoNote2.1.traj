@@ -1,0 +1,59 @@
+{
+  "samples": [
+    {
+      "x": 2.1,
+      "y": 5.55,
+      "heading": 0,
+      "angularVelocity": 0,
+      "velocityX": -1.14657028056731e-19,
+      "velocityY": 0,
+      "timestamp": 0
+    },
+    {
+      "x": 2.1575000024863096,
+      "y": 5.55,
+      "heading": 0,
+      "angularVelocity": 0,
+      "velocityX": 0.6201131810818283,
+      "velocityY": 0,
+      "timestamp": 0.09272501253077206
+    },
+    {
+      "x": 2.272499999999999,
+      "y": 5.55,
+      "heading": 0,
+      "angularVelocity": 0,
+      "velocityX": 1.2402262817222698,
+      "velocityY": 0,
+      "timestamp": 0.18545002506154412
+    },
+    {
+      "x": 2.3874999975136584,
+      "y": 5.55,
+      "heading": 0,
+      "angularVelocity": 0,
+      "velocityX": 1.2402262817222693,
+      "velocityY": 0,
+      "timestamp": 0.2781750375923162
+    },
+    {
+      "x": 2.445,
+      "y": 5.55,
+      "heading": 0,
+      "angularVelocity": 0,
+      "velocityX": 0.6201131810818274,
+      "velocityY": 0,
+      "timestamp": 0.37090005012308824
+    },
+    {
+      "x": 2.445,
+      "y": 5.55,
+      "heading": 0,
+      "angularVelocity": 0,
+      "velocityX": -1.7888849737551687e-19,
+      "velocityY": 0,
+      "timestamp": 0.4636250626538603
+    }
+  ],
+  "eventMarkers": []
+}

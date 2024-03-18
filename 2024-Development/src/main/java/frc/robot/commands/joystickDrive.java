@@ -58,7 +58,7 @@ public class joystickDrive extends Command {
         if (flipControls.getAsBoolean()) {
             joystickX *= -1;
             joystickY *= -1;
-            joystickZ *= -1;
+            //joystickZ *= -1;
         }
 
         //double xSpeed   = (Math.pow(joystickX, 2) * (joystickX<0 ? -1 : 1) /1.0) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * (RobotContainer.DRIVER_LT() ? 0.3 : 1);      // * 0.2;

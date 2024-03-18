@@ -222,7 +222,7 @@ public class RobotContainer {
     DRIVER_A.whileTrue(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setExtensionHeight(6),
-        SUBSYSTEM_SHOOTER.setTilter(140)
+        SUBSYSTEM_SHOOTER.setTilter(155)
         ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
     .whileFalse(
@@ -390,9 +390,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
         //return new PathPlannerAuto("TwoNoteAuto");
         //return SUBSYSTEM_SHOOTER.setFeederSpeed(0.5);
-        //return new PathPlannerAuto("US4NoteAuto");
+        return new PathPlannerAuto("US4NoteAuto");
 
-        return new PathPlannerAuto("FourNoteAutoUnderSpeakerCentre");
+        //return new PathPlannerAuto("FourNoteAutoUnderSpeakerCentre");
         //552305
   } 
 

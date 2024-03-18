@@ -1,0 +1,200 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2004756927490234,
+      "y": 4.45
+    },
+    "rotation": -57.994599642232934
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CaptureNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RStartToNote1.1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LoadShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CaptureNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RNote1ToNote2.1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LoadShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CaptureNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RNote2ToNote3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LoadShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CaptureNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RNote3ToNote4.1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "LoadShooter"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RNote4ToScore.1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CaptureNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RScoreToNote5.1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RNote5ToScore.1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}
