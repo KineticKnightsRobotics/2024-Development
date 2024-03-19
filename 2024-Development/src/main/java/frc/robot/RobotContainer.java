@@ -150,36 +150,15 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    //new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
-
-
     //TELEOP ROBOT TRIGGERED EVENTS _______________________________________________________________________________________________________________________________________________________________________
 
     //When Shooter falls under the home position, set it back to 0
     alwaysOn.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.02));
-    ShooterUnderHome.onTrue(SUBSYSTEM_SHOOTER.setTilter(2.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    ShooterUnderHome.onTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 2.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //When Note is in the shooter, idle the flywheels and stop the conveyer.
-    NoteInFeederTrigger.whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000,1000));
-    NoteInFeederTrigger.negate().whileTrue(SUBSYSTEM_SHOOTER.stopShooter());
+    NoteInFeederTrigger.and(OP_1.negate()).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000,1000));
+    NoteInFeederTrigger.negate().and(OP_1.negate()).whileTrue(SUBSYSTEM_SHOOTER.stopShooter());
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0).alongWith(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0)));
-
-    //When the shooter has no note and isn't at home position, set it to home position.
-    //NoteInFeederTrigger.negate().and(ShooterAtHomeTrigger.negate()).onTrue(
-    //  new WaitCommand(1)
-    //  .andThen(
-    //    SUBSYSTEM_SHOOTER.setTilter(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
-    //  ).alongWith(
-    //    SUBSYSTEM_SHOOTER.setExtensionHeight(0.0).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
-    //  )
-    //);
-
-    //When there is a note in the conveyer, and the shooter is at home position, run the feed through command.
-    //NoteInConveyerTrigger.and(ShooterAtHomeTrigger).onTrue(
-    //  SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2).andThen(
-    //    SUBSYSTEM_SHOOTER.loadGamePiece().withInterruptBehavior(InterruptionBehavior.kCancelIncoming)).andThen(
-    //    SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0))
-    //);
 
     //TELEOP CONTROLS _____________________________________________________________________________________________________________________________________________________________________________________
     
@@ -201,7 +180,7 @@ public class RobotContainer {
     ).onFalse(SUBSYSTEM_SHOOTER.IdleShooter(1500, 1500));
 
     DRIVER_R1.whileTrue(
-      (ShooterAtAmp.getAsBoolean() ? 
+      (ShooterAtAmp.getAsBoolean() ?
         SUBSYSTEM_SHOOTER.shoot(1500, 1500, false)
         :
         SUBSYSTEM_SHOOTER.shoot(4022,2681, false)
@@ -222,13 +201,13 @@ public class RobotContainer {
     DRIVER_A.whileTrue(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setExtensionHeight(6),
-        SUBSYSTEM_SHOOTER.setTilter(155)
+        SUBSYSTEM_SHOOTER.setTilter(() -> 155)
         ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
     .whileFalse(
       //new ParallelCommandGroup(
       SUBSYSTEM_SHOOTER.setExtensionHeight(0.0).andThen(
-      SUBSYSTEM_SHOOTER.setTilter(0.0)
+      SUBSYSTEM_SHOOTER.setTilter(() -> 0.0)
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
       //)
     );
@@ -269,11 +248,7 @@ public class RobotContainer {
     OP_5.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.5)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
     OP_10.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.5)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
     //Manual Tilter Angles
-    OP_12.whileTrue(SUBSYSTEM_SHOOTER.setTilter(0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    //OP_11.whileTrue(SUBSYSTEM_SHOOTER.setTilter(85)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    //OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(10)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    //OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTilter(20)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    //OP_15.whileTrue(SUBSYSTEM_SHOOTER.setTilter(30)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_12.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //Override bring the shooter down
     OP_16.whileTrue(SUBSYSTEM_SHOOTER.setTilterVoltage(-2)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //Override Shooter Buttons.
@@ -284,39 +259,6 @@ public class RobotContainer {
     //Override start shooter idle.
     OP_21.onTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
 
-
-
-    /*
-    OP_4.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.2)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
-    OP_9.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
-    OP_11.whileTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
-    OP_12.whileTrue(SUBSYSTEM_SHOOTER.setTilter(0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    //OP_8.whileTrue(new ampPosition(SUBSYSTEM_SHOOTER, 6, 80).withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
-    OP_8.whileTrue(
-      new ParallelCommandGroup(
-        SUBSYSTEM_SHOOTER.setExtensionHeight(6),
-        SUBSYSTEM_SHOOTER.setTilter(80)
-        )
-    ).onFalse(
-      new ParallelCommandGroup(
-        SUBSYSTEM_SHOOTER.stopTilter(),
-        SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0)
-      )
-    );
-    //OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(45.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(10)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTilter(20)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_15.whileTrue(SUBSYSTEM_SHOOTER.setTilter(30)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_16.whileTrue(SUBSYSTEM_SHOOTER.setTilter(35)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_17.whileTrue(SUBSYSTEM_SHOOTER.setTilter(30.5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    OP_18.whileTrue(SUBSYSTEM_SHOOTER.setTilter(31)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    */
-    //OP_19.whileTrue(SUBSYSTEM_SHOOTER.setTilterVoltage(0.7)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    //OP_15.whileTrue(new autoAimSpeaker(SUBSYSTEM_SHOOTER));
-   // OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTiltertoManual());
-
-
-
     //SYS ID CONTROLS _________________________________________________________________________________________________________________________________________________________________
   }
 
@@ -326,7 +268,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shoot",
       new SequentialCommandGroup(
         new ParallelDeadlineGroup(
-          SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
+          //SUBSYSTEM_SHOOTER.setTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
           new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
             () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
             () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
@@ -337,24 +279,9 @@ public class RobotContainer {
           )
         ),
         SUBSYSTEM_SHOOTER.shoot(4022,2681, false),
-        SUBSYSTEM_SHOOTER.setTilter(0.0)
+        SUBSYSTEM_SHOOTER.setTilter(() -> 0.0)
       )
     );
-
-    /*
-    NamedCommands.registerCommand("LoadShooter", 
-        SUBSYSTEM_SHOOTER.setFeederSpeed(0.4)
-        .andThen(
-          SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2)
-        )
-        .until(() -> SUBSYSTEM_SHOOTER.getLineBreak())
-        .andThen(
-          SUBSYSTEM_SHOOTER.setFeederSpeed(0.0)
-        ).alongWith(
-          SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)
-        ) 
-    );*/
-    
 
     NamedCommands.registerCommand("IntakeDown", SUBSYSTEM_INTAKE.intakeDown());
 

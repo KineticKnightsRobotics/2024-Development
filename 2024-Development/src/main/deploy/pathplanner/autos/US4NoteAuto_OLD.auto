@@ -24,7 +24,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -34,31 +34,31 @@
                 }
               },
               {
-                "type": "parallel",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "CaptureNote"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "USStartToNote1"
-                      }
-                    }
-                  ]
+                  "name": "CaptureNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "USStartToNote1"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "USNote1ToScore"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "USNote1ToScore"
+                }
+              }
+            ]
           }
         },
         {
@@ -68,7 +68,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -78,31 +78,31 @@
                 }
               },
               {
-                "type": "parallel",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "USScoreToNote2"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "CaptureNote"
-                      }
-                    }
-                  ]
+                  "pathName": "USScoreToNote2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CaptureNote"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "USNote2ToScore"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "USNote2ToScore"
+                }
+              }
+            ]
           }
         },
         {
@@ -112,7 +112,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -122,31 +122,31 @@
                 }
               },
               {
-                "type": "parallel",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "USScoreToNote3"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "CaptureNote"
-                      }
-                    }
-                  ]
+                  "pathName": "USScoreToNote3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CaptureNote"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "USNote3ToScore"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "USNote3ToScore"
+                }
+              }
+            ]
           }
         },
         {

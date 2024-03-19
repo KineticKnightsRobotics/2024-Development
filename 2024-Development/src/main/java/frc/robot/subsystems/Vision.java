@@ -32,17 +32,16 @@ public class Vision {
         SmartDashboard.putNumber("tagCount", tagCount);
 
 
-        if /*(*/ (tagCount == 1 && avgDist > 4) /*|| (m_Drive.ODEMETER.getEstimatedPosition().getTranslation().getDistance(limelightPose.pose.getTranslation()) > 0.5) )*/ {
+        if (tagCount == 1 && avgDist > 4) {
             return VecBuilder.fill(Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE);
         }
         else {
             SmartDashboard.putNumberArray("Vision STD", defaultSTD.singleTagStD.times(1 + (Math.pow(avgDist, 2) / 30)).getData());
             return defaultSTD.singleTagStD.times(1 + (Math.pow(avgDist, 2) / 30));
-            //return defaultSTD.singleTagStD;
         }
     }
     public double getTimestamp() {
-        return Timer.getFPGATimestamp() - LimelightHelpers.getLatency_Capture("limelight")/1000;
+        return Timer.getFPGATimestamp() - LimelightHelpers.getLatency_Capture("limelight")/1000 - LimelightHelpers.getLatency_Pipeline("limelight")/1000;
     }
 
     public boolean getTV() {

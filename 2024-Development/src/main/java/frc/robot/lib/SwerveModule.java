@@ -95,7 +95,7 @@ public class SwerveModule extends SubsystemBase {
         MOTOR_TURN.setSmartCurrentLimit(60);
         MOTOR_TURN.setInverted(REVERSE_MOTOR_TURN);
         this.ENCODER_TURN = MOTOR_TURN.getEncoder();
-        ENCODER_TURN.setPositionConversionFactor(ModuleConstants.MODULE_TURN_ROTATIONS_TO_RADIANS);
+        ENCODER_TURN.setPositionConversionFactor(ModuleConstants.MODULE_TURN_ROTATION_TO_RADIANS);
         ENCODER_TURN.setVelocityConversionFactor(ModuleConstants.TurningEncoderRPM2RadPerSec);
         //init absolute encoder
         ENCODER_ABSOLUTE = new CANCoder(ID_ENCODER_ABSOLUTE);
