@@ -33,7 +33,7 @@ public class PID_Config {
 
     public class ShooterSubsystem {
         public class ExtensionPID {
-            public static final double Proportional = 0.2;
+            public static final double Proportional = 0.5;
             public static final double Integral     = 0.0;
             public static final double Derivitive   = 0.0;
         }

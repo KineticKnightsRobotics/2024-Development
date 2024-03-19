@@ -148,10 +148,10 @@ public final class Constants {
   }
 
   public static class ClimberSubsystemConstants {
-    public static int ID_LEFT_WINCH  = 61; //TODO: Remember to switch these back after drive practice.
+    public static int ID_LEFT_WINCH  = 61; 
     public static int ID_RIGHT_WINCH = 62;
 
-    public static double climberUpPosition = 50; //TOOD: Measure this.
+    public static double climberUpPosition = 50; //TODO: Measure this.
 
 
   }

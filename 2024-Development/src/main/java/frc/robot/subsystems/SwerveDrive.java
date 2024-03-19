@@ -160,20 +160,13 @@ public class SwerveDrive extends SubsystemBase {
 
     @Override
     public void periodic() {
-       // Shuffleboard.getTab("Teleoperated").add("Gyro",navX.getYaw());
-       // SmartDashboard.putNumber("Robot Heading", getRobotHeading());
         SmartDashboard.putData("Field", field);field.setRobotPose(getPose());
         SmartDashboard.putString("Drive Odemeter Position", ODEMETER.getEstimatedPosition().toString());
 
-        //SmartDashboard.putString("Vision Pose", vision.getEstimatedRoboPose().toString());
-        //SmartDashboard.putString("Vision STD", vision.getStandardDeviations().toString());
-        //SmartDashboard.putNumber("Vision Latency", vision.getTimestamp());
-
-
-        MODULE_FRONT_LEFT.moduleData2Dashboard();
-        MODULE_FRONT_RIGHT.moduleData2Dashboard();
-        MODULE_BACK_LEFT.moduleData2Dashboard();
-        MODULE_BACK_RIGHT.moduleData2Dashboard();
+        //MODULE_FRONT_LEFT.moduleData2Dashboard();
+        //MODULE_FRONT_RIGHT.moduleData2Dashboard();
+        //MODULE_BACK_LEFT.moduleData2Dashboard();
+        //MODULE_BACK_RIGHT.moduleData2Dashboard();
 
         SmartDashboard.putNumber("Drive Gyro Heading", -navX.getYaw());
 
