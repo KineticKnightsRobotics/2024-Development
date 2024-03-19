@@ -89,28 +89,6 @@ public class Shooter extends SubsystemBase {
             TilterPIDConfig.extended.Derivitive
         );
 
-        //TODO: Next Week Stuff :]
-        /*
-        tiltController = new ProfiledPIDController(
-            TilterPIDConfig.Proportional,
-            TilterPIDConfig.Integral,
-            TilterPIDConfig.Derivitive,
-           new TrapezoidProfile.Constraints(50, 10),
-           0.02
-
-        );
-
-        tiltFeedforward = new ArmFeedforward(
-            TilterFeedForward.shooterKS,
-            TilterFeedForward.shooterKG, 
-            TilterFeedForward.shooterKV, 
-            TilterFeedForward.shooterKA
-        );
-        */
-
-        
-
-
         shooterMotorL = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotorR = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotorL.setSmartCurrentLimit(80);
@@ -207,50 +185,11 @@ public class Shooter extends SubsystemBase {
         return tiltEncoder.getPosition();
     }
 
-    public Command aimTilter(DoubleSupplier angleSupplier) {
+    public Command setTilter(DoubleSupplier angle) {
         return Commands.run(
             () -> {
-                //tiltController.setGoal(angleSupplier.getAsDouble());
-
-                //tiltController.setReference(angle, ControlType.kPosition);
-                tiltMotor.set(MathUtil.clamp(tiltControllerHome.calculate(tiltEncoder.getPosition(), angleSupplier.getAsDouble()),-0.2,0.2));
-                //tiltMotor.setVoltage(tiltController.calculate(getTilterPosition()) + shooterFeedFoward.calculate(tiltController.getSetpoint().velocity) );
+                tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tiltEncoder.getPosition(), angle.getAsDouble()),-0.25,0.25));
             }
-        );
-    }
-
-    public Command setTilter(double angle) {
-        return Commands.run(
-            () -> {
-                /*
-                if (extensionEncoder.getPosition() < 2) {
-                    // Tilting from home for shooting
-                    if (tiltEncoder.getPosition() > 90 && tiltControllerHome.calculate(tiltEncoder.getPosition(),angle) > 0) {
-                        tiltMotor.set(0.0);
-                    }
-                    else {
-                        tiltMotor.set(MathUtil.clamp(tiltControllerHome.calculate(tiltEncoder.getPosition(), angle),-0.25,0.25));
-                    }
-                }
-                else {
-                    if (tiltEncoder.getPosition() > 90 && tiltControllerExtend.calculate(tiltEncoder.getPosition(),angle) > 0) {
-                        tiltMotor.set(0.0);
-                    }
-                    else {
-                        tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tiltEncoder.getPosition(), angle),-0.25,0.25));
-                    }
-                }
-                */
-                //if (tiltEncoder.getPosition() > 155 && tiltControllerExtend.calculate(tiltEncoder.getPosition(),angle) > 0) {
-                //    tiltMotor.set(0.0);
-                //    }
-                //else {
-                tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tiltEncoder.getPosition(), angle),-0.25,0.25));
-                //}
-
-            }
-        //).until(
-        //    tiltController.atSetpoint()
         ).finallyDo(
            () -> {
                 tiltMotor.stopMotor();
