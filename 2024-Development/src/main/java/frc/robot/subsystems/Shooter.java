@@ -377,4 +377,14 @@ public class Shooter extends SubsystemBase {
     public Command setExtensionHeight(double height) {
         return Commands.runOnce(() -> {extensionController.setReference(height, ControlType.kPosition);});
     }   
+
+    public double getTilterAimAngle(double distance) {
+        double angle = 
+        // coefficient * distance^degree 
+        (1*(Math.pow(distance,4))) +
+        (1*(Math.pow(distance,3))) +
+        (1*(Math.pow(distance,2))) + 
+        (1*(Math.pow(distance,1)));
+        return angle;
+    }
 }
