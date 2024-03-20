@@ -13,6 +13,7 @@ import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,6 +29,7 @@ import frc.robot.lib.ShooterInterpolator;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 
 public class Shooter extends SubsystemBase {
 
@@ -36,6 +38,10 @@ public class Shooter extends SubsystemBase {
     private final CANSparkMax tiltMotor_Follower;
     public final PIDController tiltControllerHome;
     public final PIDController tiltControllerExtend;
+
+    public final ProfiledPIDController tiltTrapezoidProfile;
+
+
     private final RelativeEncoder tiltEncoder;
     private final DigitalInput tiltLimitSwitch;
 
@@ -96,6 +102,17 @@ public class Shooter extends SubsystemBase {
             TilterPIDConfig.extended.Integral,
             TilterPIDConfig.extended.Derivitive
         );
+
+        tiltTrapezoidProfile = new ProfiledPIDController(
+            TilterPIDConfig.extended.Proportional,
+            TilterPIDConfig.extended.Integral,
+            TilterPIDConfig.extended.Derivitive, 
+            new TrapezoidProfile.Constraints(
+                200,
+                100
+            )
+        );
+
 
         shooterMotorL = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotorR = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
@@ -266,7 +283,8 @@ public class Shooter extends SubsystemBase {
     public Command setTilter(DoubleSupplier angle) {
         return Commands.run(
             () -> {
-                tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tiltEncoder.getPosition(), angle.getAsDouble()),-0.25,0.25));
+                //tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tiltEncoder.getPosition(), angle.getAsDouble()),-0.5,0.5));
+                tiltMotor.set(MathUtil.clamp(tiltTrapezoidProfile.calculate(tiltEncoder.getPosition(), angle.getAsDouble()), -0.5, 0.5));
             }
         ).finallyDo(
            () -> {

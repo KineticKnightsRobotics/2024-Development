@@ -127,7 +127,7 @@ public class Intake extends SubsystemBase {
         //.until(() -> intakePivotEncoder.getPosition() == intakePivotController_Reference)
         .andThen(
             () ->{
-                rollerMotor.set(0.6);
+                rollerMotor.set(0.8);
             }
         );
     }
