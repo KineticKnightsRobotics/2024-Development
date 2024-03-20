@@ -268,7 +268,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shoot",
       new SequentialCommandGroup(
         new ParallelDeadlineGroup(
-          //SUBSYSTEM_SHOOTER.setTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
+            SUBSYSTEM_SHOOTER.setTilter(() -> SUBSYSTEM_SHOOTER.getTilterAimAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
+         // SUBSYSTEM_SHOOTER.setTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
+           // SUBSYSTEM_SHOOTER.setTilter(SUBSYSTEM_SHOOTER.getTilterAimAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
           new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
             () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
             () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
