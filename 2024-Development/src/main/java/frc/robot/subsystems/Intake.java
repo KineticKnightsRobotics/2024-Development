@@ -68,26 +68,6 @@ public class Intake extends SubsystemBase {
         intakePivotController.setOutputRange(-0.8,0.8);
 
         SmartDashboard.putBoolean("Intake is stuck!", limitSwitchActuate());
-
-
-        m_SysIdRoutine = 
-            new SysIdRoutine(
-                new SysIdRoutine.Config(),
-                new SysIdRoutine.Mechanism(
-                    (Measure<Voltage> volts) -> {
-                        intakePivotMotor.set(volts.in(Volts));
-                    },
-                    log -> {log
-                        .motor("Intake Pivot")
-                        .voltage(m_SysID_Voltage.mut_replace(intakePivotMotor.getAppliedOutput() * intakePivotMotor.getBusVoltage(),Volts))
-                        .angularPosition(m_SysID_Position.mut_replace(intakePivotEncoder.getPosition(),Degrees))
-                        .angularVelocity(m_SysID_Velocity.mut_replace(intakePivotEncoder.getVelocity(),DegreesPerSecond));
-                    },
-                    this
-                )
-            );
-
-
     }
 
 
@@ -125,7 +105,7 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
     SmartDashboard.putNumber("Intake Actuator Position", getIntakePosition());
-    SmartDashboard.putNumber("roller Current", rollerMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Intake Roller Current", rollerMotor.getOutputCurrent());
     //zeroIntake(0);
     }
 
@@ -135,14 +115,6 @@ public class Intake extends SubsystemBase {
     public Command zeroIntakeCommand() {
         return Commands.runOnce(() -> zeroIntake(0));
     }
-
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return m_SysIdRoutine.quasistatic(direction);
-    }
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return m_SysIdRoutine.dynamic(direction);
-    }
-
 
     public Command intakeDown() {
         return Commands
@@ -155,7 +127,7 @@ public class Intake extends SubsystemBase {
         //.until(() -> intakePivotEncoder.getPosition() == intakePivotController_Reference)
         .andThen(
             () ->{
-                rollerMotor.set(0.8);
+                rollerMotor.set(0.6);
             }
         );
     }

@@ -176,7 +176,7 @@ public final class Constants {
 
   public static class AutonomousConstants{
     public static class PathFindingConstraints{
-      public static PathConstraints kConstraints = new PathConstraints(3.4,3.5,Math.toRadians(540),Math.toRadians(720));
+      public static PathConstraints kConstraints = new PathConstraints(3.0,3.0,Math.toRadians(540),Math.toRadians(720));
     }
     // Shop zone 332cm x 173cm
     public static double LIMIT_AUTOSPEED_DRIVE = 3.5;

@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAnalogSensor;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -35,6 +37,8 @@ public class Shooter extends SubsystemBase {
     public final PIDController tiltControllerHome;
     public final PIDController tiltControllerExtend;
     private final RelativeEncoder tiltEncoder;
+    private final DigitalInput tiltLimitSwitch;
+
 
     private final CANSparkMax shooterMotorL; //TOP roller
     private final CANSparkMax shooterMotorR; //BOTTOM roller
@@ -78,6 +82,8 @@ public class Shooter extends SubsystemBase {
         tiltEncoder = tiltMotor.getEncoder();
         tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
         tiltEncoder.setPosition(0.0);
+
+        tiltLimitSwitch = new DigitalInput(9);
 
         tiltControllerHome = new PIDController(
             TilterPIDConfig.home.Proportional,
@@ -177,6 +183,9 @@ public class Shooter extends SubsystemBase {
         //SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
 
         SmartDashboard.putBoolean("Shooter Linebreak", getLineBreak());
+
+
+        SmartDashboard.putBoolean("AAAA Limit Switch", tiltLimitSwitch.get());
     }
 
     public boolean getLineBreak() {

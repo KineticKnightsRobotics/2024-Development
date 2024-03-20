@@ -179,22 +179,25 @@ public class RobotContainer {
         )
     ).onFalse(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
 
-    DRIVER_R1.whileTrue(
+    DRIVER_R1.and(ShooterAtAmp.negate()).whileTrue(
         SUBSYSTEM_SHOOTER.shoot(4022,2681, false)
+    );
+    DRIVER_R1.and(ShooterAtAmp).whileTrue(
+        SUBSYSTEM_SHOOTER.spitOutNote()
     );
 
 
 
     /*
     DRIVER_R1.whileTrue(
-      Commands.run(() -> {SmartDashboard.putBoolean("Amp Scoring", SUBSYSTEM_SHOOTER.ampPostion());}).alongWith(
       (SUBSYSTEM_SHOOTER.ampPostion() ?
         SUBSYSTEM_SHOOTER.spitOutNote()//SUBSYSTEM_SHOOTER.setFeederSpeed(0.8)//SUBSYSTEM_SHOOTER.shoot(500, 500, false)
         :           
         SUBSYSTEM_SHOOTER.shoot(4022,2681, false)
-        ))
+        )
     );
     */
+
 
 
 
@@ -207,6 +210,7 @@ public class RobotContainer {
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
     .onFalse(SUBSYSTEM_INTAKE.intakeUp());
+
     DRIVER_A.whileTrue(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setExtensionHeight(6),
@@ -329,10 +333,11 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
         //return new PathPlannerAuto("TwoNoteAuto");
         //return SUBSYSTEM_SHOOTER.setFeederSpeed(0.5);
-        return new PathPlannerAuto("US4NoteAuto");
 
-        //return new PathPlannerAuto("FourNoteAutoUnderSpeakerCentre");
-        //552305
+
+        return new PathPlannerAuto("(unused)FourNoteAutoUnderSpeaker");
+
+        //return new PathPlannerAuto("US4NoteAuto");
   } 
 
   public static boolean DRIVER_LT() {
