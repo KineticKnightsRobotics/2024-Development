@@ -95,7 +95,7 @@ public final class Constants {
     public static final double LIMIT_SOFT_SPEED_DRIVE = 4.0; // soft limit for speed of chassis
 
     // Robot turning speeds
-    public static final double LIMIT_SOFT_SPEED_TURN = 1 * 2*Math.PI; // soft limit for module rotation
+    public static final double LIMIT_SOFT_SPEED_TURN =  2.5*Math.PI; // soft limit for module rotation
 
     // Robot acceleration
     public static final double LIMIT_SOFT_ACCELERATION_SPEED = 1; // soft limit for acceleration (M/S^2)

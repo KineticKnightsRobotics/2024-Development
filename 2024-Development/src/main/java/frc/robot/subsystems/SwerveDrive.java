@@ -163,7 +163,7 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putData("Field", field);field.setRobotPose(getPose());
         SmartDashboard.putString("Drive Odemeter Position", ODEMETER.getEstimatedPosition().toString());
 
-        //MODULE_FRONT_LEFT.moduleData2Dashboard();
+        MODULE_FRONT_LEFT.moduleData2Dashboard();
         //MODULE_FRONT_RIGHT.moduleData2Dashboard();
         //MODULE_BACK_LEFT.moduleData2Dashboard();
         //MODULE_BACK_RIGHT.moduleData2Dashboard();

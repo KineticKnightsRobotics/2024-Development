@@ -108,8 +108,8 @@ public class Shooter extends SubsystemBase {
             TilterPIDConfig.extended.Integral,
             TilterPIDConfig.extended.Derivitive, 
             new TrapezoidProfile.Constraints(
-                200,
-                100
+                900,
+                1200
             )
         );
 
