@@ -1,12 +1,16 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAnalogSensor;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -33,6 +37,8 @@ public class Shooter extends SubsystemBase {
     public final PIDController tiltControllerHome;
     public final PIDController tiltControllerExtend;
     private final RelativeEncoder tiltEncoder;
+    private final DigitalInput tiltLimitSwitch;
+
 
     private final CANSparkMax shooterMotorL; //TOP roller
     private final CANSparkMax shooterMotorR; //BOTTOM roller
@@ -65,7 +71,7 @@ public class Shooter extends SubsystemBase {
         
         tiltMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER, CANSparkLowLevel.MotorType.kBrushless);
         tiltMotor.setIdleMode(IdleMode.kBrake);
-        tiltMotor.setSmartCurrentLimit(40);
+        tiltMotor.setSmartCurrentLimit(50);
         tiltMotor_Follower = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER_FOLLOWER, CANSparkLowLevel.MotorType.kBrushless);
         tiltMotor_Follower.setIdleMode(IdleMode.kBrake);
         tiltMotor_Follower.setSmartCurrentLimit(45);
@@ -76,6 +82,8 @@ public class Shooter extends SubsystemBase {
         tiltEncoder = tiltMotor.getEncoder();
         tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
         tiltEncoder.setPosition(0.0);
+
+        tiltLimitSwitch = new DigitalInput(9);
 
         tiltControllerHome = new PIDController(
             TilterPIDConfig.home.Proportional,
@@ -97,6 +105,12 @@ public class Shooter extends SubsystemBase {
         shooterMotorR.setInverted(false);
         shooterMotorL.setIdleMode(IdleMode.kCoast);
         shooterMotorR.setIdleMode(IdleMode.kCoast);
+
+        shooterMotorREncoder = shooterMotorR.getEncoder();
+        shooterMotorLEncoder = shooterMotorL.getEncoder();
+
+        shooterMotorLEncoder.setVelocityConversionFactor(1/60);
+        shooterMotorREncoder.setVelocityConversionFactor(1/60);
 
         shooterControllerL = shooterMotorL.getPIDController();
         shooterControllerL.setP(ShooterVelocityPID.Proportional);
@@ -127,9 +141,6 @@ public class Shooter extends SubsystemBase {
 
         lineBreak = new DigitalInput(0);
 
-        shooterMotorREncoder = shooterMotorR.getEncoder();
-        shooterMotorLEncoder = shooterMotorL.getEncoder();
-
         shooterMotorREncoder.setPositionConversionFactor(1);
         shooterMotorREncoder.setVelocityConversionFactor(1);
 
@@ -152,6 +163,7 @@ public class Shooter extends SubsystemBase {
         extensionController.setP(ExtensionPID.Proportional);
         extensionController.setI(ExtensionPID.Integral);
         extensionController.setD(ExtensionPID.Derivitive);
+
     }
     
     @Override
@@ -171,6 +183,9 @@ public class Shooter extends SubsystemBase {
         //SmartDashboard.putNumber("ShooterCurrentL",shooterMotorL.getOutputCurrent());
 
         SmartDashboard.putBoolean("Shooter Linebreak", getLineBreak());
+
+
+        SmartDashboard.putBoolean("AAAA Limit Switch", tiltLimitSwitch.get());
     }
 
     public boolean getLineBreak() {
@@ -183,6 +198,69 @@ public class Shooter extends SubsystemBase {
 
     public double getTilterPosition () {
         return tiltEncoder.getPosition();
+    }
+    
+    public boolean ampPostion() {
+        return extensionEncoder.getPosition() > 2.0;
+    }
+
+    /**
+     * Sets Flywheel speed speed. 2 Speeds don't work right in open loop mode, higher RPM will supersede the lower RPM
+     * 
+     * @param desiredRPM_1 Left Side
+     * @param desiredRPM_2 Right Side
+     * @param openLoop
+     * @return
+     */
+    public Command shoot(double desiredRPM_1, double desiredRPM_2, boolean openLoop) {        
+        double leftSpeed = desiredRPM_1/60;
+        double rightSpeed= desiredRPM_2/60;
+
+        return Commands
+        .run(
+            () -> {
+                if (openLoop) {
+                    shooterMotorL.set(1.0);
+                    shooterMotorR.set(1.0);
+                }
+                else {
+                shooterControllerL.setReference(leftSpeed, ControlType.kVelocity,0,shooterFeedFoward.calculate(leftSpeed), ArbFFUnits.kVoltage);
+                shooterControllerR.setReference(rightSpeed, ControlType.kVelocity,0,shooterFeedFoward.calculate(rightSpeed), ArbFFUnits.kVoltage);
+                }
+                if (shooterMotorLEncoder.getVelocity() >= desiredRPM_1-20 && shooterMotorREncoder.getVelocity() >= desiredRPM_2-20){
+                    feedMotor.set(1.0); 
+                }
+            },
+        this)
+        .until(() -> ! getLineBreak())
+        .andThen(new WaitCommand(0.25))
+        .finallyDo(
+            () -> {
+                shooterMotorL.set(0.0);
+                shooterMotorR.set(0.0);
+                feedMotor.set(0.0);
+            }
+        );
+    }
+
+    public Command spitOutNote() {
+        return Commands
+            .run(
+                () -> {
+                    shooterMotorL.set(0.2);
+                    shooterMotorR.set(0.2);
+                    feedMotor.set(0.5);
+                }
+            )
+            .until(() -> ! getLineBreak())
+            .andThen(new WaitCommand(0.25))
+            .finallyDo(
+                () -> {
+                    shooterMotorL.set(0.0);
+                    shooterMotorR.set(0.0);
+                    feedMotor.set(0.0);
+                }
+            );
     }
 
     public Command setTilter(DoubleSupplier angle) {
@@ -232,43 +310,6 @@ public class Shooter extends SubsystemBase {
             }
         )
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
-    }
-
-    /**
-     * Sets Flywheel speed speed. 2 Speeds don't work right in open loop mode, higher RPM will supersede the lower RPM
-     * 
-     * @param desiredRPM_1 Left Side
-     * @param desiredRPM_2 Right Side
-     * @param openLoop
-     * @return
-     */
-    public Command shoot(double desiredRPM_1, double desiredRPM_2, boolean openLoop) {
-        return Commands
-        .run(
-            () -> {
-
-                if (openLoop) {
-                    shooterMotorL.set(1.0);
-                    shooterMotorR.set(1.0);
-                }
-                else {
-                shooterControllerL.setReference(desiredRPM_1, ControlType.kVelocity,0,shooterFeedFoward.calculate(desiredRPM_1));
-                shooterControllerR.setReference(desiredRPM_2, ControlType.kVelocity,0,shooterFeedFoward.calculate(desiredRPM_2));
-                }
-                if (shooterMotorLEncoder.getVelocity() >= desiredRPM_1-20 && shooterMotorREncoder.getVelocity() >= desiredRPM_2-20){
-                    feedMotor.set(1.0);
-                }
-            },
-        this)
-        .until(() -> ! getLineBreak())
-        .andThen(new WaitCommand(1.0))
-        .finallyDo(
-            () -> {
-                shooterMotorL.set(0.0);
-                shooterMotorR.set(0.0);
-                feedMotor.set(0.0);
-            }
-        );
     }
 
     public Command loadGamePiece() {

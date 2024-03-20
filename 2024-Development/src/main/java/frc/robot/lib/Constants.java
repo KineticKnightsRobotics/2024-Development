@@ -148,10 +148,10 @@ public final class Constants {
   }
 
   public static class ClimberSubsystemConstants {
-    public static int ID_LEFT_WINCH  = 61; //TODO: Remember to switch these back after drive practice.
+    public static int ID_LEFT_WINCH  = 61; 
     public static int ID_RIGHT_WINCH = 62;
 
-    public static double climberUpPosition = 50; //TOOD: Measure this.
+    public static double climberUpPosition = 50; //TODO: Measure this.
 
 
   }
@@ -176,7 +176,7 @@ public final class Constants {
 
   public static class AutonomousConstants{
     public static class PathFindingConstraints{
-      public static PathConstraints kConstraints = new PathConstraints(3.4,3.5,Math.toRadians(540),Math.toRadians(720));
+      public static PathConstraints kConstraints = new PathConstraints(3.0,3.0,Math.toRadians(540),Math.toRadians(720));
     }
     // Shop zone 332cm x 173cm
     public static double LIMIT_AUTOSPEED_DRIVE = 3.5;

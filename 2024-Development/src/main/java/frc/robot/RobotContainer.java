@@ -104,7 +104,7 @@ public class RobotContainer {
   //ROBOT TRIGGERS
   Trigger alwaysOn = new Trigger(() -> true);
     
-  Trigger ShooterAtAmp = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() > 60);
+  Trigger ShooterAtAmp = new Trigger(() -> SUBSYSTEM_SHOOTER.getExtensionPosition() > 2);
 
   Trigger ShooterUnderHome = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() < -3.0);
 
@@ -177,15 +177,27 @@ public class RobotContainer {
           //SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
           SUBSYSTEM_SHOOTER.IdleShooter(4022,2681)
         )
-    ).onFalse(SUBSYSTEM_SHOOTER.IdleShooter(1500, 1500));
+    ).onFalse(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
 
+    DRIVER_R1.and(ShooterAtAmp.negate()).whileTrue(
+        SUBSYSTEM_SHOOTER.shoot(4022,2681, false)
+    );
+    DRIVER_R1.and(ShooterAtAmp).whileTrue(
+        SUBSYSTEM_SHOOTER.spitOutNote()
+    );
+
+
+
+    /*
     DRIVER_R1.whileTrue(
-      (ShooterAtAmp.getAsBoolean() ?
-        SUBSYSTEM_SHOOTER.shoot(1500, 1500, false)
-        :
+      (SUBSYSTEM_SHOOTER.ampPostion() ?
+        SUBSYSTEM_SHOOTER.spitOutNote()//SUBSYSTEM_SHOOTER.setFeederSpeed(0.8)//SUBSYSTEM_SHOOTER.shoot(500, 500, false)
+        :           
         SUBSYSTEM_SHOOTER.shoot(4022,2681, false)
         )
     );
+    */
+
 
 
 
@@ -198,6 +210,7 @@ public class RobotContainer {
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
     .onFalse(SUBSYSTEM_INTAKE.intakeUp());
+
     DRIVER_A.whileTrue(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setExtensionHeight(6),
@@ -215,6 +228,8 @@ public class RobotContainer {
     DRIVER_B.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.45,5.52),new Rotation2d(0.0)), AutonomousConstants.PathFindingConstraints.kConstraints));
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
+
+    //DRIVER_Y.whileTrue(SUBSYSTEM_SHOOTER.setShooterTEMP()).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
 
 
     //OPERATOR CONTROLS________________________________________________________________________________________________________________________________________________________________
@@ -320,10 +335,11 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
         //return new PathPlannerAuto("TwoNoteAuto");
         //return SUBSYSTEM_SHOOTER.setFeederSpeed(0.5);
-        return new PathPlannerAuto("US4NoteAuto");
 
-        //return new PathPlannerAuto("FourNoteAutoUnderSpeakerCentre");
-        //552305
+
+        return new PathPlannerAuto("(unused)FourNoteAutoUnderSpeaker");
+
+        //return new PathPlannerAuto("US4NoteAuto");
   } 
 
   public static boolean DRIVER_LT() {

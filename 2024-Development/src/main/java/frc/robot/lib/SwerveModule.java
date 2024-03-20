@@ -165,7 +165,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public void setPercentOutput(SwerveModuleState state) {
-        double percentOutput = state.speedMetersPerSecond/SwerveSubsystemConstants.LIMIT_HARD_SPEED_DRIVE;
+        double percentOutput = state.speedMetersPerSecond/SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;
         MOTOR_DRIVE.set(/*-*/percentOutput);
     }
     

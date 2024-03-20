@@ -11,8 +11,11 @@ public class ShooterInterpolator {
 
     InterpolatingDoubleTreeMap m_InterpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
 
-    public ShooterInterpolator() {
 
+    //PolynomialRegression m_tiltPolynomialRegression
+
+    public ShooterInterpolator() {
+        /*
         m_InterpolatingDoubleTreeMap.put(1.305,0.0);
         m_InterpolatingDoubleTreeMap.put(1.47,10.0);
         m_InterpolatingDoubleTreeMap.put(2.085,20.0);
@@ -30,6 +33,14 @@ public class ShooterInterpolator {
         SmartDashboard.putNumber("Distance to Speaker", distance);
         SmartDashboard.putNumber("Interpolated Angle", m_InterpolatingDoubleTreeMap.get(distance));
         return m_InterpolatingDoubleTreeMap.get(distance);
+    }
+
+    public double findAngleRegression(double distance) {
+        return 0.0;
+    }
+
+    public double returnAngleEquation(double distance) {
+        return 0.0;
     }
 
 
