@@ -120,7 +120,7 @@ public class SwerveModule extends SubsystemBase {
         SmartDashboard.putNumber("Drive " + MODULE_NAME +" "+ ENCODER_ABSOLUTE.getDeviceID() + " absolute angle", Math.toDegrees(getAbsoluteEncoder()));
 
         //SmartDashboard.putNumber("Drive " + MODULE_NAME + " Distance Travelled",getDrivePosition());
-        //SmartDashboard.putNumber("Drive " + MODULE_NAME + " Velocity", getDriveVelocity());
+        SmartDashboard.putNumber("Drive " + MODULE_NAME + " Velocity", getDriveVelocity());
     }
 
     public boolean isIdle() {

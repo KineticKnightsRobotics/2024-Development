@@ -156,7 +156,7 @@ public class RobotContainer {
     alwaysOn.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.02));
     ShooterUnderHome.onTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 2.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //When Note is in the shooter, idle the flywheels and stop the conveyer.
-    NoteInFeederTrigger.and(OP_1.negate()).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000,1000));
+    NoteInFeederTrigger.and(OP_1.negate()).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1500,1500));
     NoteInFeederTrigger.negate().and(OP_1.negate()).whileTrue(SUBSYSTEM_SHOOTER.stopShooter());
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0).alongWith(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0)));
 
@@ -204,7 +204,7 @@ public class RobotContainer {
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.intakeDown(),
-        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.2),
+        SUBSYSTEM_CONVEYER.setConveyerSpeed(0.8),
         SUBSYSTEM_SHOOTER.loadGamePiece()
         //SUBSYSTEM_INTAKE.intakeUp()
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
@@ -220,7 +220,7 @@ public class RobotContainer {
     .whileFalse(
       //new ParallelCommandGroup(
       SUBSYSTEM_SHOOTER.setExtensionHeight(0.0).andThen(
-      SUBSYSTEM_SHOOTER.setTilter(() -> 0.0)
+      SUBSYSTEM_SHOOTER.setTilter(() -> 5.0)
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
       //)
     );
@@ -283,7 +283,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shoot",
       new SequentialCommandGroup(
         new ParallelDeadlineGroup(
-            SUBSYSTEM_SHOOTER.setTilter(() -> SUBSYSTEM_SHOOTER.getTilterAimAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
+            //SUBSYSTEM_SHOOTER.setTilter(() -> SUBSYSTEM_SHOOTER.getTilterAimAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
          // SUBSYSTEM_SHOOTER.setTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
            // SUBSYSTEM_SHOOTER.setTilter(SUBSYSTEM_SHOOTER.getTilterAimAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
           new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
@@ -337,7 +337,7 @@ public class RobotContainer {
         //return SUBSYSTEM_SHOOTER.setFeederSpeed(0.5);
 
 
-        return new PathPlannerAuto("(unused)FourNoteAutoUnderSpeaker");
+        return new PathPlannerAuto("FourNotePP");
 
         //return new PathPlannerAuto("US4NoteAuto");
   } 
