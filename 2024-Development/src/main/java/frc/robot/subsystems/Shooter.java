@@ -305,8 +305,8 @@ public class Shooter extends SubsystemBase {
         return Commands
         .runOnce(
             ()->{
-                shooterMotorL.set(0.25);
-                shooterMotorR.set(0.25);
+                shooterMotorL.set(0.3);
+                shooterMotorR.set(0.3);
             }
         )
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
