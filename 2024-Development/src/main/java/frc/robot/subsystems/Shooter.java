@@ -250,7 +250,7 @@ public class Shooter extends SubsystemBase {
             },
         this)
         .until(() -> ! getLineBreak())
-        .andThen(new WaitCommand(0.25))
+        .andThen(new WaitCommand(0.1))
         .finallyDo(
             () -> {
                 shooterMotorL.set(0.0);

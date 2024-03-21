@@ -8,8 +8,6 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.lib.Constants.*;
 
-import java.util.function.DoubleSupplier;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 
 //import java.util.function.DoubleSupplier;
@@ -102,6 +100,8 @@ public class RobotContainer {
 
   int ShooterRPM = 4022;
 
+  int LEDColour = 1;
+
   //ROBOT TRIGGERS
   Trigger alwaysOn = new Trigger(() -> true);
     
@@ -155,15 +155,15 @@ public class RobotContainer {
 
     //When Shooter falls under the home position, set it back to 0
     alwaysOn.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.02));
-    //ShooterUnderHome.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 2.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    ShooterUnderHome.onTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 2.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //When Note is in the shooter, idle the flywheels and stop the conveyer.
     NoteInFeederTrigger.and(OP_1.negate()).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1500,1500));
     NoteInFeederTrigger.negate().and(OP_1.negate()).whileTrue(SUBSYSTEM_SHOOTER.stopShooter());
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0).alongWith(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0)));
 
     //TELEOP CONTROLS _____________________________________________________________________________________________________________________________________________________________________________________
-  
-    //Aim at speaker
+    
+    //Lock
     DRIVER_R2.whileTrue(
       new ParallelCommandGroup(
         new rotationTargetLockDrive(
@@ -180,8 +180,6 @@ public class RobotContainer {
         )
     ).onFalse(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
 
-
-
     DRIVER_R1.and(ShooterAtAmp.negate()).whileTrue(
         SUBSYSTEM_SHOOTER.shoot(4022,2681, false)
     );
@@ -190,16 +188,7 @@ public class RobotContainer {
     );
 
 
-    DRIVER_Y.whileTrue(
-      Commands.run(
-        () -> {
-           SmartDashboard.putNumber("Shooter Angle Aiming", SUBSYSTEM_SHOOTER.shooterInterpolator.getTilterAimAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker()));
-        }
-      ).alongWith(
-        SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())
-      )
-    );
-    
+
     /*
     DRIVER_R1.whileTrue(
       (SUBSYSTEM_SHOOTER.ampPostion() ?
@@ -237,7 +226,7 @@ public class RobotContainer {
       .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
       //)
     );
-    DRIVER_X.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.84,7.73),new Rotation2d(-45.0)) , AutonomousConstants.PathFindingConstraints.kConstraints));
+    DRIVER_X.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.84,7.73),new Rotation2d(-90.0)) , AutonomousConstants.PathFindingConstraints.kConstraints));
     DRIVER_B.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.45,5.52),new Rotation2d(0.0)), AutonomousConstants.PathFindingConstraints.kConstraints));
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
@@ -265,22 +254,21 @@ public class RobotContainer {
       )
     );
 
-    /*
+
     OP_2.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 10));
     OP_3.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 20));
     OP_6.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 25));
     OP_7.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 30));
     OP_8.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 32));
-    */
+    
 
-    OP_21.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 15));
-
+    /*
     OP_2.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
     OP_3.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
     OP_6.whileTrue(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(-0.2))).onFalse(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(0.0)));
     OP_7.whileTrue(SUBSYSTEM_SHOOTER.reverseShooter()).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
     OP_8.onTrue(SUBSYSTEM_SHOOTER.stopShooter());
-
+    */
     //Climber controls
     OP_4.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(0.9)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
     OP_9.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.9)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0));
@@ -297,9 +285,7 @@ public class RobotContainer {
     //Override zero tilter THIS BREAKS THE CODE IF YOU ZERO WHILE AT A NON 0 ANGLE.
     OP_17.and(OP_18).onTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
     //Override start shooter idle.
-    
-    
-    //OP_21.onTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
+    OP_21.onTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
 
     //SYS ID CONTROLS _________________________________________________________________________________________________________________________________________________________________
   }
