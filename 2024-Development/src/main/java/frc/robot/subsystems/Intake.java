@@ -6,25 +6,14 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 import frc.robot.lib.Constants.IntakeSubsystemConstants;
 import frc.robot.lib.PID_Config.IntakeSubsystem.*;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.Volts;
-import static edu.wpi.first.units.MutableMeasure.mutable;
 
 public class Intake extends SubsystemBase {
     
@@ -37,11 +26,6 @@ public class Intake extends SubsystemBase {
     private final RelativeEncoder intakePivotEncoder;
 
     private double intakePivotController_Reference;
-
-    private SysIdRoutine m_SysIdRoutine;
-    private final MutableMeasure<Voltage> m_SysID_Voltage = mutable(Volts.of(0));
-    private final MutableMeasure<Angle> m_SysID_Position = mutable(Degrees.of(0));
-    private final MutableMeasure<Velocity<Angle>> m_SysID_Velocity = mutable(DegreesPerSecond.of(0));
 
     public Intake(){
         rollerMotor = new CANSparkMax(IntakeSubsystemConstants.ID_MOTOR_ROLLER, MotorType.kBrushless);
@@ -66,21 +50,6 @@ public class Intake extends SubsystemBase {
         intakePivotController.setI(IntakePivotControllerPID.Integral);
         intakePivotController.setD(IntakePivotControllerPID.Derivitive);
         intakePivotController.setOutputRange(-0.8,0.8);
-
-        SmartDashboard.putBoolean("Intake is stuck!", limitSwitchActuate());
-    }
-
-
-
-    /*
-    public void actuateIntake(double position) {
-        //intakePivotController_Reference = position;
-        intakePivotController.setReference(position, ControlType.kPosition);
-    }
-    */
-
-    public boolean limitSwitchActuate() {
-        return (Math.abs(intakePivotEncoder.getPosition() - intakePivotController_Reference) > 0.1) && (Math.abs(intakePivotEncoder.getVelocity()) <= 0.01);
     }
     
     public double getIntakePosition() {
@@ -89,11 +58,6 @@ public class Intake extends SubsystemBase {
 
     public void setRollerSpeed(double percentOutput) {
         rollerMotor.set(percentOutput);
-    }
-
-    public void stopactuateIntake() {
-        intakePivotController.setReference(intakePivotEncoder.getPosition(), ControlType.kPosition);
-        intakePivotMotor.set(0.0);
     }
 
     /*

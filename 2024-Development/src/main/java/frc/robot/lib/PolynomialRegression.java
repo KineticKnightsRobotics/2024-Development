@@ -433,6 +433,8 @@ public class PolynomialRegression {
    * @throws InterruptedException
    */
   public static void main(String[] args) throws FileNotFoundException, InterruptedException {
+
+    /*
     File file = new File("src/testData2.txt");
     Scanner sc = new Scanner(file);
     sc.nextLine(); // ignores first line with comment
@@ -463,7 +465,7 @@ public class PolynomialRegression {
     System.out.println("Points to analyse: " + testData.size());
 
     System.out.println("Optimal degree: " + getOptimalPolynomialDegreeWithTestData(points, testData));
-
+    */
   }
 
   // int count = 0;
