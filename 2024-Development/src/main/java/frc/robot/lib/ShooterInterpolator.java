@@ -44,18 +44,15 @@ public class ShooterInterpolator {
 
     public double getTilterAimAngle(double distance) {
         double angle = 
-        //y=-26.1742x^{6}+399.3922x^{5}-2507.7064x^{4}+8292.5075x^{3}-15232.2054x^{2}+14739.1237x-5842.1178
-
+        //y= -9.5824x^{3}+55.2489x^{2}-79.7603x+45.3198
 
         //polynomial regression...? ...sigma...
 
-        -(26.1742*(Math.pow(distance,6)))
-        +(399.3922*(Math.pow(distance,5))) 
-        -(2507.7064*(Math.pow(distance,4))) 
-        +(8292.5075*(Math.pow(distance,3)))
-        -(15232.2054*(Math.pow(distance,2)))
-        +(14739.1237*(Math.pow(distance,1)))
-        -(5842.1178);
+
+        -9.5824*(Math.pow(distance,3))
+        +55.2489*(Math.pow(distance,2))
+        -79.7603*distance
+        +45.3198;
 
         /* 
         (1*(Math.pow(distance,4))) +
