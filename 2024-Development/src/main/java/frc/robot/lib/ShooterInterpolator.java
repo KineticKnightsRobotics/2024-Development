@@ -27,6 +27,8 @@ public class ShooterInterpolator {
             m_InterpolatingDoubleTreeMap.put(data[x][0],data[x][1]);
         }
         */
+        //m_tiltPolynomialRegression = new PolynomialRegression(
+        //    Array.listOf, 0);
     }
 
     public double interpolateAngle(double distance) {
@@ -43,5 +45,14 @@ public class ShooterInterpolator {
         return 0.0;
     }
 
+    public double getTilterAimAngle(double distance) {
+        double angle = 
+        // coefficient * distance^degree 
+        (1*(Math.pow(distance,4))) +
+        (1*(Math.pow(distance,3))) +
+        (1*(Math.pow(distance,2))) + 
+        (1*(Math.pow(distance,1)));
+        return angle;
+    }
 
 }

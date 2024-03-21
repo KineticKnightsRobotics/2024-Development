@@ -167,8 +167,8 @@ public class RobotContainer {
       new ParallelCommandGroup(
         new rotationTargetLockDrive(
             SUBSYSTEM_SWERVEDRIVE,   
-            () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
-            () -> JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
+            () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
+            () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
             () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
             () -> true, 
             () -> getAllianceFlip(),
@@ -221,7 +221,8 @@ public class RobotContainer {
       //new ParallelCommandGroup(
       SUBSYSTEM_SHOOTER.setExtensionHeight(0.0).andThen(
       SUBSYSTEM_SHOOTER.setTilter(() -> 5.0)
-      ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+      ).until(() -> (Math.abs(SUBSYSTEM_SHOOTER.getTilterPosition()-5.0) < 0.05 && SUBSYSTEM_SHOOTER.getExtensionPosition() < 0.15)) // This is the dumbest fix of all time
+      .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
       //)
     );
     DRIVER_X.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.84,7.73),new Rotation2d(-90.0)) , AutonomousConstants.PathFindingConstraints.kConstraints));
@@ -251,14 +252,25 @@ public class RobotContainer {
         SUBSYSTEM_SHOOTER.stopShooter()
       )
     );
+
+
+    OP_2.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 10));
+    OP_3.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 20));
+    OP_6.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 25));
+    OP_7.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 30));
+    OP_8.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 32));
+
+
+    /*
     OP_2.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
     OP_3.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
     OP_6.whileTrue(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(-0.2))).onFalse(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(0.0)));
     OP_7.whileTrue(SUBSYSTEM_SHOOTER.reverseShooter()).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
     OP_8.onTrue(SUBSYSTEM_SHOOTER.stopShooter());
+    */
     //Climber controls
-    OP_4.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(0.7)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
-    OP_9.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.7)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0));
+    OP_4.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(0.9)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
+    OP_9.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.9)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0));
     //Manual Shooter Extension
     OP_5.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.5)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
     OP_10.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.5)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));

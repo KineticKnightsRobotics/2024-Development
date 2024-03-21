@@ -39,7 +39,7 @@ public class PID_Config {
         }
         public class TilterPIDConfig {
             public class extended {
-                public static final double Proportional = 0.032;//0.035;//0.0025;
+                public static final double Proportional = 0.012;//0.035;//0.0025;
                 public static final double Integral     = 0.0;//0.0045;
                 public static final double Derivitive   = 0.0;//0.00225;
             }
