@@ -121,6 +121,7 @@ public class SwerveModule extends SubsystemBase {
 
         //SmartDashboard.putNumber("Drive " + MODULE_NAME + " Distance Travelled",getDrivePosition());
         SmartDashboard.putNumber("Drive " + MODULE_NAME + " Velocity", getDriveVelocity());
+        SmartDashboard.putNumber("Drive " + MODULE_NAME + " Free Speed", getDriveVelocity()/ModuleConstants.MODULE_DRIVE_RPM_TO_MPS);
     }
 
     public boolean isIdle() {
