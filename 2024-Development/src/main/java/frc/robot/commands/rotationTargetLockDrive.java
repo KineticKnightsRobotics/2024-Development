@@ -25,7 +25,7 @@ public class rotationTargetLockDrive extends Command {
     private final BooleanSupplier SUPPLIER_Field_Oriented;
     private final BooleanSupplier flipControls;
     private final DoubleSupplier SUPPLIER_Period;
-private PIDController rotationPID = new PIDController(RotationTargetLock.Proportional,RotationTargetLock.Integral,RotationTargetLock.Derivitive);
+    private PIDController rotationPID = new PIDController(RotationTargetLock.Proportional,RotationTargetLock.Integral,RotationTargetLock.Derivitive);
     //private final SlewRateLimiter xLimiter, yLimiter, zLimiter;
 
     public rotationTargetLockDrive(
@@ -44,23 +44,18 @@ private PIDController rotationPID = new PIDController(RotationTargetLock.Proport
         flipControls = _flipControls;
         SUPPLIER_Period = timePeriod;
         addRequirements(subsystem);
-        //this.xLimiter = new SlewRateLimiter(Constants.SwerveSubsystemConstants.LIMIT_SOFT_ACCELERATION_SPEED);
-        //this.yLimiter = new SlewRateLimiter(Constants.SwerveSubsystemConstants.LIMIT_SOFT_ACCELERATION_SPEED);
-        //this.zLimiter = new SlewRateLimiter(Constants.SwerveSubsystemConstants.LIMIT_SOFT_ACCELERATION_TURN);
+
         rotationPID.setTolerance(2, 5);
         rotationPID.enableContinuousInput(-180, 180);
     }
 
     @Override
     public void execute() {
-                // double[] positionData = LimelightHelpers.getTargetPose_RobotSpace("limelight");
-                //  double desiredAngle = positionData[5];
-
         double joystickX = SUPPLIER_xSpeed.getAsDouble();
         double joystickY = SUPPLIER_ySpeed.getAsDouble();
 
         if (flipControls.getAsBoolean()) {
-            joystickX *= -1;
+            joystickX *= -1; //TODO: NATHAN IS GAY!!!!! HE LIKES KISSING BOYS!!!!
             joystickY *= -1;
         }
 
@@ -69,8 +64,6 @@ private PIDController rotationPID = new PIDController(RotationTargetLock.Proport
         double rotSpeed = rotationPID.calculate(subsystem.getRotation2d().getDegrees(), subsystem.getRotationRelativeToSpeaker().getDegrees()+180.0);
         boolean fieldRelative = SUPPLIER_Field_Oriented.getAsBoolean();
         double timePeriod = SUPPLIER_Period.getAsDouble();
-
-        //ChassisSpeeds chassisSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, subsystem.getRotation2d());
       
         ChassisSpeeds chassisSpeed = ChassisSpeeds.discretize(
             fieldRelative 
@@ -79,16 +72,7 @@ private PIDController rotationPID = new PIDController(RotationTargetLock.Proport
                 : 
                     new ChassisSpeeds(xSpeed, ySpeed, rotSpeed),
             timePeriod);
-     
-        
         subsystem.setChassisSpeed(chassisSpeed,true);
-
-        /*
-        if (subsystem.idle_Timer_Lock.get() > 0.5) {
-            subsystem.lockChassis();
-            subsystem.idle_Timer_Lock.reset();
-        }
-        */
     }
     @Override
     public void end(boolean interrupted) {

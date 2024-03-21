@@ -162,6 +162,11 @@ public final class Constants {
     }
   }
 
+  public static class BlingConstants {
+    public static int ID_LED_STRIP = 9;
+    public static int ledStripLength = 92;
+  }
+
   public static final class OIConstants {
     public static final int ID_CONTROLLER_DRIVER = 0;
     public static final double CONTROLLER_DRIVER_DEADBAND = 0.05;
@@ -176,7 +181,7 @@ public final class Constants {
 
   public static class AutonomousConstants{
     public static class PathFindingConstraints{
-      public static PathConstraints kConstraints = new PathConstraints(3.0,3.0,Math.toRadians(540),Math.toRadians(720));
+      public static PathConstraints kConstraints = new PathConstraints(3.0,3.0,Math.toRadians(720),Math.toRadians(720));
     }
     // Shop zone 332cm x 173cm
     public static double LIMIT_AUTOSPEED_DRIVE = 3.5;
