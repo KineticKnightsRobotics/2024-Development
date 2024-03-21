@@ -265,21 +265,13 @@ public class RobotContainer {
       )
     );
 
-    /*
-    OP_2.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 10));
-    OP_3.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 20));
-    OP_6.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 25));
-    OP_7.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 30));
-    OP_8.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 32));
-    */
-
     OP_21.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 15));
 
     OP_2.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
     OP_3.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
     OP_6.whileTrue(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(-0.2))).onFalse(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(0.0)));
     OP_7.whileTrue(SUBSYSTEM_SHOOTER.reverseShooter()).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
-    OP_8.onTrue(SUBSYSTEM_SHOOTER.stopShooter());
+    OP_8.onTrue(SUBSYSTEM_SHOOTER.stopShooter().alongWith(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)));
 
     //Climber controls
     OP_4.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(0.9)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
@@ -297,9 +289,7 @@ public class RobotContainer {
     //Override zero tilter THIS BREAKS THE CODE IF YOU ZERO WHILE AT A NON 0 ANGLE.
     OP_17.and(OP_18).onTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
     //Override start shooter idle.
-    
-    
-    //OP_21.onTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
+    OP_21.onTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
 
     //SYS ID CONTROLS _________________________________________________________________________________________________________________________________________________________________
   }
