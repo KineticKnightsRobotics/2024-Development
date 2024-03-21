@@ -250,7 +250,7 @@ public class Shooter extends SubsystemBase {
             },
         this)
         .until(() -> ! getLineBreak())
-        .andThen(new WaitCommand(0.1))
+        .andThen(new WaitCommand(0.25))
         .finallyDo(
             () -> {
                 shooterMotorL.set(0.0);
@@ -270,7 +270,7 @@ public class Shooter extends SubsystemBase {
                 }
             )
             .until(() -> ! getLineBreak())
-            .andThen(new WaitCommand(0.1))
+            .andThen(new WaitCommand(0.25))
             .finallyDo(
                 () -> {
                     shooterMotorL.set(0.0);
@@ -285,19 +285,6 @@ public class Shooter extends SubsystemBase {
             () -> {
                 //tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tiltEncoder.getPosition(), angle.getAsDouble()),-0.5,0.5));
                 tiltMotor.set(MathUtil.clamp(tiltTrapezoidProfile.calculate(tiltEncoder.getPosition(), angle.getAsDouble()), -0.5, 0.5));
-            }
-        ).finallyDo(
-           () -> {
-                tiltMotor.stopMotor();
-           }
-        );
-    }
-
-    public Command autoTilter(DoubleSupplier distance) {
-        return Commands.run(
-            () -> {
-                double angle = shooterInterpolator.getTilterAimAngle(distance.getAsDouble());
-                tiltMotor.set(MathUtil.clamp(tiltTrapezoidProfile.calculate(tiltEncoder.getPosition(), angle), -0.5, 0.5));
             }
         ).finallyDo(
            () -> {
@@ -390,4 +377,5 @@ public class Shooter extends SubsystemBase {
     public Command setExtensionHeight(double height) {
         return Commands.runOnce(() -> {extensionController.setReference(height, ControlType.kPosition);});
     }   
+    
 }
