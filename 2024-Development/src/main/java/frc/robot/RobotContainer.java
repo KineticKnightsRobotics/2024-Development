@@ -237,7 +237,7 @@ public class RobotContainer {
       .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
       //)
     );
-    DRIVER_X.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.84,7.55),new Rotation2d(-90.0)) , AutonomousConstants.PathFindingConstraints.kConstraints));
+    DRIVER_X.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.84,7.55),new Rotation2d(Math.toRadians(-90.0))) , AutonomousConstants.PathFindingConstraints.kConstraints));
     DRIVER_B.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.45,5.52),new Rotation2d(0.0)), AutonomousConstants.PathFindingConstraints.kConstraints));
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
@@ -264,8 +264,6 @@ public class RobotContainer {
         SUBSYSTEM_SHOOTER.stopShooter()
       )
     );
-
-    OP_21.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 15));
 
     OP_2.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
     OP_3.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
