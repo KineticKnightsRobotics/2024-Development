@@ -175,8 +175,8 @@ public class RobotContainer {
             () -> getAllianceFlip(),
             () -> 0.02
           ),
-          //SUBSYSTEM_SHOOTER.aimTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
-          SUBSYSTEM_SHOOTER.IdleShooter(4022,2681)
+          SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())
+          //SUBSYSTEM_SHOOTER.IdleShooter(4022,2681)
         )
     ).onFalse(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
 
@@ -237,7 +237,7 @@ public class RobotContainer {
       .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
       //)
     );
-    DRIVER_X.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.84,7.73),new Rotation2d(-45.0)) , AutonomousConstants.PathFindingConstraints.kConstraints));
+    DRIVER_X.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.84,7.55),new Rotation2d(-90.0)) , AutonomousConstants.PathFindingConstraints.kConstraints));
     DRIVER_B.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.45,5.52),new Rotation2d(0.0)), AutonomousConstants.PathFindingConstraints.kConstraints));
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
