@@ -54,6 +54,7 @@ public class RobotContainer {
   private final Shooter SUBSYSTEM_SHOOTER = new Shooter();
   private final Climber SUBSYSTEM_CLIMBER = new Climber();
   private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive();
+  private final Bling SUBSYSTEM_BLING = new Bling();
 
   //private final AprilTagFieldLayout fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
@@ -126,6 +127,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    
     SUBSYSTEM_SWERVEDRIVE.setDefaultCommand(
       new joystickDrive(
         SUBSYSTEM_SWERVEDRIVE, 
@@ -157,6 +159,7 @@ public class RobotContainer {
     alwaysOn.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.02));
     //ShooterUnderHome.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 2.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     //When Note is in the shooter, idle the flywheels and stop the conveyer.
+    NoteInFeederTrigger.whileTrue(SUBSYSTEM_BLING.blinkNote());
     NoteInFeederTrigger.and(OP_1.negate()).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1500,1500));
     NoteInFeederTrigger.negate().and(OP_1.negate()).whileTrue(SUBSYSTEM_SHOOTER.stopShooter());
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0).alongWith(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0)));

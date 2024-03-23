@@ -346,7 +346,9 @@ public class SwerveDrive extends SubsystemBase {
      * @return Pathfinding Command
      */
     public Command pathFind(Pose2d position) {
+        //return AutoBuilder.pathfindToPoseFlipped(position, AutonomousConstants.PathFindingConstraints.kConstraints, 0.0, 0.0);
         return AutoBuilder.pathfindToPose(position, AutonomousConstants.PathFindingConstraints.kConstraints, 0.0, 0.0);
+
         /*
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent()){

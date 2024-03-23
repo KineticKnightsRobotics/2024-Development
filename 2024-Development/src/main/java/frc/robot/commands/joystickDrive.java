@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 //import edu.wpi.first.math.filter.SlewRateLimiter;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
@@ -56,11 +57,42 @@ public class joystickDrive extends Command {
         double joystickY = SUPPLIER_ySpeed.getAsDouble(); //grab speeds and apply deadband
         double joystickZ = SUPPLIER_zSpeed.getAsDouble();
 
-        if (flipControls) {
+
+        boolean silly = false;
+
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            if (alliance.get() == DriverStation.Alliance.Red) {
+                joystickX *= -1;
+                joystickY *= -1;
+                silly = true;
+            }
+        }
+        else {
             joystickX *= -1;
             joystickY *= -1;
-            //joystickZ *= -1;
+            silly = false;
         }
+
+
+
+
+
+        SmartDashboard.putBoolean(
+            "HELP", 
+            silly
+            );
+
+
+        //return false;
+
+
+
+        //if (flipControls) {
+        //    joystickX *= -1;
+        //    joystickY *= -1;
+        //    //joystickZ *= -1;
+        //}
         
         double xSpeed   = ((joystickX * joystickX) * (joystickX<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;// * 0.2;
         double ySpeed   = ((joystickY * joystickY) * (joystickY<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;

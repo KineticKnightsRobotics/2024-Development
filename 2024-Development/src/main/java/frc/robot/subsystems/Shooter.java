@@ -76,10 +76,10 @@ public class Shooter extends SubsystemBase {
         shooterInterpolator = new ShooterInterpolator();
         
         tiltMotor = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER, CANSparkLowLevel.MotorType.kBrushless);
-        tiltMotor.setIdleMode(IdleMode.kBrake);
+        tiltMotor.setIdleMode(IdleMode.kCoast);
         tiltMotor.setSmartCurrentLimit(50);
         tiltMotor_Follower = new CANSparkMax(ShooterSubsystemConstants.ID_MOTOR_TILTER_FOLLOWER, CANSparkLowLevel.MotorType.kBrushless);
-        tiltMotor_Follower.setIdleMode(IdleMode.kBrake);
+        tiltMotor_Follower.setIdleMode(IdleMode.kCoast);
         tiltMotor_Follower.setSmartCurrentLimit(45);
         tiltMotor.setInverted(true);
         tiltMotor_Follower.setInverted(false);
