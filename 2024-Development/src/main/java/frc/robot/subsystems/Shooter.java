@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkAnalogSensor;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -15,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,7 +25,6 @@ import frc.robot.lib.Constants.ShooterSubsystemConstants;
 import frc.robot.lib.ShooterInterpolator;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 
 public class Shooter extends SubsystemBase {
@@ -36,13 +32,12 @@ public class Shooter extends SubsystemBase {
     private final SimpleMotorFeedforward shooterFeedFoward;
     public final CANSparkMax tiltMotor;
     private final CANSparkMax tiltMotor_Follower;
-    public final PIDController tiltControllerHome;
-    public final PIDController tiltControllerExtend;
 
     public final ProfiledPIDController tiltTrapezoidProfile;
 
 
     private final RelativeEncoder tiltEncoder;
+    private final RelativeEncoder tiltFollowerEncoder;
     private final DigitalInput tiltLimitSwitch;
 
 
@@ -56,8 +51,7 @@ public class Shooter extends SubsystemBase {
     private final CANSparkMax feedMotor;
     private final RelativeEncoder feedEncoder;
     private final DigitalInput lineBreak;
-    private final double tiltPosition = 0.0;
-    
+
     public final ShooterInterpolator shooterInterpolator;
     private final CANSparkMax extensionMotor;
     private final RelativeEncoder extensionEncoder;
@@ -83,25 +77,16 @@ public class Shooter extends SubsystemBase {
         tiltMotor_Follower.setSmartCurrentLimit(45);
         tiltMotor.setInverted(true);
         tiltMotor_Follower.setInverted(false);
-        tiltMotor_Follower.follow(tiltMotor);
+        //tiltMotor_Follower.follow(tiltMotor);
 
         tiltEncoder = tiltMotor.getEncoder();
         tiltEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
         tiltEncoder.setPosition(0.0);
 
+        tiltFollowerEncoder = tiltMotor_Follower.getEncoder();
+        tiltFollowerEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
+
         tiltLimitSwitch = new DigitalInput(9);
-
-        tiltControllerHome = new PIDController(
-            TilterPIDConfig.home.Proportional,
-            TilterPIDConfig.home.Integral,
-            TilterPIDConfig.home.Derivitive
-        );
-
-        tiltControllerExtend = new PIDController(
-            TilterPIDConfig.extended.Proportional,
-            TilterPIDConfig.extended.Integral,
-            TilterPIDConfig.extended.Derivitive
-        );
 
         tiltTrapezoidProfile = new ProfiledPIDController(
             TilterPIDConfig.extended.Proportional,
@@ -189,6 +174,10 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Shooter Extension Position", extensionEncoder.getPosition());
 
         SmartDashboard.putNumber("Shooter Tilter Position", tiltEncoder.getPosition());
+        SmartDashboard.putNumber("Shooter Tilter Follower Position", tiltFollowerEncoder.getPosition());
+
+        SmartDashboard.putNumber("Tilter 1 Current Draw", tiltMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Tilter 2 Current Draw", tiltMotor_Follower.getOutputCurrent());
 
         //SmartDashboard.putNumber("Through Bore Encoder Absolute", throughBoreEncoder.getAbsolutePosition());
 
@@ -285,10 +274,13 @@ public class Shooter extends SubsystemBase {
             () -> {
                 //tiltMotor.set(MathUtil.clamp(tiltControllerExtend.calculate(tiltEncoder.getPosition(), angle.getAsDouble()),-0.5,0.5));
                 tiltMotor.set(MathUtil.clamp(tiltTrapezoidProfile.calculate(tiltEncoder.getPosition(), angle.getAsDouble()), -0.5, 0.5));
+                tiltMotor_Follower.set(MathUtil.clamp(tiltTrapezoidProfile.calculate(tiltEncoder.getPosition(), angle.getAsDouble()), -0.5, 0.5));
             }
-        ).finallyDo(
+        )//.until(/*() -> Math.abs(tiltEncoder.getPosition() - angle.getAsDouble()) < 4 */)
+        .finallyDo(
            () -> {
                 tiltMotor.stopMotor();
+                tiltMotor_Follower.stopMotor();
            }
         );
     }
@@ -298,6 +290,8 @@ public class Shooter extends SubsystemBase {
             () -> {
                 double angle = shooterInterpolator.getTilterAimAngle(distance.getAsDouble());
                 tiltMotor.set(MathUtil.clamp(tiltTrapezoidProfile.calculate(tiltEncoder.getPosition(), angle), -0.5, 0.5));
+                tiltMotor_Follower.set(MathUtil.clamp(tiltTrapezoidProfile.calculate(tiltEncoder.getPosition(), angle), -0.5, 0.5));
+
             }
         ).finallyDo(
            () -> {
@@ -310,6 +304,7 @@ public class Shooter extends SubsystemBase {
         return Commands.runOnce(
             ()->{
                 tiltMotor.set(0);
+                tiltMotor_Follower.set(0);
             }
             );
     }
@@ -328,7 +323,10 @@ public class Shooter extends SubsystemBase {
 
     public Command zeroTilter(double angle) {
         //return Commands.runOnce(() -> {tiltEncoder.setPosition(angle);});
-                return Commands.runOnce(() -> {tiltEncoder.setPosition(0.0);});
+                return Commands.runOnce(() -> {
+                    tiltEncoder.setPosition(0.0);
+                    tiltFollowerEncoder.setPosition(0.0);
+                });
 
     }
     

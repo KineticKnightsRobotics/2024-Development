@@ -1,4 +1,4 @@
-package frc.robot.lib;
+package frc.robot.lib.regression;
 
 import java.io.File;
 import java.io.FileNotFoundException;

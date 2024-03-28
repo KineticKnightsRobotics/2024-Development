@@ -9,9 +9,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.lib.Constants.SwerveSubsystemConstants;
 import frc.robot.subsystems.SwerveDrive;
@@ -23,10 +21,7 @@ public class joystickDrive extends Command {
     private final DoubleSupplier SUPPLIER_ySpeed;
     private final DoubleSupplier SUPPLIER_zSpeed;
     private final BooleanSupplier SUPPLIER_Field_Oriented;
-    private final BooleanSupplier SUPPLIER_flipControls;
     private final DoubleSupplier SUPPLIER_Period;
-
-    private final Boolean flipControls;
 
     //private final SlewRateLimiter xLimiter, yLimiter, zLimiter;
 
@@ -36,7 +31,6 @@ public class joystickDrive extends Command {
         DoubleSupplier ySpeed, 
         DoubleSupplier zSpeed,
         BooleanSupplier fieldOriented,
-        BooleanSupplier _flipControls,
         DoubleSupplier timePeriod
         ){
         subsystem = m_subsystem;
@@ -44,11 +38,8 @@ public class joystickDrive extends Command {
         SUPPLIER_ySpeed = ySpeed;
         SUPPLIER_zSpeed = zSpeed;
         SUPPLIER_Field_Oriented = fieldOriented;
-        SUPPLIER_flipControls = _flipControls;
         SUPPLIER_Period = timePeriod;
         addRequirements(subsystem);
-
-        flipControls = SUPPLIER_flipControls.getAsBoolean();
     }
 
     @Override
@@ -58,42 +49,13 @@ public class joystickDrive extends Command {
         double joystickZ = SUPPLIER_zSpeed.getAsDouble();
 
 
-        boolean silly = false;
 
         var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
-            if (alliance.get() == DriverStation.Alliance.Red) {
-                joystickX *= -1;
-                joystickY *= -1;
-                silly = true;
-            }
-        }
-        else {
+        if (alliance.get() == DriverStation.Alliance.Red) {
             joystickX *= -1;
             joystickY *= -1;
-            silly = false;
         }
-
-
-
-
-
-        SmartDashboard.putBoolean(
-            "HELP", 
-            silly
-            );
-
-
-        //return false;
-
-
-
-        //if (flipControls) {
-        //    joystickX *= -1;
-        //    joystickY *= -1;
-        //    //joystickZ *= -1;
-        //}
-        
+                
         double xSpeed   = ((joystickX * joystickX) * (joystickX<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;// * 0.2;
         double ySpeed   = ((joystickY * joystickY) * (joystickY<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;
         double rotSpeed = ((joystickZ * joystickZ) * (joystickZ<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_TURN; //* 0.8 to make SLOW */

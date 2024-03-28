@@ -8,9 +8,8 @@ import java.util.function.DoubleSupplier;
 //import edu.wpi.first.math.filter.SlewRateLimiter;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.LimelightHelpers;
-import frc.robot.RobotContainer;
 import frc.robot.lib.Constants.SwerveSubsystemConstants;
 import frc.robot.lib.PID_Config.RotationTargetLock;
 import frc.robot.subsystems.SwerveDrive;
@@ -23,7 +22,6 @@ public class rotationTargetLockDrive extends Command {
     private final DoubleSupplier SUPPLIER_xSpeed;
     private final DoubleSupplier SUPPLIER_ySpeed;
     private final BooleanSupplier SUPPLIER_Field_Oriented;
-    private final BooleanSupplier flipControls;
     private final DoubleSupplier SUPPLIER_Period;
     private PIDController rotationPID = new PIDController(RotationTargetLock.Proportional,RotationTargetLock.Integral,RotationTargetLock.Derivitive);
     //private final SlewRateLimiter xLimiter, yLimiter, zLimiter;
@@ -34,14 +32,12 @@ public class rotationTargetLockDrive extends Command {
         DoubleSupplier ySpeed, 
         DoubleSupplier zSpeed,
         BooleanSupplier fieldOriented,
-        BooleanSupplier _flipControls,
         DoubleSupplier timePeriod
         ){
         subsystem = m_subsystem;
         SUPPLIER_xSpeed = xSpeed;
         SUPPLIER_ySpeed = ySpeed;
         SUPPLIER_Field_Oriented = fieldOriented;
-        flipControls = _flipControls;
         SUPPLIER_Period = timePeriod;
         addRequirements(subsystem);
 
@@ -54,9 +50,11 @@ public class rotationTargetLockDrive extends Command {
         double joystickX = SUPPLIER_xSpeed.getAsDouble();
         double joystickY = SUPPLIER_ySpeed.getAsDouble();
 
-        if (flipControls.getAsBoolean()) {
-            joystickX *= -1; //TODO: NATHAN IS GAY!!!!! HE LIKES KISSING BOYS!!!!
-            joystickY *= -1;
+        if (DriverStation.getAlliance().isPresent()) {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+                joystickX *= -1; //TODO: NATHAN IS GAY!!!!! HE LIKES KISSING BOYS!!!!
+                joystickY *= -1;
+            }
         }
 
         double xSpeed   = ((joystickX * joystickX) * (joystickX<0 ? -1 : 1)) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;     // * 0.2;
@@ -83,5 +81,6 @@ public class rotationTargetLockDrive extends Command {
     @Override
     public boolean isFinished() {
         return false;
+        //return (subsystem.getRotationRelativeToSpeaker().getDegrees() < 0.1);
     }
 }

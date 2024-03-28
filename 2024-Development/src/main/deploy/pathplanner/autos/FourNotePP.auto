@@ -175,6 +175,12 @@
           "data": {
             "name": "ShootNoAim"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ZeroTilter"
+          }
         }
       ]
     }

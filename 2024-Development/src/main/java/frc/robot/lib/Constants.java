@@ -55,71 +55,64 @@ public final class Constants {
 
 
     // DRIVE Motor Ports
-    public static final int ID_FRONT_LEFT_DRIVE = 4;
-    public static final int ID_BACK_LEFT_DRIVE = 2;
+    public static final int ID_FRONT_LEFT_DRIVE  = 4;
+    public static final int ID_BACK_LEFT_DRIVE   = 2;
     public static final int ID_FRONT_RIGHT_DRIVE = 6;
-    public static final int ID_BACK_RIGHT_DRIVE = 8;
+    public static final int ID_BACK_RIGHT_DRIVE  = 8;
 
     // TURNING Motor Ports
-    public static final int ID_FRONT_LEFT_TURN = 3;
-    public static final int ID_BACK_LEFT_TURN = 1;
+    public static final int ID_FRONT_LEFT_TURN  = 3;
+    public static final int ID_BACK_LEFT_TURN   = 1;
     public static final int ID_FRONT_RIGHT_TURN = 5;
-    public static final int ID_BACK_RIGHT_TURN = 7;
+    public static final int ID_BACK_RIGHT_TURN  = 7;
 
     // CANCoder Ids
-    public static final int ID_FRONT_LEFT_ENCODER_ABSOLUTE = 6;
-    public static final int ID_BACK_LEFT_ENCODER_ABSOLUTE = 8;
+    public static final int ID_FRONT_LEFT_ENCODER_ABSOLUTE  = 6;
+    public static final int ID_BACK_LEFT_ENCODER_ABSOLUTE   = 8;
     public static final int ID_FRONT_RIGHT_ENCODER_ABSOLUTE = 5;
-    public static final int ID_BACK_RIGHT_ENCODER_ABSOLUTE = 7;
+    public static final int ID_BACK_RIGHT_ENCODER_ABSOLUTE  = 7;
 
     // Invert booleans | We use MK4i modules so the turning motors are inverted
-    public static final boolean REVERSED_ENCODER_TURN = true;
-    public static final boolean REVERSED_ENCODER_DRIVE = false;
+    public static final boolean REVERSED_ENCODER_TURN     = true;
+    public static final boolean REVERSED_ENCODER_DRIVE    = false;
     public static final boolean REVERSED_ENCODER_ABSOLUTE = false;
-    public static final boolean REVERSED_GYRO = false;
+    public static final boolean REVERSED_GYRO             = false;
 
     // Invert Specific Motors
-    public static final boolean REVERSED_FRONT_LEFT_MOTOR_DRIVE = false;//true;//false;
+    public static final boolean REVERSED_FRONT_LEFT_MOTOR_DRIVE  = false;//true;//false;
     public static final boolean REVERSED_FRONT_RIGHT_MOTOR_DRIVE = true;//false;//true;
-    public static final boolean REVERSED_BACK_LEFT_MOTOR_DRIVE = false;//true;//false;
-    public static final boolean REVERSED_BACK_RIGHT_MOTOR_DRIVE = true;//false;//true;
+    public static final boolean REVERSED_BACK_LEFT_MOTOR_DRIVE   = false;//true;//false;
+    public static final boolean REVERSED_BACK_RIGHT_MOTOR_DRIVE  = true;//false;//true;
 
     // Turning encoder offsets
-    public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE = Math.toRadians(-96.0+7.6+90);
-    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE  = Math.toRadians(-118.7986+180); //What the fuck are these offsets?
-    public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE= Math.toRadians(-77.0+6+90);
-    public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE = Math.toRadians( 62.0+-3.6+90);
+    public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE  = Math.toRadians(-96.0+7.6+90);
+    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE   = Math.toRadians(+67.17);//(0.0);  //What the fuck are these offsets?
+    public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE = Math.toRadians(-77.0+6+90);
+    public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE  = Math.toRadians( 62.0+-3.6+90);
 
     // Robot drive speeds
     public static final double LIMIT_HARD_SPEED_DRIVE = 4.2; // hard limit for speed of chassis
-    public static final double LIMIT_SOFT_SPEED_DRIVE = 4.0; // soft limit for speed of chassis
+    public static final double LIMIT_SOFT_SPEED_DRIVE = 4.2; // soft limit for speed of chassis
 
     // Robot turning speeds
     public static final double LIMIT_SOFT_SPEED_TURN =  2.5*Math.PI; // soft limit for module rotation
-
-    // Robot acceleration
-    public static final double LIMIT_SOFT_ACCELERATION_SPEED = 1; // soft limit for acceleration (M/S^2)
-    public static final double LIMIT_SOFT_ACCELERATION_TURN = 1;  // soft limit for acceleration (M/S^2)
   }
 
   public static class IntakeSubsystemConstants {
-    public static int ID_MOTOR_ROLLER = 32;
+    public static int ID_MOTOR_ROLLER       = 32;
     public static int ID_MOTOR_INTAKE_PIVOT = 31;
-
 
     public static double INTAKE_PIVOT_GEAR_RATIO = (1/50);
     public static double INTAKE_PIVOT_ROTATIONS_TO_DEGRESS = INTAKE_PIVOT_GEAR_RATIO * 2*Math.PI;
-
-    public static double Forward_IntakePivot_Position = 0.0;
-    
+    public static double Forward_IntakePivot_Position = 0.0;    
     public static double Reverse_IntakePivot_Position = 18.0;
 
   }
   
   public static class ConveyerSubsystemConstants {
-    public static int ID_MOTOR_CONVEYER_LEFT = 11;
+    public static int ID_MOTOR_CONVEYER_LEFT  = 11;
     public static int ID_MOTOR_CONVEYER_RIGHT = 12;
-    public static int ID_SENSOR_LINEBREAK = 2;
+    public static int ID_SENSOR_LINEBREAK     = 2;
   }
 
   public static class ShooterSubsystemConstants {
@@ -130,14 +123,13 @@ public final class Constants {
     public static int ID_MOTOR_TILTER_FOLLOWER = 55;
     public static int ID_MOTOR_EXTENSION       = 56;
     public static int ID_SHOOTER_BEAMBREAK     = 0;
-
-    public static double extensionUpPosition = 0.0;
-
+    
     public static double SHOOTER_EXTENSION_GEAR = 25/1;
+
     public static double EXTENSION_ROT_TO_HEIGHT = 5.5 / SHOOTER_EXTENSION_GEAR;
 
     public static double MOTOR_FEEDER_GEARRATIO = 1 / 3;
-    public static double SHOOTER_GEAR_RATIO = 36/1; // 36 : 1
+    public static double SHOOTER_GEAR_RATIO = 60/1; // 36 : 1
     public static double SHOOTER_TICKS_TO_DEGREES = 360 / SHOOTER_GEAR_RATIO;
     public static double SHOOTER_HEIGHT = 23.5;
     public static double SHOOTER_HOME_ANGLE = 60.0;
@@ -163,7 +155,7 @@ public final class Constants {
   }
 
   public static class BlingConstants {
-    public static int ID_LED_STRIP = 9;
+    public static int ID_LED_STRIP   = 9;
     public static int ledStripLength = 92;
   }
 
@@ -181,21 +173,12 @@ public final class Constants {
 
   public static class AutonomousConstants{
     public static class PathFindingConstraints{
-      public static PathConstraints kConstraints = new PathConstraints(3.25,3.25,Math.toRadians(360),Math.toRadians(720));
-    }
-    // Shop zone 332cm x 173cm
-    public static double LIMIT_AUTOSPEED_DRIVE = 3.5;
-    public static double LIMIT_AUTOSPEED_ROTATE = 360;
-  }
-
-  public static class FieldGeometry {
-    public class Speaker{
-      public class ShootingPosition {
-        public static double shootingPosHeight = 78.254 - 5;//+ 2.542 - 10; //82
-        public static double shootingPosDistanceOffset = 18.943/2;
-      }
+      public static PathConstraints kConstraints = new PathConstraints(
+              3.25,
+        3.25,
+        Math.toRadians(360),
+        Math.toRadians(720));
     }
   }
-
 
 }

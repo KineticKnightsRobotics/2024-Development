@@ -1,4 +1,4 @@
-package frc.robot.lib;
+package frc.robot.lib.regression;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -6,31 +6,24 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.lib.Waypoint;
 import frc.robot.lib.Constants.*;
-
-import java.util.function.DoubleSupplier;
-
-import com.pathplanner.lib.auto.AutoBuilder;
 
 //import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 //import edu.wpi.first.wpilibj2.command.PIDCommand;
 //import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -49,12 +42,12 @@ public class RobotContainer {
   //Init auto chooser
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final Intake SUBSYSTEM_INTAKE = new Intake();
-  private final Conveyer SUBSYSTEM_CONVEYER = new Conveyer();
-  private final Shooter SUBSYSTEM_SHOOTER = new Shooter();
-  private final Climber SUBSYSTEM_CLIMBER = new Climber();
-  private final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive();
-  private final Bling SUBSYSTEM_BLING = new Bling();
+  public final Intake SUBSYSTEM_INTAKE = new Intake();
+  public final Conveyer SUBSYSTEM_CONVEYER = new Conveyer();
+  public final Shooter SUBSYSTEM_SHOOTER = new Shooter();
+  public final Climber SUBSYSTEM_CLIMBER = new Climber();
+  public final SwerveDrive SUBSYSTEM_SWERVEDRIVE = new SwerveDrive();
+  public final Bling SUBSYSTEM_BLING = new Bling();
 
   //private final AprilTagFieldLayout fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
@@ -62,7 +55,7 @@ public class RobotContainer {
   //private Command lockCommand = new RunCommand(() -> SUBSYSTEM_SWERVEDRIVE.lockChassis(),SUBSYSTEM_SWERVEDRIVE);
 
 
-  private final static CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
+  public final static CommandJoystick JOYSTICK_DRIVER = new CommandJoystick(OIConstants.ID_CONTROLLER_DRIVER);
   Trigger DRIVER_A = new Trigger(JOYSTICK_DRIVER.button(1));
   Trigger DRIVER_B = new Trigger(JOYSTICK_DRIVER.button(2));
   Trigger DRIVER_X = new Trigger(JOYSTICK_DRIVER.button(3));
@@ -120,14 +113,8 @@ public class RobotContainer {
 
   Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer() >=0.521);
 
-
-
-  //private final SendableChooser<Command> autoChooser;
-
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    
     SUBSYSTEM_SWERVEDRIVE.setDefaultCommand(
       new joystickDrive(
         SUBSYSTEM_SWERVEDRIVE, 
@@ -135,30 +122,18 @@ public class RobotContainer {
         () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
         () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
         () -> true, 
-        ()-> getAllianceFlip(),
         () -> 0.02
       )
     );
-
-
+    
     configureNamedCommands();
-
-
-    //autoChooser = AutoBuilder.buildAutoChooser();
-
-    //SmartDashboard.putData("Autos", autoChooser);
-
-
     configureBindings();
   }
 
   private void configureBindings() {
     //TELEOP ROBOT TRIGGERED EVENTS _______________________________________________________________________________________________________________________________________________________________________
 
-    //When Shooter falls under the home position, set it back to 0
     alwaysOn.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.02));
-    //ShooterUnderHome.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 2.0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-    //When Note is in the shooter, idle the flywheels and stop the conveyer.
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_BLING.blinkNote());
     NoteInFeederTrigger.and(OP_1.negate()).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1500,1500));
     NoteInFeederTrigger.negate().and(OP_1.negate()).whileTrue(SUBSYSTEM_SHOOTER.stopShooter());
@@ -175,53 +150,24 @@ public class RobotContainer {
             () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
             () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
             () -> true, 
-            () -> getAllianceFlip(),
             () -> 0.02
           ),
           SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())
-          //SUBSYSTEM_SHOOTER.IdleShooter(4022,2681)
         )
-    ).onFalse(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
-
-
+    ).onFalse(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000).andThen(SUBSYSTEM_SHOOTER.setTilter(()->0.0)));
 
     DRIVER_R1.and(ShooterAtAmp.negate()).whileTrue(
-        SUBSYSTEM_SHOOTER.shoot(4022,2681, false)
+        SUBSYSTEM_SHOOTER.shoot(4500,3700, false)
     );
     DRIVER_R1.and(ShooterAtAmp).whileTrue(
         SUBSYSTEM_SHOOTER.spitOutNote()
     );
-
-
-    DRIVER_Y.whileTrue(
-      Commands.run(
-        () -> {
-           SmartDashboard.putNumber("Shooter Angle Aiming", SUBSYSTEM_SHOOTER.shooterInterpolator.getTilterAimAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker()));
-        }
-      ).alongWith(
-        SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())
-      )
-    );
-    
-    /*
-    DRIVER_R1.whileTrue(
-      (SUBSYSTEM_SHOOTER.ampPostion() ?
-        SUBSYSTEM_SHOOTER.spitOutNote()//SUBSYSTEM_SHOOTER.setFeederSpeed(0.8)//SUBSYSTEM_SHOOTER.shoot(500, 500, false)
-        :           
-        SUBSYSTEM_SHOOTER.shoot(4022,2681, false)
-        )
-    );
-    */
-
-
-
 
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.intakeDown(),
         SUBSYSTEM_CONVEYER.setConveyerSpeed(0.8),
         SUBSYSTEM_SHOOTER.loadGamePiece()
-        //SUBSYSTEM_INTAKE.intakeUp()
       ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
     .onFalse(SUBSYSTEM_INTAKE.intakeUp());
@@ -233,23 +179,30 @@ public class RobotContainer {
         ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
     .whileFalse(
-      //new ParallelCommandGroup(
       SUBSYSTEM_SHOOTER.setExtensionHeight(0.0).andThen(
-      SUBSYSTEM_SHOOTER.setTilter(() -> 5.0)
+      SUBSYSTEM_SHOOTER.setTilter(() -> 0.0)
       ).until(() -> (Math.abs(SUBSYSTEM_SHOOTER.getTilterPosition()-5.0) < 0.05 && SUBSYSTEM_SHOOTER.getExtensionPosition() < 0.15)) // This is the dumbest fix of all time
       .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
-      //)
     );
-    DRIVER_X.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.84,7.55),new Rotation2d(Math.toRadians(-90.0))) , AutonomousConstants.PathFindingConstraints.kConstraints));
-    DRIVER_B.whileTrue(AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(1.45,5.52),new Rotation2d(0.0)), AutonomousConstants.PathFindingConstraints.kConstraints));
+    
+    DRIVER_X.whileTrue(SwerveDrive.pathFind(Waypoint.Amp.blue,Waypoint.Amp.red));
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
 
-    //DRIVER_Y.whileTrue(SUBSYSTEM_SHOOTER.setShooterTEMP()).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
-
-
     //OPERATOR CONTROLS________________________________________________________________________________________________________________________________________________________________
 
+
+    OP_1.whileTrue(SUBSYSTEM_SHOOTER.setTilter(()->12.5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_2.whileTrue(SUBSYSTEM_SHOOTER.setTilter(()->17.5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_3.whileTrue(SUBSYSTEM_SHOOTER.setTilter(()->22.5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_6.whileTrue(SUBSYSTEM_SHOOTER.setTilter(()->27.5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    OP_7.whileTrue(SUBSYSTEM_SHOOTER.setTilter(()->32.5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    //OP_8.whileTrue(SUBSYSTEM_SHOOTER.setTilter(()->32));
+    OP_8.whileTrue(SUBSYSTEM_SHOOTER.setTilter(()-> SmartDashboard.getNumber("! Shooter Angle",0.0)));
+
+
+
+    /*
     //Reverse override subsystems
     OP_1.whileTrue(
       new ParallelCommandGroup(
@@ -268,12 +221,14 @@ public class RobotContainer {
       )
     );
 
+    //OP_14.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 25.0));
+
     OP_2.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
     OP_3.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
     OP_6.whileTrue(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(-0.2))).onFalse(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(0.0)));
     OP_7.whileTrue(SUBSYSTEM_SHOOTER.reverseShooter()).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
     OP_8.onTrue(SUBSYSTEM_SHOOTER.stopShooter().alongWith(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)));
-
+    */
     //Climber controls
     OP_4.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(0.9)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
     OP_9.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.9)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0));
@@ -301,20 +256,17 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shoot",
       new SequentialCommandGroup(
         new ParallelDeadlineGroup(
-            //SUBSYSTEM_SHOOTER.setTilter(() -> SUBSYSTEM_SHOOTER.getTilterAimAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
-         // SUBSYSTEM_SHOOTER.setTilter(() -> SUBSYSTEM_SHOOTER.shooterInterpolator.interpolateAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
-           // SUBSYSTEM_SHOOTER.setTilter(SUBSYSTEM_SHOOTER.getTilterAimAngle(SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())),
           new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
-            () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
-            () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
-            () -> 0.0,//-JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
-            () -> true, 
-            () -> getAllianceFlip(),
+            () -> 0.0,
+            () -> 0.0,
+            () -> 0.0,
+            () -> true,
             () -> 0.02
-          )
+          ),
+          SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())
         ),
         SUBSYSTEM_SHOOTER.shoot(4022,2681, false),
-        SUBSYSTEM_SHOOTER.setTilter(() -> 0.0)
+        SUBSYSTEM_SHOOTER.setTilter(() -> 0.0).until(() -> SUBSYSTEM_SHOOTER.getTilterPosition() < 0.05)
       )
     );
 
@@ -332,6 +284,17 @@ public class RobotContainer {
     );
 
     NamedCommands.registerCommand("ZeroRobotHeading", SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading().andThen(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.02)));
+
+    NamedCommands.registerCommand(
+      "ZeroTilter",
+      new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+          new WaitCommand(0.50), 
+          SUBSYSTEM_SHOOTER.setTilter(() -> 20)),
+        new WaitCommand(0.75),
+        SUBSYSTEM_SHOOTER.zeroTilter(0.0)
+      )
+    );
 
 
     /*
@@ -369,16 +332,4 @@ public class RobotContainer {
  public static double DRIVER_RT() {
     return JOYSTICK_DRIVER.getRawAxis(2);
   }
-
-  /**
-   * @return Whether or not we are on red alliance
-   */
-  public boolean getAllianceFlip() {
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-        return alliance.get() == DriverStation.Alliance.Red;
-    }
-    return false;
-  }
-
 }

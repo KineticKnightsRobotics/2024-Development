@@ -1,4 +1,4 @@
-package frc.robot.lib;
+package frc.robot.lib.regression;
 
 /**
  * Class representing utils for Matrix operations

@@ -1,4 +1,4 @@
-package frc.robot.lib;
+package frc.robot.lib.regression;
 
 /**
  * Utility class representing a point.

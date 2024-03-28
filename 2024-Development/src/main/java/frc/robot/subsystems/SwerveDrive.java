@@ -35,6 +35,7 @@ import frc.robot.lib.Constants.AutonomousConstants;
 import frc.robot.lib.PID_Config.TrajectoryDriving;
 import frc.robot.lib.PID_Config.TrajectoryTurning;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+
 import java.util.Optional;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -166,9 +167,9 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putNumber("Drive distance to speaker", getDistanceToSpeaker());
 
         MODULE_FRONT_LEFT.moduleData2Dashboard();
-        //MODULE_FRONT_RIGHT.moduleData2Dashboard();
-        //MODULE_BACK_LEFT.moduleData2Dashboard();
-        //MODULE_BACK_RIGHT.moduleData2Dashboard();
+        MODULE_FRONT_RIGHT.moduleData2Dashboard();
+        MODULE_BACK_LEFT.moduleData2Dashboard();
+        MODULE_BACK_RIGHT.moduleData2Dashboard();
 
         SmartDashboard.putNumber("Drive Gyro Heading", -navX.getYaw());
 
@@ -345,24 +346,16 @@ public class SwerveDrive extends SubsystemBase {
      * @param position Using WPI Blue Alliance coordinates
      * @return Pathfinding Command
      */
-    public Command pathFind(Pose2d position) {
-        //return AutoBuilder.pathfindToPoseFlipped(position, AutonomousConstants.PathFindingConstraints.kConstraints, 0.0, 0.0);
-        return AutoBuilder.pathfindToPose(position, AutonomousConstants.PathFindingConstraints.kConstraints, 0.0, 0.0);
-
-        /*
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()){
-            if (alliance.get() == DriverStation.Alliance.Red) {
-                return AutoBuilder.pathfindToPoseFlipped(position, AutonomousConstants.PathFindingConstraints.kConstraints);
+    public static Command pathFind(Pose2d bluePosition, Pose2d redPosition) {
+        if (DriverStation.getAlliance().isPresent()) {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+                return AutoBuilder.pathfindToPose(bluePosition, AutonomousConstants.PathFindingConstraints.kConstraints, 0.0, 0.0);
             }
-            else {
-                return AutoBuilder.pathfindToPose(position,AutonomousConstants.PathFindingConstraints.kConstraints,0.0);
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+                return AutoBuilder.pathfindToPose(redPosition, AutonomousConstants.PathFindingConstraints.kConstraints, 0.0, 0.0);
             }
         }
-        else {
-            return AutoBuilder.pathfindToPose(position,AutonomousConstants.PathFindingConstraints.kConstraints,0.0);
-        }
-        */
+        return null;
     }
 
     private Optional<Pose3d> getSpeakerPose() {
@@ -379,8 +372,9 @@ public class SwerveDrive extends SubsystemBase {
           speakerPose = kTagLayout.getTagPose(7);
         }    
         return speakerPose;
-      }
+    }
 
+    /*
     public Command pathfindTag(int tagNum) {
         Optional<Pose3d> tagPos = kTagLayout.getTagPose(tagNum);
         if (tagPos.isPresent()) {
@@ -389,10 +383,11 @@ public class SwerveDrive extends SubsystemBase {
         }
         return null;
       }
-
-      public double getDistanceToSpeaker(){
+    */
+    public double getDistanceToSpeaker(){
         return Math.abs(getPose().getTranslation().getDistance(getSpeakerPose().get().getTranslation().toTranslation2d()));
     }
+
 
     public boolean isRobotInAmpZone(){ //This should probably be rewritten to be like the speaker April Tag one.
         var alliance = DriverStation.getAlliance();
@@ -423,19 +418,34 @@ public class SwerveDrive extends SubsystemBase {
         return idle_Timer_Lock.get();
       }
 
+      public void configAutoBuilder() {
+        AutoBuilder.configureHolonomic(
+                () -> ODEMETER.getEstimatedPosition(), // Robot pose supplier
+                this::resetOdometer, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                this::setAutoChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                    new PIDConstants(TrajectoryDriving.Proportional,TrajectoryDriving.Integral,TrajectoryDriving.Derivitive),
+                    new PIDConstants(TrajectoryTurning.Proportional,TrajectoryTurning.Integral,TrajectoryTurning.Derivitive),
+                    3.4,
+                    KinematicsConstants.RADIUS_DRIVE_CHASSIS, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new ReplanningConfig(
+                            
+                    ) // Default path replanning config. See the API for the options here
+                ),
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    /*
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return m_SysIdRoutine.quasistatic(direction);
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                    //return true;
+                },
+                this // Reference to this subsystem to set requirements
+        );
     }
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return m_SysIdRoutine.dynamic(direction);
-    }
-    public Command sysIdQuasistaticModuleTurning(SysIdRoutine.Direction direction) {
-        return MODULE_FRONT_LEFT.sysIdQuasistatic(direction);
-    }
-    public Command sysIdDynamicModuleTurning(SysIdRoutine.Direction direction) {
-        return MODULE_FRONT_LEFT.sysIdDynamic(direction);
-    }
-    */
 }

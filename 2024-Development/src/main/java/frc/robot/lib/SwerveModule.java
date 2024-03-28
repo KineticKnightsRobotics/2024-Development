@@ -1,9 +1,5 @@
 package frc.robot.lib;
 
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
-import static edu.wpi.first.units.MutableMeasure.mutable;
 
 //pheonix
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
@@ -111,7 +107,7 @@ public class SwerveModule extends SubsystemBase {
         //Name
         MODULE_NAME = _NAME;
 
-        //MOTOR_TURN.burnFlash();
+        MOTOR_TURN.burnFlash();
         //MOTOR_DRIVE.burnFlash();
 
     }
