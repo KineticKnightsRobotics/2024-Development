@@ -339,8 +339,22 @@ public class Shooter extends SubsystemBase {
         return Commands
         .runOnce(
             ()->{
-                shooterMotorL.set(0.3);
-                shooterMotorR.set(0.3);
+                shooterMotorL.set(0.4);
+                shooterMotorR.set(0.4);
+            }
+        )
+        .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
+    }
+     public Command IdleShooterFaster(double idleRPM_L,double idleRPM_R){
+        
+        return Commands
+        .runOnce(
+            ()->{
+                //shooterMotorL.set(0.8);
+                //shooterMotorR.set(0.8);
+                                shooterControllerL.setReference(idleRPM_L/60, ControlType.kVelocity,0,shooterFeedFoward.calculate(idleRPM_L/60), ArbFFUnits.kVoltage);
+                shooterControllerR.setReference(idleRPM_R/60, ControlType.kVelocity,0,shooterFeedFoward.calculate(idleRPM_R/60), ArbFFUnits.kVoltage);
+
             }
         )
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);

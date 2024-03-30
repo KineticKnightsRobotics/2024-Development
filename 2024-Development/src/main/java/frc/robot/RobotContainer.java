@@ -151,16 +151,20 @@ public class RobotContainer {
             () -> true, 
             () -> 0.02
           ),
-          SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())
+          SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker()),
+          SUBSYSTEM_SHOOTER.IdleShooterFaster(4200, 4750)
         )
-    ).onFalse(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000).andThen(SUBSYSTEM_SHOOTER.stopTilter()));
+    ).onFalse(SUBSYSTEM_SHOOTER.stopShooter().andThen(SUBSYSTEM_SHOOTER.stopTilter()));
 
+    
+    
     DRIVER_R1.and(ShooterAtAmp.negate()).whileTrue(
-        SUBSYSTEM_SHOOTER.shoot(4500,3700, false)
+        SUBSYSTEM_SHOOTER.shoot(4200,4750, false)
     );
     DRIVER_R1.and(ShooterAtAmp).whileTrue(
         SUBSYSTEM_SHOOTER.spitOutNote()
     );
+
 
     DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
@@ -184,7 +188,12 @@ public class RobotContainer {
       .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     );
     
-    DRIVER_Y.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 60));
+    DRIVER_Y.whileTrue(
+            new ParallelCommandGroup(
+SUBSYSTEM_SHOOTER.setTilter(() -> 60),
+          SUBSYSTEM_SHOOTER.IdleShooterFaster(4200, 4750))
+
+).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
 
     //DRIVER_X.whileTrue(SwerveDrive.pathFind(Waypoint.Amp.blue,Waypoint.Amp.red));
 
@@ -211,6 +220,7 @@ public class RobotContainer {
         SUBSYSTEM_SHOOTER.reverseShooter()
         
       )
+
     ).onFalse(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setFeederSpeed(0.0),
@@ -232,8 +242,8 @@ public class RobotContainer {
     OP_7.whileTrue(SUBSYSTEM_SHOOTER.reverseShooter()).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
     OP_8.onTrue(SUBSYSTEM_SHOOTER.stopShooter().alongWith(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)));
     //Climber controls
-    OP_4.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(0.9)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
-    OP_9.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-0.9)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0));
+    OP_4.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(1)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0.0));
+    OP_9.whileTrue(SUBSYSTEM_CLIMBER.setWinchSpeed(-1)).onFalse(SUBSYSTEM_CLIMBER.setWinchSpeed(0));
     //Manual Shooter Extension
     OP_5.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.5)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
     OP_10.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.5)).onFalse(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0));
@@ -255,7 +265,7 @@ public class RobotContainer {
   public void configureNamedCommands() {
     NamedCommands.registerCommand("ZeroShooter", SUBSYSTEM_SHOOTER.zeroTilter(0.0));
 
-    NamedCommands.registerCommand("ShootNoAim", SUBSYSTEM_SHOOTER.shoot(4022, 2681, false).andThen(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000)));
+    NamedCommands.registerCommand("ShootNoAim", SUBSYSTEM_SHOOTER.shoot(2700, 2300, false).andThen(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000)));//4022, 2681
 
     NamedCommands.registerCommand("Shoot",
       new SequentialCommandGroup(

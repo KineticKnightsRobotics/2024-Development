@@ -52,6 +52,7 @@ public class Intake extends SubsystemBase {
         intakePivotController.setOutputRange(-0.8,0.8);
     }
     
+    
     public double getIntakePosition() {
         return intakePivotEncoder.getPosition();
     }
@@ -91,7 +92,8 @@ public class Intake extends SubsystemBase {
         //.until(() -> intakePivotEncoder.getPosition() == intakePivotController_Reference)
         .andThen(
             () ->{
-                rollerMotor.set(0.8);
+                rollerMotor.set(1);
+
             }
         );
     }
