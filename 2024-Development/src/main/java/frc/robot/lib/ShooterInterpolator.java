@@ -1,8 +1,5 @@
 package frc.robot.lib;
 
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class ShooterInterpolator {
 
     public double getTilterAimAngle(double distance) {

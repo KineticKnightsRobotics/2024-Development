@@ -166,6 +166,8 @@ public class SwerveDrive extends SubsystemBase {
 
         SmartDashboard.putNumber("Drive distance to speaker", getDistanceToSpeaker());
 
+        SmartDashboard.putNumber("Drive rotation to speaker", getRotationRelativeToSpeaker().getDegrees());
+
         MODULE_FRONT_LEFT.moduleData2Dashboard();
         MODULE_FRONT_RIGHT.moduleData2Dashboard();
         MODULE_BACK_LEFT.moduleData2Dashboard();

@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -194,6 +195,10 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putBoolean("AAAA Limit Switch", tiltLimitSwitch.get());
     }
 
+    public boolean readytoShoot(DoubleSupplier distance) {
+        return Math.abs( getTilterPosition() - shooterInterpolator.getTilterAimAngle(distance.getAsDouble()) ) < 0.5;
+    }
+
     public boolean getLineBreak() {
         return !lineBreak.get();
     }
@@ -356,6 +361,46 @@ public class Shooter extends SubsystemBase {
         )
         .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
+
+    public Command intakeSource() {
+        return new SequentialCommandGroup(
+            Commands.run(
+                () -> {
+                    shooterMotorL.set(-0.4);
+                    shooterMotorR.set(-0.4);
+                    feedMotor.set(-0.4);
+                }
+            ).until(()-> getLineBreak()),
+            Commands.run(() ->{})
+            .until(()-> !getLineBreak()),
+            Commands.run(
+                () -> {
+                    shooterMotorL.set(0.4);
+                    shooterMotorR.set(0.4);
+                    feedMotor.set(0.4);
+                }
+            ).until(() -> getLineBreak()),
+            Commands.runOnce(
+                () -> {
+                    shooterMotorL.stopMotor();
+                    shooterMotorR.stopMotor();
+                    feedMotor.stopMotor();
+                }
+            )
+        );
+        /*
+        .until(()-> getLineBreak())
+        .finallyDo(
+            () -> {
+                shooterMotorL.set(0.0);
+                shooterMotorR.set(0.0);
+                feedMotor.set(0.0);
+            }
+        ); 
+        */
+    }
+
+
 
     public Command reverseShooter() {
         return Commands

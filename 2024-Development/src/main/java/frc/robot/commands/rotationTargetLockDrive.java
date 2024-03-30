@@ -48,19 +48,22 @@ public class rotationTargetLockDrive extends Command {
     @Override
     public void execute() {
         double joystickX = SUPPLIER_xSpeed.getAsDouble();
-        double joystickY = SUPPLIER_ySpeed.getAsDouble();
+        double joystickY = SUPPLIER_ySpeed.getAsDouble(); //grab speeds and apply deadband
 
-        if (DriverStation.getAlliance().isPresent()) {
-            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-                joystickX *= -1; //TODO: NATHAN IS GAY!!!!! HE LIKES KISSING BOYS!!!!
-                joystickY *= -1;
-            }
+
+        var alliance = DriverStation.getAlliance();
+        if (alliance.get() == DriverStation.Alliance.Red) {
+            joystickX *= -1;
+            joystickY *= -1;
         }
 
-        double xSpeed   = ((joystickX * joystickX) * (joystickX<0 ? -1 : 1)) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;     // * 0.2;
-        double ySpeed   = ((joystickY * joystickX) * (joystickY<0 ? -1 : 1)) *   SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;     // * 0.2; //Determine new velocity
+        double xSpeed   = ((joystickX * joystickX) * (joystickX<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;// * 0.2;
+        double ySpeed   = ((joystickY * joystickY) * (joystickY<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;
+
         double rotSpeed = rotationPID.calculate(subsystem.getRotation2d().getDegrees(), subsystem.getRotationRelativeToSpeaker().getDegrees()+180.0);
+        
         boolean fieldRelative = SUPPLIER_Field_Oriented.getAsBoolean();
+        
         double timePeriod = SUPPLIER_Period.getAsDouble();
       
         ChassisSpeeds chassisSpeed = ChassisSpeeds.discretize(

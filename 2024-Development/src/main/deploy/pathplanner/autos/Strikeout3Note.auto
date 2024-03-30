@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.85,
-      "y": 4.4
+      "x": 1.2178802439796659,
+      "y": 4.2462621911545195
     },
     "rotation": -59.83114945370977
   },
@@ -14,13 +14,19 @@
         {
           "type": "named",
           "data": {
+            "name": "ZeroShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "ZeroRobotHeading"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "Shoot"
           }
         },
         {
@@ -64,7 +70,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "Shoot"
           }
         },
         {
@@ -108,7 +114,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "Shoot"
           }
         }
       ]
