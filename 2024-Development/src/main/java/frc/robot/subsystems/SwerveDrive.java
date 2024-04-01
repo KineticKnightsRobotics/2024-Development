@@ -13,6 +13,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -356,6 +357,7 @@ public class SwerveDrive extends SubsystemBase {
             if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
                 return AutoBuilder.pathfindToPose(redPosition, AutonomousConstants.PathFindingConstraints.kConstraints, 0.0, 0.0);
             }
+            
         }
         return null;
     }
@@ -408,9 +410,25 @@ public class SwerveDrive extends SubsystemBase {
         return getDistanceToSpeaker()<=4.5 && !isRobotInAmpZone();
       }
 
-      public Rotation2d getRotationRelativeToSpeaker() {
+     /* public Rotation2d getRotationRelativeToSpeaker() {
+        
         return getPose().getTranslation().minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
-      }
+      }*/
+
+        public Rotation2d getRotationRelativeToSpeaker() {
+                var alliance = DriverStation.getAlliance();
+ if (alliance.isPresent()) {
+          if (alliance.get() == DriverStation.Alliance.Blue) {
+        return getPose().getTranslation().plus(new Translation2d(-0.7096,0)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
+          
+    }else{
+        return getPose().getTranslation().plus(new Translation2d(0.7096,0)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
+    }
+}else{
+            return getPose().getTranslation().plus(new Translation2d(-0.7096,0)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
+
+}
+    }
 
       public double getCurrentDrive(){
         return MODULE_FRONT_LEFT.getModuleCurrent()+MODULE_FRONT_RIGHT.getModuleCurrent()+MODULE_BACK_LEFT.getModuleCurrent()+MODULE_BACK_RIGHT.getModuleCurrent();

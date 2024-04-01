@@ -2,7 +2,7 @@ package frc.robot.lib;
 
 public class ShooterInterpolator {
 
-    public double getTilterAimAngle(double distance) {
+  /*   public double getTilterAimAngle(double distance) {
         if (distance < 1.35 || 3.28 < distance) {
             return 0.0;
         }
@@ -12,6 +12,19 @@ public class ShooterInterpolator {
             -19.4112  *(Math.pow(distance,2))
             +69.6266  *distance
             -55.5631
+            ;
+        }
+*/
+          public double getTilterAimAngle(double distance) {
+        if (distance < 1.35 || 3.95 < distance) {
+            return 0.0;
+        }
+        else {
+            return 
+            +1.6016   *(Math.pow(distance,3))
+            -17.9932  *(Math.pow(distance,2))
+            +69.2734  *distance
+            -54.0351
             ;
         }
 

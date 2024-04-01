@@ -91,6 +91,29 @@ public class RobotContainer {
   Trigger OP_20 = new Trigger(JOYSTICK_OPERATOR.button(20));
   Trigger OP_21 = new Trigger(JOYSTICK_OPERATOR.button(21));
 
+    private final static CommandJoystick JOYSTICK_CALIBRATION = new CommandJoystick(2);
+  Trigger CALIBRATION_1 = new Trigger(JOYSTICK_CALIBRATION.button(1 ));
+  Trigger CALIBRATION_2 = new Trigger(JOYSTICK_CALIBRATION.button(2 ));
+  Trigger CALIBRATION_3 = new Trigger(JOYSTICK_CALIBRATION.button(3 ));
+  Trigger CALIBRATION_4 = new Trigger(JOYSTICK_CALIBRATION.button(4 ));
+  Trigger CALIBRATION_5 = new Trigger(JOYSTICK_CALIBRATION.button(5 ));
+  Trigger CALIBRATION_6 = new Trigger(JOYSTICK_CALIBRATION.button(6 ));
+  Trigger CALIBRATION_7 = new Trigger(JOYSTICK_CALIBRATION.button(7 ));
+  Trigger CALIBRATION_8 = new Trigger(JOYSTICK_CALIBRATION.button(8 ));
+  Trigger CALIBRATION_9 = new Trigger(JOYSTICK_CALIBRATION.button(9 ));
+  Trigger CALIBRATION_10= new Trigger(JOYSTICK_CALIBRATION.button(10));
+  Trigger CALIBRATION_11= new Trigger(JOYSTICK_CALIBRATION.button(11));
+  Trigger CALIBRATION_12= new Trigger(JOYSTICK_CALIBRATION.button(12));
+  Trigger CALIBRATION_13= new Trigger(JOYSTICK_CALIBRATION.button(13));
+  Trigger CALIBRATION_14= new Trigger(JOYSTICK_CALIBRATION.button(14));
+  Trigger CALIBRATION_15= new Trigger(JOYSTICK_CALIBRATION.button(15));
+  Trigger CALIBRATION_16= new Trigger(JOYSTICK_CALIBRATION.button(16));
+  Trigger CALIBRATION_17 = new Trigger(JOYSTICK_CALIBRATION.button(17));
+  Trigger CALIBRATION_18 = new Trigger(JOYSTICK_CALIBRATION.button(18));
+  Trigger CALIBRATION_19 = new Trigger(JOYSTICK_CALIBRATION.button(19));
+  Trigger CALIBRATION_20 = new Trigger(JOYSTICK_CALIBRATION.button(20));
+  Trigger CALIBRATION_21 = new Trigger(JOYSTICK_CALIBRATION.button(21));
+
   //Translation2d tag = fieldLayout.getTagPose(DriverStation.getAlliance().isEmpty() || DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 3).get().getTranslation().toTranslation2d();
 
   int ShooterRPM = 4022;
@@ -152,14 +175,15 @@ public class RobotContainer {
             () -> 0.02
           ),
           SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker()),
-          SUBSYSTEM_SHOOTER.IdleShooterFaster(4200, 4750)
+          SUBSYSTEM_SHOOTER.IdleShooterFaster(4400, 4600),
+          SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.1)
         )
-    ).onFalse(SUBSYSTEM_SHOOTER.stopShooter().andThen(SUBSYSTEM_SHOOTER.stopTilter()));
+    ).onFalse(SUBSYSTEM_SHOOTER.stopShooter().andThen(SUBSYSTEM_SHOOTER.stopTilter()).andThen(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0)));
+
 
     
-    
     DRIVER_R1.and(ShooterAtAmp.negate()).whileTrue(
-        SUBSYSTEM_SHOOTER.shoot(4200,4750, false)
+        SUBSYSTEM_SHOOTER.shoot(4400,4600, false)
     );
     DRIVER_R1.and(ShooterAtAmp).whileTrue(
         SUBSYSTEM_SHOOTER.spitOutNote()
@@ -191,11 +215,11 @@ public class RobotContainer {
     DRIVER_Y.whileTrue(
             new ParallelCommandGroup(
 SUBSYSTEM_SHOOTER.setTilter(() -> 60),
-          SUBSYSTEM_SHOOTER.IdleShooterFaster(4200, 4750))
+          SUBSYSTEM_SHOOTER.IdleShooterFaster(4400, 4600))
 
 ).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
 
-    //DRIVER_X.whileTrue(SwerveDrive.pathFind(Waypoint.Amp.blue,Waypoint.Amp.red));
+    DRIVER_X.whileTrue(SwerveDrive.pathFind(Waypoint.Amp.blue,Waypoint.Amp.red));
 
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
@@ -259,6 +283,30 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
     //Override start shooter idle.
     OP_21.onTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
 
+
+    CALIBRATION_1.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+        CALIBRATION_2.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 10)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_3.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 15)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_4.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 20)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_5.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 25)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_6.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 30)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_7.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 35)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_8.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 37.5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_9.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 45)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_10.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 50)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_11.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 55)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_12.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 60)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_13.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 65)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_14.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 70)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_15.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_16.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_17.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_18.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_19.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_20.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 0)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+
+
+
     //SYS ID CONTROLS _________________________________________________________________________________________________________________________________________________________________
   }
 
@@ -309,6 +357,9 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
         SUBSYSTEM_SHOOTER.zeroTilter(0.0)
       )
     );
+
+
+
 
 
     /*

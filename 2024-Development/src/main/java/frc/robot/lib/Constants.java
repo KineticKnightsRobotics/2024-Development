@@ -91,8 +91,8 @@ public final class Constants {
     public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE  = Math.toRadians( 62.0+-3.6+90);
 
     // Robot drive speeds
-    public static final double LIMIT_HARD_SPEED_DRIVE = 4.2; // hard limit for speed of chassis
-    public static final double LIMIT_SOFT_SPEED_DRIVE = 4.2; // soft limit for speed of chassis
+    public static final double LIMIT_HARD_SPEED_DRIVE = 4.4; // hard limit for speed of chassis
+    public static final double LIMIT_SOFT_SPEED_DRIVE = 4.4; // soft limit for speed of chassis
 
     // Robot turning speeds
     public static final double LIMIT_SOFT_SPEED_TURN =  2.5*Math.PI; // soft limit for module rotation
@@ -174,8 +174,8 @@ public final class Constants {
   public static class AutonomousConstants{
     public static class PathFindingConstraints{
       public static PathConstraints kConstraints = new PathConstraints(
-              3.25,
-        3.25,
+              1.5,//3.25,
+        1.5,//3.25,
         Math.toRadians(360),
         Math.toRadians(720));
     }

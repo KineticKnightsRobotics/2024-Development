@@ -238,13 +238,13 @@ public class Shooter extends SubsystemBase {
                 shooterControllerL.setReference(leftSpeed, ControlType.kVelocity,0,shooterFeedFoward.calculate(leftSpeed), ArbFFUnits.kVoltage);
                 shooterControllerR.setReference(rightSpeed, ControlType.kVelocity,0,shooterFeedFoward.calculate(rightSpeed), ArbFFUnits.kVoltage);
                 }
-                if (shooterMotorLEncoder.getVelocity() >= desiredRPM_1-20 && shooterMotorREncoder.getVelocity() >= desiredRPM_2-20){
+                if (shooterMotorLEncoder.getVelocity() >= desiredRPM_1-100 && shooterMotorREncoder.getVelocity() >= desiredRPM_2-100){
                     feedMotor.set(1.0); 
                 }
             },
         this)
         .until(() -> ! getLineBreak())
-        .andThen(new WaitCommand(0.1))
+        .andThen(new WaitCommand(0.05))
         .finallyDo(
             () -> {
                 shooterMotorL.set(0.0);
@@ -258,8 +258,8 @@ public class Shooter extends SubsystemBase {
         return Commands
             .run(
                 () -> {
-                    shooterMotorL.set(0.2);
-                    shooterMotorR.set(0.2);
+                    shooterMotorL.set(0.3);
+                    shooterMotorR.set(0.3);
                     feedMotor.set(0.5);
                 }
             )
