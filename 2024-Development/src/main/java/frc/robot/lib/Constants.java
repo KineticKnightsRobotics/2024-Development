@@ -43,9 +43,9 @@ public final class Constants {
 
     //Robot Geometry
     public static final double MODULE_WHEEL_DIAMETER = Units.inchesToMeters(4.0);
-    public static final double MODULE_DRIVE_GEAR_RATIO = 7.130 / 1.0; // Drive ratio of 8.14 : 1
+    public static final double MODULE_DRIVE_GEAR_RATIO = 5.9 / 1.0; // Drive ratio of 8.14 : 1
     public static final double MODULE_TURN_GEAR_RATIO = 1.0 / (150.0 / 7.0); // Turning ratio of (150 / 7) : 1
-    public static final double MODULE_DRIVE_ROTATIONS_TO_METERS = ((MODULE_WHEEL_DIAMETER * Math.PI) / MODULE_DRIVE_GEAR_RATIO) /1.05; //1.0475;/// 0.77; -- multiplier to compensate for tread thickness
+    public static final double MODULE_DRIVE_ROTATIONS_TO_METERS = ((MODULE_WHEEL_DIAMETER * Math.PI) / MODULE_DRIVE_GEAR_RATIO);//1.05; //1.0475;/// 0.77; -- multiplier to compensate for tread thickness
     public static final double MODULE_TURN_ROTATION_TO_RADIANS = MODULE_TURN_GEAR_RATIO * 2 * Math.PI;
     public static final double MODULE_DRIVE_RPM_TO_MPS = MODULE_DRIVE_ROTATIONS_TO_METERS / 60.0;
     public static final double TurningEncoderRPM2RadPerSec = MODULE_TURN_ROTATION_TO_RADIANS / 60.0;
@@ -85,10 +85,10 @@ public final class Constants {
     public static final boolean REVERSED_BACK_RIGHT_MOTOR_DRIVE  = true;//false;//true;
 
     // Turning encoder offsets
-    public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE  = Math.toRadians(-96.0+7.6+90);
-    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE   = Math.toRadians(+67.17);//(0.0);  //What the fuck are these offsets?
-    public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE = Math.toRadians(-77.0+6+90);
-    public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE  = Math.toRadians( 62.0+-3.6+90);
+    public static final double OFFSET_FRONT_LEFT_ENCODER_ABSOLUTE  = Math.toRadians(-135.3515 + 180);
+    public static final double OFFSET_BACK_LEFT_ENCODER_ABSOLUTE   = Math.toRadians(-153.8964 + 180);
+    public static final double OFFSET_FRONT_RIGHT_ENCODER_ABSOLUTE = Math.toRadians(18.98430);
+    public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE  = Math.toRadians(152.1386);
 
     // Robot drive speeds
     public static final double LIMIT_HARD_SPEED_DRIVE = 4.4; // hard limit for speed of chassis
