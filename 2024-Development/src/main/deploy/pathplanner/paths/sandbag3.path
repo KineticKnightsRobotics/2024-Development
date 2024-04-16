@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5,
-        "y": 6.8
+        "x": 8.5,
+        "y": 1.99
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.499616952788408,
-        "y": 6.796198057798959
+        "x": 8.274033024642627,
+        "y": 1.4514183983322928
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.85,
-        "y": 6.65
+        "x": 4.461438832787575,
+        "y": 1.8027171189477522
       },
       "prevControl": {
-        "x": 0.85,
-        "y": 6.65
+        "x": 5.681739651767591,
+        "y": 1.4421736951582023
+      },
+      "nextControl": {
+        "x": 3.481507856858929,
+        "y": 2.0922421800175792
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.7635575631511622,
+        "y": 4.363499898170968
+      },
+      "prevControl": {
+        "x": 0.7173340472770985,
+        "y": 3.392806064895451
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.39344151650037,
-    "rotateFast": false
+    "rotation": -60.255118703231155,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "RightUnderSpeakerAutos",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 28.133928870489598,
+    "rotation": 90.96286362563623,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -127,6 +127,8 @@ public class RobotContainer {
 
   Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 10.0 && SUBSYSTEM_SHOOTER.getTilterPosition() > -3.0 && SUBSYSTEM_SHOOTER.getExtensionPosition() < 0.10);
 
+  Trigger ShooterHomeSwitch = new Trigger(()-> SUBSYSTEM_SHOOTER.getLimitSwitch());
+
   Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
 
   Trigger NoteInFeederTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getLineBreak());//SUBSYSTEM_SHOOTER::getLineBreak);
@@ -160,6 +162,15 @@ public class RobotContainer {
     NoteInFeederTrigger.and(OP_1.negate()).and(OP_2.negate()).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1500,1500));
     NoteInFeederTrigger.negate().and(OP_1.negate()).and(OP_2.negate()).whileTrue(SUBSYSTEM_SHOOTER.stopShooter());
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0).alongWith(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0)));
+
+    /*
+    ShooterHomeSwitch.whileTrue(
+      new SequentialCommandGroup(
+        new WaitCommand(0.1),
+        SUBSYSTEM_SHOOTER.zeroTilter(0.0)
+      )
+    );
+    */
 
     //TELEOP CONTROLS _____________________________________________________________________________________________________________________________________________________________________________________
   
@@ -219,7 +230,7 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
 
 ).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
 
-    DRIVER_X.whileTrue(SwerveDrive.pathFind(Waypoint.Amp.blue,Waypoint.Amp.red));
+    //DRIVER_X.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(Waypoint.Amp.blue,Waypoint.Amp.red));
 
 
     DRIVER_START.whileTrue(SUBSYSTEM_SWERVEDRIVE.zeroRobotHeading());
@@ -261,7 +272,8 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
     //OP_2.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
 
 
-    OP_3.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
+    OP_3.whileTrue(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(1.0))).onFalse(Commands.runOnce(()->SUBSYSTEM_INTAKE.setRollerSpeed(0.0)));
+
     OP_6.whileTrue(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(-0.2))).onFalse(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(0.0)));
     OP_7.whileTrue(SUBSYSTEM_SHOOTER.reverseShooter()).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
     OP_8.onTrue(SUBSYSTEM_SHOOTER.stopShooter().alongWith(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0)));
@@ -313,7 +325,7 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
   public void configureNamedCommands() {
     NamedCommands.registerCommand("ZeroShooter", SUBSYSTEM_SHOOTER.zeroTilter(0.0));
 
-    NamedCommands.registerCommand("ShootNoAim", SUBSYSTEM_SHOOTER.shoot(2700, 2300, false).andThen(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000)));//4022, 2681
+    NamedCommands.registerCommand("ShootNoAim", SUBSYSTEM_SHOOTER.shoot(2700, 2300, false).andThen(SUBSYSTEM_SHOOTER.IdleShooter(2700, 2300)));//4022, 2681
 
     NamedCommands.registerCommand("Shoot",
       new SequentialCommandGroup(
@@ -384,7 +396,7 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
 
 
         //return new PathPlannerAuto("FourNotePP");
-        return new PathPlannerAuto("FourNotePP");
+        return new PathPlannerAuto("2056killright");
   } 
 
   public static boolean DRIVER_LT() {

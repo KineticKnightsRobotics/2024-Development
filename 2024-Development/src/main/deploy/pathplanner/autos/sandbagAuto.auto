@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.82,
-      "y": 4.43
+      "x": 0.7753903041307011,
+      "y": 4.39544449294277
     },
-    "rotation": -59.83114945370977
+    "rotation": -59.87631494547154
   },
   "command": {
     "type": "sequential",
@@ -14,19 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ZeroShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ZeroRobotHeading"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "ShootNoAim"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "sandbag1"
           }
         },
         {
@@ -36,7 +30,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.75
+                  "waitTime": 1.4
                 }
               },
               {
@@ -46,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SOScoreToMidNote1"
+                        "pathName": "sandbag2"
                       }
                     },
                     {
@@ -62,16 +56,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SOMidNote1ToScore"
-                }
-              }
-            ]
+            "pathName": "sandbag3"
           }
         },
         {
@@ -87,58 +74,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.75
-                }
-              },
-              {
-                "type": "parallel",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "SOScoreToMidNote2"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "CaptureNote"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SOMidNote2ToScore"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNoAim"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.0
+                  "waitTime": 3.48
                 }
               },
               {
@@ -161,6 +97,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SOMidNote3ToScore"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoAim"
           }
         }
       ]

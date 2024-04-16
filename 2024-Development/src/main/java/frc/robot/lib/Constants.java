@@ -91,8 +91,8 @@ public final class Constants {
     public static final double OFFSET_BACK_RIGHT_ENCODER_ABSOLUTE  = Math.toRadians(152.1386);
 
     // Robot drive speeds
-    public static final double LIMIT_HARD_SPEED_DRIVE = 4.4; // hard limit for speed of chassis
-    public static final double LIMIT_SOFT_SPEED_DRIVE = 4.4; // soft limit for speed of chassis
+    public static final double LIMIT_HARD_SPEED_DRIVE = Units.feetToMeters(17.385); // hard limit for speed of chassis
+    public static final double LIMIT_SOFT_SPEED_DRIVE = Units.feetToMeters(17.385); // soft limit for speed of chassis
 
     // Robot turning speeds
     public static final double LIMIT_SOFT_SPEED_TURN =  2.5*Math.PI; // soft limit for module rotation

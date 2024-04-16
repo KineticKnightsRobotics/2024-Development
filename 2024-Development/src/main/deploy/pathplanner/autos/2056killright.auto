@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7912916726734353,
+      "y": 4.409723414041423
+    },
+    "rotation": -58.815025340874605
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoAim"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2056killR1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2056killR2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2056killR3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2056killR2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2056killR3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

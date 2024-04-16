@@ -39,6 +39,7 @@ public class Shooter extends SubsystemBase {
 
     private final RelativeEncoder tiltEncoder;
     private final RelativeEncoder tiltFollowerEncoder;
+
     private final DigitalInput tiltLimitSwitch;
 
 
@@ -191,12 +192,18 @@ public class Shooter extends SubsystemBase {
 
         SmartDashboard.putBoolean("Shooter Linebreak", getLineBreak());
 
+        SmartDashboard.putBoolean("Shooter Limit Switch", getLimitSwitch());
+
 
         SmartDashboard.putBoolean("AAAA Limit Switch", tiltLimitSwitch.get());
     }
 
     public boolean readytoShoot(DoubleSupplier distance) {
         return Math.abs( getTilterPosition() - shooterInterpolator.getTilterAimAngle(distance.getAsDouble()) ) < 0.5;
+    }
+
+    public boolean getLimitSwitch() {
+        return !tiltLimitSwitch.get();
     }
 
     public boolean getLineBreak() {
@@ -226,6 +233,7 @@ public class Shooter extends SubsystemBase {
     public Command shoot(double desiredRPM_1, double desiredRPM_2, boolean openLoop) {        
         double leftSpeed = desiredRPM_1/60;
         double rightSpeed= desiredRPM_2/60;
+    
 
         return Commands
         .run(
@@ -235,8 +243,17 @@ public class Shooter extends SubsystemBase {
                     shooterMotorR.set(1.0);
                 }
                 else {
-                shooterControllerL.setReference(leftSpeed, ControlType.kVelocity,0,shooterFeedFoward.calculate(leftSpeed), ArbFFUnits.kVoltage);
-                shooterControllerR.setReference(rightSpeed, ControlType.kVelocity,0,shooterFeedFoward.calculate(rightSpeed), ArbFFUnits.kVoltage);
+                    if(tiltEncoder.getPosition()<10.0){
+                        shooterControllerL.setReference(2600/60, ControlType.kVelocity,0,shooterFeedFoward.calculate(2600/60), ArbFFUnits.kVoltage);
+                        shooterControllerR.setReference(2600/60, ControlType.kVelocity,0,shooterFeedFoward.calculate(2500/60), ArbFFUnits.kVoltage);
+                    }
+                    else{
+                        shooterControllerL.setReference(leftSpeed, ControlType.kVelocity,0,shooterFeedFoward.calculate(leftSpeed), ArbFFUnits.kVoltage);
+                        shooterControllerR.setReference(rightSpeed, ControlType.kVelocity,0,shooterFeedFoward.calculate(rightSpeed), ArbFFUnits.kVoltage);
+                    }
+                }
+                if(tiltEncoder.getPosition()<10.0 && shooterMotorLEncoder.getVelocity() >= 2600-100 && shooterMotorREncoder.getVelocity() >= 2600-100){
+                    feedMotor.set(1.0);
                 }
                 if (shooterMotorLEncoder.getVelocity() >= desiredRPM_1-100 && shooterMotorREncoder.getVelocity() >= desiredRPM_2-100){
                     feedMotor.set(1.0); 
@@ -339,8 +356,8 @@ public class Shooter extends SubsystemBase {
         return Commands
         .runOnce(
             ()->{
-                shooterMotorL.set(0.4);
-                shooterMotorR.set(0.4);
+                shooterMotorL.set(0.6);
+                shooterMotorR.set(0.6);
             }
         )
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);

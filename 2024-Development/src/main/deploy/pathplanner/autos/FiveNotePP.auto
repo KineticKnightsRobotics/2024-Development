@@ -183,7 +183,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0
+                  "waitTime": 3.0
                 }
               },
               {
@@ -219,6 +219,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoAim"
           }
         },
         {
