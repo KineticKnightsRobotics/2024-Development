@@ -146,7 +146,8 @@ public class RobotContainer {
         () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
         () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
         () -> true, 
-        () -> 0.02
+        () -> 0.02,
+        () -> OP_3.getAsBoolean()
       )
     );
     
@@ -159,7 +160,7 @@ public class RobotContainer {
 
     alwaysOn.whileTrue(SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.02));
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_BLING.blinkNote());
-    NoteInFeederTrigger.and(OP_1.negate()).and(OP_2.negate()).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1500,1500));
+    //NoteInFeederTrigger.and(OP_1.negate()).and(OP_2.negate()).whileTrue(SUBSYSTEM_SHOOTER.IdleShooter(1500,1500));
     NoteInFeederTrigger.negate().and(OP_1.negate()).and(OP_2.negate()).whileTrue(SUBSYSTEM_SHOOTER.stopShooter());
     NoteInFeederTrigger.whileTrue(SUBSYSTEM_CONVEYER.setConveyerSpeed(0.0).alongWith(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0)));
 
@@ -175,6 +176,7 @@ public class RobotContainer {
     //TELEOP CONTROLS _____________________________________________________________________________________________________________________________________________________________________________________
   
     //Aim at speaker
+    /*
     DRIVER_R2.whileTrue(
       new ParallelCommandGroup(
         new rotationTargetLockDrive(
@@ -190,7 +192,7 @@ public class RobotContainer {
           SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.1)
         )
     ).onFalse(SUBSYSTEM_SHOOTER.stopShooter().andThen(SUBSYSTEM_SHOOTER.stopTilter()).andThen(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0)));
-
+    */
 
     
     DRIVER_R1.and(ShooterAtAmp.negate()).whileTrue(
@@ -224,11 +226,10 @@ public class RobotContainer {
     );
     
     DRIVER_Y.whileTrue(
-            new ParallelCommandGroup(
-SUBSYSTEM_SHOOTER.setTilter(() -> 60),
+      new ParallelCommandGroup(
+          SUBSYSTEM_SHOOTER.setTilter(() -> 60),
           SUBSYSTEM_SHOOTER.IdleShooterFaster(4400, 4600))
-
-).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
+    ).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
 
     //DRIVER_X.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(Waypoint.Amp.blue,Waypoint.Amp.red));
 
@@ -253,9 +254,7 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
         SUBSYSTEM_CONVEYER.setConveyerSpeed(-0.2),
         Commands.run(() -> SUBSYSTEM_INTAKE.setRollerSpeed(0.2)),
         SUBSYSTEM_SHOOTER.reverseShooter()
-        
       )
-
     ).onFalse(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setFeederSpeed(0.0),
@@ -272,7 +271,7 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
     //OP_2.whileTrue(SUBSYSTEM_SHOOTER.setFeederSpeed(-0.2)).onFalse(SUBSYSTEM_SHOOTER.setFeederSpeed(0.0));
 
 
-    OP_3.whileTrue(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(1.0))).onFalse(Commands.runOnce(()->SUBSYSTEM_INTAKE.setRollerSpeed(0.0)));
+    //OP_3.whileTrue(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(1.0))).onFalse(Commands.runOnce(()->SUBSYSTEM_INTAKE.setRollerSpeed(0.0)));
 
     OP_6.whileTrue(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(-0.2))).onFalse(Commands.runOnce(() -> SUBSYSTEM_INTAKE.setRollerSpeed(0.0)));
     OP_7.whileTrue(SUBSYSTEM_SHOOTER.reverseShooter()).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
@@ -297,7 +296,7 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
 
 
     CALIBRATION_1.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-        CALIBRATION_2.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 10)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_2.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 10)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     CALIBRATION_3.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 15)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     CALIBRATION_4.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 20)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     CALIBRATION_5.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 25)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());

@@ -22,6 +22,7 @@ public class joystickDrive extends Command {
     private final DoubleSupplier SUPPLIER_zSpeed;
     private final BooleanSupplier SUPPLIER_Field_Oriented;
     private final DoubleSupplier SUPPLIER_Period;
+    private final BooleanSupplier SUPPLIER_speed;
 
     //private final SlewRateLimiter xLimiter, yLimiter, zLimiter;
 
@@ -31,7 +32,8 @@ public class joystickDrive extends Command {
         DoubleSupplier ySpeed, 
         DoubleSupplier zSpeed,
         BooleanSupplier fieldOriented,
-        DoubleSupplier timePeriod
+        DoubleSupplier timePeriod,
+        BooleanSupplier speedButton
         ){
         subsystem = m_subsystem;
         SUPPLIER_xSpeed = xSpeed;
@@ -39,6 +41,7 @@ public class joystickDrive extends Command {
         SUPPLIER_zSpeed = zSpeed;
         SUPPLIER_Field_Oriented = fieldOriented;
         SUPPLIER_Period = timePeriod;
+        SUPPLIER_speed = speedButton;
         addRequirements(subsystem);
     }
 
@@ -61,7 +64,7 @@ public class joystickDrive extends Command {
         double rotSpeed = ((joystickZ * joystickZ) * (joystickZ<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_TURN; //* 0.8 to make SLOW */
 
         //apply slow mode
-        if (RobotContainer.DRIVER_LT()) {
+        if (SUPPLIER_speed.getAsBoolean() == false) {
             xSpeed   *= 0.3;
             ySpeed   *= 0.3;
             rotSpeed *= 0.3;
