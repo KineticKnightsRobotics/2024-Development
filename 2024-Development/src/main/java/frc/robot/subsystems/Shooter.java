@@ -181,7 +181,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Tilter 1 Current Draw", tiltMotor.getOutputCurrent());
         SmartDashboard.putNumber("Tilter 2 Current Draw", tiltMotor_Follower.getOutputCurrent());
 
-        //SmartDashboard.putNumber("Through Bore Encoder Absolute", throughBoreEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Through Bore Encoder Absolute", throughBoreEncoder.getAbsolutePosition());
 
         SmartDashboard.putNumber("Shooter RPM Left", shooterMotorLEncoder.getVelocity());
 
