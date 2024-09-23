@@ -12,6 +12,7 @@ import com.revrobotics.SparkPIDController.ArbFFUnits;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -53,6 +54,7 @@ public class Shooter extends SubsystemBase {
     private final CANSparkMax feedMotor;
     private final RelativeEncoder feedEncoder;
     private final DigitalInput lineBreak;
+    private final AnalogInput proxSensor;
 
     public final ShooterInterpolator shooterInterpolator;
     private final CANSparkMax extensionMotor;
@@ -89,6 +91,8 @@ public class Shooter extends SubsystemBase {
         tiltFollowerEncoder.setPositionConversionFactor(ShooterSubsystemConstants.SHOOTER_TICKS_TO_DEGREES);
 
         tiltLimitSwitch = new DigitalInput(9);
+
+
 
         tiltTrapezoidProfile = new ProfiledPIDController(
             TilterPIDConfig.extended.Proportional,
@@ -143,7 +147,11 @@ public class Shooter extends SubsystemBase {
         feedEncoder.setPositionConversionFactor(ShooterSubsystemConstants.MOTOR_FEEDER_GEARRATIO);
         feedMotor.setIdleMode(IdleMode.kBrake);
 
-        lineBreak = new DigitalInput(0);
+        
+
+        lineBreak = new DigitalInput(8);
+        proxSensor = new AnalogInput(0);
+
 
         shooterMotorREncoder.setPositionConversionFactor(1);
         shooterMotorREncoder.setVelocityConversionFactor(1);
@@ -185,6 +193,8 @@ public class Shooter extends SubsystemBase {
 
         SmartDashboard.putNumber("Shooter RPM Left", shooterMotorLEncoder.getVelocity());
 
+        //SmartDashboard.putBoolean("Proximity Sensor Reading", lineBreak.);
+
         SmartDashboard.putNumber("Shooter RPM Right", shooterMotorREncoder.getVelocity());
 
         //SmartDashboard.putNumber("ShooterCurrentF",shooterMotorR.getOutputCurrent());
@@ -207,7 +217,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean getLineBreak() {
-        return !lineBreak.get();
+        return lineBreak.get();
     }
 
     public double getExtensionPosition() {

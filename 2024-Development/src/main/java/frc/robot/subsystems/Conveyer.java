@@ -33,16 +33,16 @@ public class Conveyer extends SubsystemBase {
         conveyerMotorRight.setInverted(false);
         conveyerMotorLeft.setSmartCurrentLimit(25);
         conveyerMotorRight.setSmartCurrentLimit(25);
-        lineBreakSensor = new DigitalInput(2);//new AnalogInput(ConveyerSubsystemConstants.ID_SENSOR_LINEBREAK);
+        //lineBreakSensor = new DigitalInput(2);//new AnalogInput(ConveyerSubsystemConstants.ID_SENSOR_LINEBREAK);
     }
     @Override
     public void periodic() {
         //SmartDashboard.putData(this);
-        SmartDashboard.putBoolean("Conveyer", getLineBreak());
+        //SmartDashboard.putBoolean("Conveyer", getLineBreak());
         SmartDashboard.putNumber("convey_Left", conveyerMotorLeft.getOutputCurrent());
         SmartDashboard.putNumber("convey_Right", conveyerMotorRight.getOutputCurrent());
     }
-    public boolean getLineBreak() {return !lineBreakSensor.get();}
+    //public boolean getLineBreak() {return !lineBreakSensor.get();}
     /**
      * Runs Conveyer wheels until the note hits the linebreak, then stop the motors.  
      */
@@ -54,7 +54,7 @@ public class Conveyer extends SubsystemBase {
                 conveyerMotorRight.set(0.2);
             }
         ,this)
-        .until(() -> getLineBreak())
+        //.until(() -> getLineBreak())
         .andThen(
             () ->{
                 conveyerMotorLeft.set(0.0);

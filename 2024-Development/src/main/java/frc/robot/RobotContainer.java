@@ -120,21 +120,13 @@ public class RobotContainer {
 
   //ROBOT TRIGGERS
   Trigger alwaysOn = new Trigger(() -> true);
-
   Trigger ShooterAtAmp = new Trigger(() -> SUBSYSTEM_SHOOTER.getExtensionPosition() > 2);
-
   Trigger ShooterUnderHome = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() < -3.0);
-
   Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 10.0 && SUBSYSTEM_SHOOTER.getTilterPosition() > -3.0 && SUBSYSTEM_SHOOTER.getExtensionPosition() < 0.10);
-
   Trigger ShooterHomeSwitch = new Trigger(()-> SUBSYSTEM_SHOOTER.getLimitSwitch());
-
-  Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
-
+  //Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
   Trigger NoteInFeederTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getLineBreak());//SUBSYSTEM_SHOOTER::getLineBreak);
-
   Trigger DriveCurrentLimitTrigger = new Trigger(()->SUBSYSTEM_SWERVEDRIVE.getCurrentDrive()>150);
-
   Trigger LockDriveTrigger = new Trigger(()-> SUBSYSTEM_SWERVEDRIVE.getLockTimer() >=0.521);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -203,7 +195,7 @@ public class RobotContainer {
     );
 
 
-    DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
+    DRIVER_L1/*.and(NoteInConveyerTrigger.negate())*/.and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.intakeDown(),
         SUBSYSTEM_CONVEYER.setConveyerSpeed(0.8),
@@ -394,8 +386,8 @@ public class RobotContainer {
         //return SUBSYSTEM_SHOOTER.setFeederSpeed(0.5);
 
 
-        //return new PathPlannerAuto("FourNotePP");
-        return new PathPlannerAuto("2056killright");
+        return new PathPlannerAuto("FourNotePP");
+        //return new PathPlannerAuto("2056killright");
   } 
 
   public static boolean DRIVER_LT() {

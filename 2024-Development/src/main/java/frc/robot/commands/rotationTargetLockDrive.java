@@ -57,8 +57,8 @@ public class rotationTargetLockDrive extends Command {
             joystickY *= -1;
         }
 
-        double xSpeed   = ((joystickX * joystickX) * (joystickX<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;// * 0.2;
-        double ySpeed   = ((joystickY * joystickY) * (joystickY<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE;
+        double xSpeed   = ((joystickX * joystickX) * (joystickX<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * 0.2;
+        double ySpeed   = ((joystickY * joystickY) * (joystickY<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * 0.2;
 
         double rotSpeed = rotationPID.calculate(subsystem.getRotation2d().getDegrees(), subsystem.getRotationRelativeToSpeaker().getDegrees()+180.0);
         
