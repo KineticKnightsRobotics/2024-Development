@@ -417,18 +417,18 @@ public class SwerveDrive extends SubsystemBase {
 
         public Rotation2d getRotationRelativeToSpeaker() {
                 var alliance = DriverStation.getAlliance();
- if (alliance.isPresent()) {
-          if (alliance.get() == DriverStation.Alliance.Blue) {
-        return getPose().getTranslation().plus(new Translation2d(-0.7096,0)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
+                if (alliance.isPresent()) {
+                    if (alliance.get() == DriverStation.Alliance.Blue) {
+                        return getPose().getTranslation().plus(new Translation2d(0.3,0)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
           
-    }else{
-        return getPose().getTranslation().plus(new Translation2d(0.7096,0)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
-    }
-}else{
-            return getPose().getTranslation().plus(new Translation2d(-0.7096,0)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
+                    }else{
+                        return getPose().getTranslation().plus(new Translation2d(-0.3,0)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
+                    }
+                }else{
+                    return getPose().getTranslation().plus(new Translation2d(-0.7096,0)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
 
-}
-    }
+                }
+        }
 
       public double getCurrentDrive(){
         return MODULE_FRONT_LEFT.getModuleCurrent()+MODULE_FRONT_RIGHT.getModuleCurrent()+MODULE_BACK_LEFT.getModuleCurrent()+MODULE_BACK_RIGHT.getModuleCurrent();

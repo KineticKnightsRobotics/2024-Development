@@ -213,7 +213,7 @@ public class RobotContainer {
     DRIVER_A.whileTrue(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setExtensionHeight(6),
-        SUBSYSTEM_SHOOTER.setTilter(() -> 93)
+        SUBSYSTEM_SHOOTER.setTilter(() -> 90)
         ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
     .whileFalse(
@@ -297,7 +297,7 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
 
 
     CALIBRATION_1.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
-        CALIBRATION_2.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 10)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
+    CALIBRATION_2.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 10)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     CALIBRATION_3.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 15)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     CALIBRATION_4.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 20)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
     CALIBRATION_5.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 25)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
@@ -396,7 +396,7 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
 
 
         //return new PathPlannerAuto("FourNotePP");
-        return new PathPlannerAuto("2056killright");
+        return new PathPlannerAuto("autoshoottest");
   } 
 
   public static boolean DRIVER_LT() {
