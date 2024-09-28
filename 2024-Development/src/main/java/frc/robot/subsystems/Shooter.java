@@ -228,7 +228,7 @@ public class Shooter extends SubsystemBase {
     }
     
     public double getTilterABSPosition () {
-        return (tilterAbsEncoder.getAbsolutePosition() - 0.85) * -360;
+        return ((tilterAbsEncoder.getAbsolutePosition() -0.85) * -360)+3;
     }
     
     public boolean ampPostion() {

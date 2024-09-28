@@ -123,13 +123,13 @@ public class RobotContainer {
 
   Trigger ShooterAtAmp = new Trigger(() -> SUBSYSTEM_SHOOTER.getExtensionPosition() > 2);
 
-  Trigger ShooterUnderHome = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() < -3.0);
+  Trigger ShooterUnderHome = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterABSPosition() < -3.0);
 
-  Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterPosition() <= 10.0 && SUBSYSTEM_SHOOTER.getTilterPosition() > -3.0 && SUBSYSTEM_SHOOTER.getExtensionPosition() < 0.10);
+  Trigger ShooterAtHomeTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getTilterABSPosition() <= 10.0 && SUBSYSTEM_SHOOTER.getTilterABSPosition() > -3.0 && SUBSYSTEM_SHOOTER.getExtensionPosition() < 0.10);
 
   Trigger ShooterHomeSwitch = new Trigger(()-> SUBSYSTEM_SHOOTER.getLimitSwitch());
 
-  Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
+  //Trigger NoteInConveyerTrigger = new Trigger(() -> SUBSYSTEM_CONVEYER.getLineBreak());
 
   Trigger NoteInFeederTrigger = new Trigger(() -> SUBSYSTEM_SHOOTER.getLineBreak());//SUBSYSTEM_SHOOTER::getLineBreak);
 
@@ -146,7 +146,8 @@ public class RobotContainer {
         () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
         () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
         () -> true, 
-        () -> 0.02
+        () -> 0.02,
+        () -> OP_21.getAsBoolean()
       )
     );
     
@@ -183,7 +184,8 @@ public class RobotContainer {
             () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
             () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
             () -> true, 
-            () -> 0.02
+            () -> 0.02,
+            () -> OP_21.getAsBoolean()
           ),
           SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker()),
           SUBSYSTEM_SHOOTER.IdleShooterFaster(4400, 4600),
@@ -201,7 +203,7 @@ public class RobotContainer {
     );
 
 
-    DRIVER_L1.and(NoteInConveyerTrigger.negate()).and(NoteInFeederTrigger.negate()).whileTrue(
+    DRIVER_L1/* .and(NoteInConveyerTrigger.negate())*/.and(NoteInFeederTrigger.negate()).whileTrue(
       new SequentialCommandGroup(
         SUBSYSTEM_INTAKE.intakeDown(),
         SUBSYSTEM_CONVEYER.setConveyerSpeed(0.8),
@@ -216,10 +218,10 @@ public class RobotContainer {
         SUBSYSTEM_SHOOTER.setTilter(() -> 90)
         ).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     )
-    .whileFalse(
+    .onFalse(
       SUBSYSTEM_SHOOTER.setExtensionHeight(0.0).andThen(
       SUBSYSTEM_SHOOTER.setTilter(() -> 0.0)
-      ).until(() -> (Math.abs(SUBSYSTEM_SHOOTER.getTilterPosition()-5.0) < 0.05 && SUBSYSTEM_SHOOTER.getExtensionPosition() < 0.15)) // This is the dumbest fix of all time
+      ).until(() -> (Math.abs(SUBSYSTEM_SHOOTER.getTilterABSPosition()-5.0) < 1 && SUBSYSTEM_SHOOTER.getExtensionPosition() < 0.15)) // This is the dumbest fix of all time
       .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     );
     
@@ -293,7 +295,7 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
     //Override zero tilter THIS BREAKS THE CODE IF YOU ZERO WHILE AT A NON 0 ANGLE.
     OP_17.and(OP_18).onTrue(SUBSYSTEM_SHOOTER.zeroTilter(0.0));
     //Override start shooter idle.
-    OP_21.onTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
+    //OP_21.onTrue(SUBSYSTEM_SHOOTER.IdleShooter(1000, 1000));
 
 
     CALIBRATION_1.whileTrue(SUBSYSTEM_SHOOTER.setTilter(() -> 5)).onFalse(SUBSYSTEM_SHOOTER.stopTilter());
@@ -336,7 +338,8 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
             () -> 0.0,
             () -> 0.0,
             () -> true,
-            () -> 0.02
+            () -> 0.02,
+            () -> true
           ),
           SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())
         ),
@@ -369,34 +372,12 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
         SUBSYSTEM_SHOOTER.zeroTilter(0.0)
       )
     );
-
-
-
-
-
-    /*
-    NamedCommands.registerCommand("ResetModulePosition", SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
-    NamedCommands.registerCommand("IntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
-    NamedCommands.registerCommand("IntakeUp" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Reverse_IntakePivot_Position));
-    NamedCommands.registerCommand("AutoConveyer", new intakeLineBreak(SUBSYSTEM_CONVEYER,SUBSYSTEM_INTAKE));
-    NamedCommands.registerCommand("AutoAimSpeaker", new autoAimSpeaker(SUBSYSTEM_SHOOTER));
-    NamedCommands.registerCommand("AutoRunShooter", new autoRunShooter(SUBSYSTEM_SHOOTER/*,SUBSYSTEM_CONVEYER,2500.0));
-    NamedCommands.registerCommand("AutoSetShooterIdle", new autoSetShooterIdle(SUBSYSTEM_SHOOTER));
-    NamedCommands.registerCommand("AutoLoadShooter", new loadShooterAuto(SUBSYSTEM_CONVEYER,SUBSYSTEM_SHOOTER));
-    NamedCommands.registerCommand("ShooterDown", SUBSYSTEM_SHOOTER.setTilter(0.0));
-    
-    
-   */
   }
 
 
   public Command getAutonomousCommand() {
-        //return new PathPlannerAuto("TwoNoteAuto");
-        //return SUBSYSTEM_SHOOTER.setFeederSpeed(0.5);
-
-
-        //return new PathPlannerAuto("FourNotePP");
-        return new PathPlannerAuto("autoshoottest");
+    return new PathPlannerAuto("FourNotePP");
+    //return new PathPlannerAuto("autoshoottest");
   } 
 
   public static boolean DRIVER_LT() {

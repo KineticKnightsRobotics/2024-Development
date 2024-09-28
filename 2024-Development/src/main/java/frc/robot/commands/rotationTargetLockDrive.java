@@ -23,6 +23,7 @@ public class rotationTargetLockDrive extends Command {
     private final DoubleSupplier SUPPLIER_ySpeed;
     private final BooleanSupplier SUPPLIER_Field_Oriented;
     private final DoubleSupplier SUPPLIER_Period;
+    private final BooleanSupplier SUPPLIER_speed;
     private PIDController rotationPID = new PIDController(RotationTargetLock.Proportional,RotationTargetLock.Integral,RotationTargetLock.Derivitive);
     //private final SlewRateLimiter xLimiter, yLimiter, zLimiter;
 
@@ -32,13 +33,15 @@ public class rotationTargetLockDrive extends Command {
         DoubleSupplier ySpeed, 
         DoubleSupplier zSpeed,
         BooleanSupplier fieldOriented,
-        DoubleSupplier timePeriod
+        DoubleSupplier timePeriod,
+        BooleanSupplier speedButton
         ){
         subsystem = m_subsystem;
         SUPPLIER_xSpeed = xSpeed;
         SUPPLIER_ySpeed = ySpeed;
         SUPPLIER_Field_Oriented = fieldOriented;
         SUPPLIER_Period = timePeriod;
+        SUPPLIER_speed = speedButton;
         addRequirements(subsystem);
 
         rotationPID.setTolerance(2, 5);
@@ -57,15 +60,23 @@ public class rotationTargetLockDrive extends Command {
             joystickY *= -1;
         }
 
-        double xSpeed   = ((joystickX * joystickX) * (joystickX<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * 0.2;
-        double ySpeed   = ((joystickY * joystickY) * (joystickY<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * 0.2;
+        double xSpeed   = -((joystickX * joystickX) * (joystickX<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * 0.2;
+        double ySpeed   = -((joystickY * joystickY) * (joystickY<0 ? -1 : 1)) *    SwerveSubsystemConstants.LIMIT_SOFT_SPEED_DRIVE * 0.2;
 
         double rotSpeed = rotationPID.calculate(subsystem.getRotation2d().getDegrees(), subsystem.getRotationRelativeToSpeaker().getDegrees()+180.0);
         
+
+        //apply slow mode
+        if (SUPPLIER_speed.getAsBoolean() == false) {
+            xSpeed   *= 0.3;
+            ySpeed   *= 0.3;
+            rotSpeed *= 0.3;
+        }
+
+
+
         boolean fieldRelative = SUPPLIER_Field_Oriented.getAsBoolean();
-        
         double timePeriod = SUPPLIER_Period.getAsDouble();
-      
         ChassisSpeeds chassisSpeed = ChassisSpeeds.discretize(
             fieldRelative 
                 ? 
