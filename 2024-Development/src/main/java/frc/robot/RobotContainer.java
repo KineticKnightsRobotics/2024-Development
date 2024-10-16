@@ -351,6 +351,32 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("ShootNoAim", SUBSYSTEM_SHOOTER.shoot(2700, 2300, false).andThen(SUBSYSTEM_SHOOTER.IdleShooter(2700, 2300)));//4022, 2681
 
+
+    NamedCommands.registerCommand("Shoot",
+      new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+          SUBSYSTEM_SHOOTER.shoot(ShooterRPM, ShooterRPM, false),
+          new rotationTargetLockDrive(
+              SUBSYSTEM_SWERVEDRIVE,   
+              () -> 0.0, 
+              () -> 0.0, 
+              () -> 0.0, 
+              () -> true, 
+              () -> 0.02
+            ),
+            SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker()),
+            SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.1)
+        ),
+        new ParallelRaceGroup(
+        new WaitCommand(0.05),
+        SUBSYSTEM_SHOOTER.setTilter(()->0.0)
+      )
+      )
+    );
+
+
+
+    /*
     NamedCommands.registerCommand("Shoot",
       new SequentialCommandGroup(
         new ParallelDeadlineGroup(
@@ -373,6 +399,7 @@ public class RobotContainer {
       )
       )
     );
+    */
 
     NamedCommands.registerCommand("IntakeDown", SUBSYSTEM_INTAKE.intakeDown());
 
