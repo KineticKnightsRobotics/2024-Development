@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.45,
-        "y": 6.55
+        "x": 3.517544177945499,
+        "y": 6.950905330382089
       },
       "prevControl": {
-        "x": 2.95,
-        "y": 6.55
+        "x": 4.464058928117856,
+        "y": 7.071737000616858
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.3,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 500.0,
     "maxAngularAcceleration": 700.0
   },
@@ -43,10 +43,10 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Stemly",
+  "folder": "Stemly5Note",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

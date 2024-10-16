@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7745160887147171,
-      "y": 6.74
+      "x": 0.7088791320439785,
+      "y": 6.74981756312719
     },
     "rotation": 55.0
   },
@@ -18,9 +18,35 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "5 Note 1stNote"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 4.0
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "CaptureNote"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "NOFLAG 5 Note 1stNote"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -30,9 +56,54 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "5 Note Shoot to 3rd Note"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 8.0
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "NOFLAG 5 Note Shoot to 3rd Note 1"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "CaptureNote"
+                            }
+                          },
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "NOFLAG 5 Note Shoot to 3rd Note 2"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RevShooter"
           }
         },
         {
@@ -48,15 +119,35 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "5 Note Shoot to 4th"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "5 Note 4th to Shoot"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 4.0
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "NOFLAG 5 Note Shoot to 5th"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "CaptureNote"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -66,9 +157,35 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "5 Note Shoot to 5th"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 4.0
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "NOFLAG 5 Note Alt 4th Note"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "CaptureNote"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {

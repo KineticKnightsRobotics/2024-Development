@@ -3,73 +3,73 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 2.0
+        "x": 2.79,
+        "y": 6.82
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1,
-        "y": 2.0
+        "x": 3.7204815203418193,
+        "y": 7.186338832643192
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 2.0
+        "x": 8.256830799375884,
+        "y": 5.8499945571319705
       },
       "prevControl": {
-        "x": 2.9,
-        "y": 2.0
+        "x": 8.273965421841455,
+        "y": 7.06655275218768
       },
       "nextControl": {
-        "x": 3.1,
-        "y": 2.0
+        "x": 8.250117928807287,
+        "y": 5.373380746761494
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 3.0
+        "x": 8.256830799375884,
+        "y": 4.265757102942778
       },
       "prevControl": {
-        "x": 2.9000000000000004,
-        "y": 3.0
+        "x": 8.22997931710149,
+        "y": 4.601400631372692
       },
       "nextControl": {
-        "x": 3.1,
-        "y": 3.0
+        "x": 8.298671409526332,
+        "y": 3.742749476062187
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 3.0
+        "x": 5.4239994194274095,
+        "y": 4.265757102942778
       },
       "prevControl": {
-        "x": 1.9,
-        "y": 3.0
+        "x": 5.846910265249101,
+        "y": 3.681737363474727
       },
       "nextControl": {
-        "x": 2.1,
-        "y": 3.0
+        "x": 4.888414795405579,
+        "y": 5.00537396468721
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 2.0
+        "x": 3.235603614064371,
+        "y": 5.3800936173300915
       },
       "prevControl": {
-        "x": 1.9000000000000001,
-        "y": 2.0
+        "x": 2.8865343444972607,
+        "y": 5.662034181211219
       },
       "nextControl": null,
       "isLocked": false,
@@ -78,44 +78,29 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 90.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 2.0,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 3.0,
+      "waypointRelativePos": 1,
       "rotationDegrees": -90.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 4.0,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
+      "rotateFast": true
     }
   ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 0.5,
-    "maxAngularVelocity": 90.0,
-    "maxAngularAcceleration": 100.0
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.5,
+    "maxAngularVelocity": 500.0,
+    "maxAngularAcceleration": 700.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -8.746162262555144,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Regular Season",
+  "folder": "StemlyFortniteAuto",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

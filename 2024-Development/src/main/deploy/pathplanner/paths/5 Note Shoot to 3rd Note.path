@@ -16,28 +16,12 @@
     },
     {
       "anchor": {
-        "x": 8.38840306252041,
-        "y": 7.31
-      },
-      "prevControl": {
-        "x": 8.38840306252041,
-        "y": 7.81
-      },
-      "nextControl": {
-        "x": 8.38840306252041,
-        "y": 6.3100000000000005
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
         "x": 8.28338393184723,
         "y": 5.922791909075882
       },
       "prevControl": {
-        "x": 8.28338393184723,
-        "y": 6.444510079018431
+        "x": 8.290395152218876,
+        "y": 7.790014151456875
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.85,
+      "name": "Intake Note",
+      "waypointRelativePos": 0.45,
       "command": {
         "type": "deadline",
         "data": {
@@ -57,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "CapturePiece"
+                "name": "CaptureNote"
               }
             }
           ]
@@ -66,8 +50,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.3,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 500.0,
     "maxAngularAcceleration": 700.0
   },
@@ -77,7 +61,7 @@
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "Stemly",
+  "folder": "Stemly5Note",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
