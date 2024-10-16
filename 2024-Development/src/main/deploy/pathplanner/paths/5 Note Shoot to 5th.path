@@ -1,0 +1,92 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.45,
+        "y": 6.55
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.9500000000000002,
+        "y": 6.55
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.614669134100173,
+        "y": 5.725881039063665
+      },
+      "prevControl": {
+        "x": 1.3783760900855135,
+        "y": 5.844027561070996
+      },
+      "nextControl": {
+        "x": 1.9140197139972686,
+        "y": 5.5762057491151165
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.8486439195100615,
+        "y": 5.5420975603855975
+      },
+      "prevControl": {
+        "x": 3.3486439195100615,
+        "y": 5.5420975603855975
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.8,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "CaptureNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.3,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 500.0,
+    "maxAngularAcceleration": 700.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Stemly",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.82,
-      "y": 4.43
+      "x": 0.7088791320439785,
+      "y": 6.74981756312719
     },
-    "rotation": -59.83114945370977
+    "rotation": 55.0
   },
   "command": {
     "type": "sequential",
@@ -14,18 +14,6 @@
         {
           "type": "named",
           "data": {
-            "name": "ZeroShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ZeroRobotHeading"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "ShootNoAim"
           }
         },
@@ -36,7 +24,108 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.75
+                  "waitTime": 4.0
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "CaptureNote"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "NOFLAG 5 Note 1stNote"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 8.0
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "NOFLAG 5 Note Shoot to 3rd Note 1"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "CaptureNote"
+                            }
+                          },
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "NOFLAG 5 Note Shoot to 3rd Note 2"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RevShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5 Note 3rd To Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 4.0
                 }
               },
               {
@@ -46,7 +135,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SOScoreToMidNote1"
+                        "pathName": "NOFLAG 5 Note Shoot to 5th"
                       }
                     },
                     {
@@ -62,22 +151,9 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SOMidNote1ToScore"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
+            "name": "Shoot"
           }
         },
         {
@@ -87,7 +163,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.75
+                  "waitTime": 4.0
                 }
               },
               {
@@ -97,7 +173,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SOScoreToMidNote2"
+                        "pathName": "NOFLAG 5 Note Alt 4th Note"
                       }
                     },
                     {
@@ -113,54 +189,9 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SOMidNote2ToScore"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "ShootNoAim"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.0
-                }
-              },
-              {
-                "type": "parallel",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "SOScoreToMidNote3"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "CaptureNote"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
+            "name": "Shoot"
           }
         }
       ]

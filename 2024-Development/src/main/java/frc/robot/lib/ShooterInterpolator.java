@@ -21,10 +21,15 @@ public class ShooterInterpolator {
         }
         else {
             return 
-            +8.3197   *(Math.pow(distance,3))
-            -60.5249  *(Math.pow(distance,2))
-            +157.0143 *distance
-            -119.3402
+
+
+
+
+
+            -12.1146   *(Math.pow(distance,3))
+            +95.2764  *(Math.pow(distance,2))
+            -235.1371 *distance
+            +206.085
             ;
         }
 
@@ -33,6 +38,12 @@ public class ShooterInterpolator {
         //Using first and second set of data
         /*
 
+
+                    +8.3197   *(Math.pow(distance,3))
+            -60.5249  *(Math.pow(distance,2))
+            +157.0143 *distance
+            -119.3402
+            ;
 
             +1.6016   *(Math.pow(distance,3))
             -17.9932  *(Math.pow(distance,2))

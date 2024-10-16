@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.75,
-        "y": 3.97
+        "x": 3.09,
+        "y": 7.03
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.7525531627639825,
-        "y": 3.965977661685054
+        "x": 4.09,
+        "y": 7.03
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.77575874070407,
-        "y": 3.5314766125002643
+        "x": 8.38840306252041,
+        "y": 7.31
       },
       "prevControl": {
-        "x": 6.001256059377571,
-        "y": 4.720716614053249
+        "x": 8.38840306252041,
+        "y": 7.81
       },
       "nextControl": {
-        "x": 3.2134039042826865,
-        "y": 2.0153452919493353
+        "x": 8.38840306252041,
+        "y": 6.3100000000000005
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.82,
-        "y": 4.43
+        "x": 8.28338393184723,
+        "y": 5.922791909075882
       },
       "prevControl": {
-        "x": 0.8190257821931087,
-        "y": 4.428212820387094
+        "x": 8.28338393184723,
+        "y": 6.444510079018431
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +46,25 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.85,
+      "command": {
+        "type": "deadline",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "CapturePiece"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 5.3,
     "maxAcceleration": 4.0,
@@ -55,13 +73,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.36321250004048,
-    "rotateFast": false
+    "rotation": -90.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Stemly",
   "previewStartingState": {
-    "rotation": 12.288143871925465,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

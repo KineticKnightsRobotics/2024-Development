@@ -228,7 +228,8 @@ public class Shooter extends SubsystemBase {
     }
     
     public double getTilterABSPosition () {
-        return (tilterAbsEncoder.getAbsolutePosition() - 0.85) * -360;
+        return ((tilterAbsEncoder.getAbsolutePosition() - 0.85) * -360) - 7.7;
+        
     }
     
     public boolean ampPostion() {
@@ -382,7 +383,7 @@ public class Shooter extends SubsystemBase {
             ()->{
                 //shooterMotorL.set(0.8);
                 //shooterMotorR.set(0.8);
-                                shooterControllerL.setReference(idleRPM_L/60, ControlType.kVelocity,0,shooterFeedFoward.calculate(idleRPM_L/60), ArbFFUnits.kVoltage);
+                shooterControllerL.setReference(idleRPM_L/60, ControlType.kVelocity,0,shooterFeedFoward.calculate(idleRPM_L/60), ArbFFUnits.kVoltage);
                 shooterControllerR.setReference(idleRPM_R/60, ControlType.kVelocity,0,shooterFeedFoward.calculate(idleRPM_R/60), ArbFFUnits.kVoltage);
 
             }

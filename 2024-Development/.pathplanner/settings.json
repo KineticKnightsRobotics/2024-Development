@@ -5,15 +5,15 @@
   "pathFolders": [
     "LeftUnderSpeakerAutos",
     "RightUnderSpeakerAutos",
-    "TeleOp Paths",
+    "Stemly",
     "UnderSpeakerAutos"
   ],
   "autoFolders": [
     "unused"
   ],
-  "defaultMaxVel": 4.5,
-  "defaultMaxAccel": 3.6,
+  "defaultMaxVel": 5.3,
+  "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 500.0,
   "defaultMaxAngAccel": 700.0,
-  "maxModuleSpeed": 4.81
+  "maxModuleSpeed": 5.3
 }

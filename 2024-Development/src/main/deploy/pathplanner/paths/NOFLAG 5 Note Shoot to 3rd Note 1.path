@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6,
-        "y": 6.5
+        "x": 3.09,
+        "y": 7.03
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.59961695278559,
-        "y": 6.503191257572243
+        "x": 4.09,
+        "y": 7.03
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.9,
-        "y": 4.45
+        "x": 7.797670452483763,
+        "y": 7.747499304522418
       },
       "prevControl": {
-        "x": 2.0947948202202706,
-        "y": 4.409723414041423
+        "x": 7.310474854636457,
+        "y": 7.859929057871796
+      },
+      "nextControl": {
+        "x": 8.138982627171607,
+        "y": 7.668734956517532
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.230874366510639,
+        "y": 6.894218867802815
+      },
+      "prevControl": {
+        "x": 8.033963496498423,
+        "y": 7.406187129834577
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,14 +54,14 @@
     "maxAngularAcceleration": 700.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -58.60326534593967,
-    "rotateFast": false
+    "velocity": 5.3,
+    "rotation": -90.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "LeftUnderSpeakerAutos",
+  "folder": "Stemly",
   "previewStartingState": {
-    "rotation": 60.83238662042224,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

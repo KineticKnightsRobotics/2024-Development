@@ -167,7 +167,7 @@ public class SwerveDrive extends SubsystemBase {
 
         SmartDashboard.putNumber("Drive distance to speaker", getDistanceToSpeaker());
 
-        SmartDashboard.putNumber("Drive rotation to speaker", getRotationRelativeToSpeaker().getDegrees());
+        SmartDashboard.putNumber("Drive rotation to speaker", getRotationRelativeToSpeaker(0.0).getDegrees());
 
         MODULE_FRONT_LEFT.moduleData2Dashboard();
         MODULE_FRONT_RIGHT.moduleData2Dashboard();
@@ -362,7 +362,7 @@ public class SwerveDrive extends SubsystemBase {
         return null;
     }
 
-    private Optional<Pose3d> getSpeakerPose() {
+    public Optional<Pose3d> getSpeakerPose() {
         var alliance = DriverStation.getAlliance();
         Optional<Pose3d> speakerPose = null;
     
@@ -395,7 +395,6 @@ public class SwerveDrive extends SubsystemBase {
 
     public boolean isRobotInAmpZone(){ //This should probably be rewritten to be like the speaker April Tag one.
         var alliance = DriverStation.getAlliance();
-
         if(alliance.isPresent()){
             if(alliance.get() == DriverStation.Alliance.Blue);
             return getPose().getY()>=7.5 && getPose().getX()<=4;
@@ -403,9 +402,6 @@ public class SwerveDrive extends SubsystemBase {
             return getPose().getY()>=7.5 && getPose().getX()>=12.5;
         }
       }
-
-
-
       public boolean isRobotInSpeakerZone(){
         return getDistanceToSpeaker()<=4.5 && !isRobotInAmpZone();
       }
@@ -415,20 +411,36 @@ public class SwerveDrive extends SubsystemBase {
         return getPose().getTranslation().minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
       }*/
 
-        public Rotation2d getRotationRelativeToSpeaker() {
+        public Rotation2d getRotationRelativeToSpeaker(double jedFactor) {
                 var alliance = DriverStation.getAlliance();
                 if (alliance.isPresent()) {
                     if (alliance.get() == DriverStation.Alliance.Blue) {
-                        return getPose().getTranslation().plus(new Translation2d(0.3,0)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
+                        return getPose().getTranslation().plus(new Translation2d(-0.3,jedFactor)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
           
                     }else{
-                        return getPose().getTranslation().plus(new Translation2d(-0.3,0)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
+                        return getPose().getTranslation().plus(new Translation2d(0.3,jedFactor)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
+                    }
+                }else{
+                    return getPose().getTranslation().plus(new Translation2d(0.3,jedFactor)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
+
+                }
+        }
+        public Rotation2d getRotationRelativeToPoint(double offsetX, double offsetY) {
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    if (alliance.get() == DriverStation.Alliance.Blue) {
+                        return getPose().getTranslation().plus(new Translation2d(0.3,offsetY)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
+          
+                    }else{
+                        return getPose().getTranslation().plus(new Translation2d(-0.3,offsetY)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
                     }
                 }else{
                     return getPose().getTranslation().plus(new Translation2d(-0.7096,0)).minus(getSpeakerPose().get().getTranslation().toTranslation2d()).unaryMinus().getAngle();
 
                 }
         }
+
+
 
       public double getCurrentDrive(){
         return MODULE_FRONT_LEFT.getModuleCurrent()+MODULE_FRONT_RIGHT.getModuleCurrent()+MODULE_BACK_LEFT.getModuleCurrent()+MODULE_BACK_RIGHT.getModuleCurrent();

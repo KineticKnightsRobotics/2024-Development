@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -61,6 +62,7 @@ public class RobotContainer {
   Trigger DRIVER_Y = new Trigger(JOYSTICK_DRIVER.button(4));
   Trigger DRIVER_L1= new Trigger(JOYSTICK_DRIVER.button(5));
   Trigger DRIVER_R1= new Trigger(JOYSTICK_DRIVER.button(6));
+  Trigger DRIVER_L2 = new Trigger(() -> JOYSTICK_DRIVER.getRawAxis(2)>=0.3);
   //Driver L2 right now is hardcoded to be percision mode!
   Trigger DRIVER_R2 = new Trigger(()-> JOYSTICK_DRIVER.getRawAxis(3)>=0.3);
   Trigger DRIVER_START= new Trigger(JOYSTICK_DRIVER.button(8));
@@ -175,6 +177,7 @@ public class RobotContainer {
     //TELEOP CONTROLS _____________________________________________________________________________________________________________________________________________________________________________________
   
     //Aim at speaker
+    
     DRIVER_R2.whileTrue(
       new ParallelCommandGroup(
         new rotationTargetLockDrive(
@@ -190,8 +193,22 @@ public class RobotContainer {
           SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.1)
         )
     ).onFalse(SUBSYSTEM_SHOOTER.stopShooter().andThen(SUBSYSTEM_SHOOTER.stopTilter()).andThen(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0)));
-
-
+    
+    //new aim at speaker
+    /*
+    DRIVER_R2.whileTrue(new ParallelCommandGroup(
+        new speakerAiming(
+            SUBSYSTEM_SWERVEDRIVE,
+            () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X),
+            () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y),
+            () -> 0.02
+            ),
+          SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker()),
+          SUBSYSTEM_SHOOTER.IdleShooterFaster(4400, 4600),
+          SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.1)
+        )
+    ).onFalse(SUBSYSTEM_SHOOTER.stopShooter().andThen(SUBSYSTEM_SHOOTER.stopTilter()).andThen(SUBSYSTEM_SHOOTER.setExtensionSpeed(0.0)));
+    */
     
     DRIVER_R1.and(ShooterAtAmp.negate()).whileTrue(
         SUBSYSTEM_SHOOTER.shoot(4400,4600, false)
@@ -210,6 +227,10 @@ public class RobotContainer {
     )
     .onFalse(SUBSYSTEM_INTAKE.intakeUp());
 
+    DRIVER_L2.whileTrue(SUBSYSTEM_SHOOTER.intakeSource());
+
+
+
     DRIVER_A.whileTrue(
       new ParallelCommandGroup(
         SUBSYSTEM_SHOOTER.setExtensionHeight(6),
@@ -219,16 +240,16 @@ public class RobotContainer {
     .whileFalse(
       SUBSYSTEM_SHOOTER.setExtensionHeight(0.0).andThen(
       SUBSYSTEM_SHOOTER.setTilter(() -> 0.0)
-      ).until(() -> (Math.abs(SUBSYSTEM_SHOOTER.getTilterPosition()-5.0) < 0.05 && SUBSYSTEM_SHOOTER.getExtensionPosition() < 0.15)) // This is the dumbest fix of all time
+      ).until(() -> (Math.abs(SUBSYSTEM_SHOOTER.getTilterPosition()) < 50 && SUBSYSTEM_SHOOTER.getExtensionPosition() < 0.15)) // This is the dumbest fix of all time
       .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
     );
     
     DRIVER_Y.whileTrue(
             new ParallelCommandGroup(
-SUBSYSTEM_SHOOTER.setTilter(() -> 60),
-          SUBSYSTEM_SHOOTER.IdleShooterFaster(4400, 4600))
-
-).onFalse(SUBSYSTEM_SHOOTER.stopShooter());
+              SUBSYSTEM_SHOOTER.setTilter(() -> 60),
+                        SUBSYSTEM_SHOOTER.IdleShooterFaster(4400, 4600))
+              ).onFalse(SUBSYSTEM_SHOOTER.stopShooter()
+    );
 
     //DRIVER_X.whileTrue(SUBSYSTEM_SWERVEDRIVE.pathFind(Waypoint.Amp.blue,Waypoint.Amp.red));
 
@@ -325,22 +346,31 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
   public void configureNamedCommands() {
     NamedCommands.registerCommand("ZeroShooter", SUBSYSTEM_SHOOTER.zeroTilter(0.0));
 
+    NamedCommands.registerCommand("RevShooter", SUBSYSTEM_SHOOTER.IdleShooter(ShooterRPM, ShooterRPM));
+
+
     NamedCommands.registerCommand("ShootNoAim", SUBSYSTEM_SHOOTER.shoot(2700, 2300, false).andThen(SUBSYSTEM_SHOOTER.IdleShooter(2700, 2300)));//4022, 2681
 
     NamedCommands.registerCommand("Shoot",
       new SequentialCommandGroup(
         new ParallelDeadlineGroup(
           new WaitCommand(1.0),
-          new rotationTargetLockDrive(SUBSYSTEM_SWERVEDRIVE,   
-            () -> 0.0,
-            () -> 0.0,
-            () -> 0.0,
-            () -> true,
+        new rotationTargetLockDrive(
+            SUBSYSTEM_SWERVEDRIVE,   
+            () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Y), 
+            () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_X), 
+            () -> -JOYSTICK_DRIVER.getRawAxis(OIConstants.CONTROLLER_DRIVER_Z), 
+            () -> true, 
             () -> 0.02
           ),
-          SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker())
+          SUBSYSTEM_SHOOTER.autoTilter(() -> SUBSYSTEM_SWERVEDRIVE.getDistanceToSpeaker()),
+          SUBSYSTEM_SHOOTER.setExtensionSpeed(-0.1)
         ),
-        SUBSYSTEM_SHOOTER.shoot(4500,3700, false)
+        SUBSYSTEM_SHOOTER.shoot(4500,3700, false),
+        new ParallelRaceGroup(
+        new WaitCommand(0.05),
+        SUBSYSTEM_SHOOTER.setTilter(()->0.0)
+      )
       )
     );
 
@@ -369,11 +399,6 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
         SUBSYSTEM_SHOOTER.zeroTilter(0.0)
       )
     );
-
-
-
-
-
     /*
     NamedCommands.registerCommand("ResetModulePosition", SUBSYSTEM_SWERVEDRIVE.zeroModuleAngles());
     NamedCommands.registerCommand("IntakeDown" , SUBSYSTEM_INTAKE.setIntakePosition(IntakeSubsystemConstants.Forward_IntakePivot_Position));
@@ -384,19 +409,13 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
     NamedCommands.registerCommand("AutoSetShooterIdle", new autoSetShooterIdle(SUBSYSTEM_SHOOTER));
     NamedCommands.registerCommand("AutoLoadShooter", new loadShooterAuto(SUBSYSTEM_CONVEYER,SUBSYSTEM_SHOOTER));
     NamedCommands.registerCommand("ShooterDown", SUBSYSTEM_SHOOTER.setTilter(0.0));
-    
-    
    */
   }
 
 
   public Command getAutonomousCommand() {
-        //return new PathPlannerAuto("TwoNoteAuto");
-        //return SUBSYSTEM_SHOOTER.setFeederSpeed(0.5);
-
-
         //return new PathPlannerAuto("FourNotePP");
-        return new PathPlannerAuto("autoshoottest");
+        return new PathPlannerAuto("Stemly5NoteALTNoFlag");
   } 
 
   public static boolean DRIVER_LT() {
@@ -405,7 +424,7 @@ SUBSYSTEM_SHOOTER.setTilter(() -> 60),
  /*public static Trigger rightTrigger(){
   return new Trigger(()-> JOYSTICK_DRIVER.getRawAxis(3)>=0.3);
 }*/
- public static double DRIVER_RT() {
-    return JOYSTICK_DRIVER.getRawAxis(2);
+ public static boolean DRIVER_RT() {
+    return JOYSTICK_DRIVER.getRawAxis(3) > 0.5;
   }
 }
