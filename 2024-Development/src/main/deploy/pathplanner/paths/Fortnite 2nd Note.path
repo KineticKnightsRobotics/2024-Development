@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.45,
-        "y": 6.55
+        "x": 2.98,
+        "y": 5.57
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9500000000000002,
-        "y": 6.55
+        "x": 1.6312275481693819,
+        "y": 5.615044087231031
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.614669134100173,
-        "y": 5.725881039063665
+        "x": 2.785841285968286,
+        "y": 6.823360789578722
       },
       "prevControl": {
-        "x": 1.3783760900855135,
-        "y": 5.844027561070996
-      },
-      "nextControl": {
-        "x": 1.9140197139972686,
-        "y": 5.5762057491151165
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.8486439195100615,
-        "y": 5.5420975603855975
-      },
-      "prevControl": {
-        "x": 3.3486439195100615,
-        "y": 5.5420975603855975
+        "x": 1.9333067237563044,
+        "y": 6.4877172611488065
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.8,
+      "name": "Pickup Note",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -59,12 +43,6 @@
               "data": {
                 "name": "CaptureNote"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "Shoot"
-              }
             }
           ]
         }
@@ -72,18 +50,18 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.3,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 500.0,
     "maxAngularAcceleration": 700.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 30.644649345808503,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Stemly",
+  "folder": "StemlyFortniteAuto",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

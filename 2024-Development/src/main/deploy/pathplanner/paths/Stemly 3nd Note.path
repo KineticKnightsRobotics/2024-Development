@@ -1,0 +1,130 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.09,
+        "y": 7.03
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.09,
+        "y": 7.03
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.458216916432315,
+        "y": 5.9439747450950025
+      },
+      "prevControl": {
+        "x": 8.465386568076655,
+        "y": 7.8111963858620275
+      },
+      "nextControl": {
+        "x": 8.451036649533332,
+        "y": 4.0739885302347805
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.296672593345187,
+        "y": 6.655539025363765
+      },
+      "prevControl": {
+        "x": 6.658491593441337,
+        "y": 6.615336914244098
+      },
+      "nextControl": {
+        "x": 5.8737617475250135,
+        "y": 6.702529119341299
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.09,
+        "y": 7.03
+      },
+      "prevControl": {
+        "x": 2.695266172629316,
+        "y": 6.683079314921404
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -90.72182483871482,
+      "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 2,
+      "rotationDegrees": -90.6661999701832,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake Note",
+      "waypointRelativePos": 0.45,
+      "command": {
+        "type": "deadline",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "CaptureNote"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Rev Shooter",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "RevShooter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.5,
+    "maxAngularVelocity": 500.0,
+    "maxAngularAcceleration": 700.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 17.715792706377023,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "Stemly5Note",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

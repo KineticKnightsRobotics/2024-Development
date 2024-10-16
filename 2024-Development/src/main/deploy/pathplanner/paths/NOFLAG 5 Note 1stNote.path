@@ -54,8 +54,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.3,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 500.0,
     "maxAngularAcceleration": 700.0
   },
@@ -65,7 +65,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Stemly",
+  "folder": "Stemly5Note",
   "previewStartingState": {
     "rotation": 55.0,
     "velocity": 0
